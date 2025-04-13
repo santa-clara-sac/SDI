@@ -1,0 +1,621 @@
+{% extends "base.html" %}
+
+{% block title %} Lista de documentos {% endblock %}
+
+{% block body %}
+
+<style>
+    .form-control {
+        border-radius: 0.5rem;
+        height: 38px;
+    }
+
+    label.form-label {
+        font-weight: 500;
+    }
+
+    .modal-content {
+        border-radius: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: #81a1c1 !important;
+        box-shadow: 0 0 0 0.2rem rgb(242, 242, 242);
+    }
+
+    .ver-pdf-btn:hover {
+        text-decoration: underline !important;
+    }
+</style>
+
+<div style="text-align: center; margin-top: 30px;">
+    <div style="font-weight: bold; font-size: 24px;">
+        Listado General de Partidas
+    </div>
+</div>
+
+<div class="container mt-4" style="max-width: 95%;">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-11">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <!-- Sección de búsqueda -->
+                    <h5 class="mb-3">Utiliza los filtros para localizar el documento</h5>
+
+                    <div class="row mb-3">
+                        <!-- Año -->
+                        <div class="col">
+                            <label for="yearFilter" class="form-label">Año</label>
+                            <select class="form-select filter-input" data-column="1" id="yearFilter">
+                                <option value="">Seleccionar Año</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+
+                        <!-- Partida -->
+                        <div class="col">
+                            <label class="form-label">Partida</label>
+                            <input type="text" class="form-control filter-input" data-column="2">
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="col">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control filter-input" data-column="3">
+                        </div>
+
+                        <!-- Ubicación -->
+                        <div class="col">
+                            <label class="form-label">Ubicación</label>
+                            <input type="text" class="form-control filter-input" data-column="5">
+                        </div>
+
+                        <!-- Costo -->
+                        <div class="col">
+                            <label class="form-label">Costo</label>
+                            <input type="text" class="form-control filter-input" data-column="6">
+                        </div>
+
+                        <!-- Fecha Inicio -->
+                        <!-- <div class="col">
+                            <input type="date" class="form-control filter-input" data-column="1" id="startDateFilter"
+                                placeholder="Fecha Inicio">
+                        </div> -->
+
+                        <!-- Fecha Final -->
+                        <!-- <div class="col">
+                            <input type="date" class="form-control filter-input" data-column="1" id="endDateFilter"
+                                placeholder="Fecha Final">
+                        </div> -->
+
+                        <!-- Botón Limpiar Filtros -->
+                        <div class="col">
+                            <label class="form-label" style="color: #edeff4;">Limpiar</label>
+                            <a href="{% url 'lista_partidas' %}" id="clearFilters"
+                                class="form-control btn btn-secondary text-center"
+                                style="background-color: #02737e; line-height: 25px;">Limpiar Filtros</a>
+                        </div>
+
+                    </div>
+
+                    <!-- Botón para abrir el modal de agregar -->
+                    {% if request.user.role != 1 %}
+                    <center>
+                        <button type="button" class="btn text-white mt-4" style="background-color: #02737e;"
+                            data-bs-toggle="modal" data-bs-target="#documentModal">
+                            <i class="bi bi-plus-lg"></i> Agregar Nueva Partida
+                        </button>
+                    </center>
+                    {% endif %}
+
+
+                    <!-- Modal para agregar nueva partida -->
+                    <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header text-white" style="background-color: #02737e;">
+                                    <h5 class="modal-title" id="documentModalLabel">Agregar Nueva Partida</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="{% url 'lista_partidas' %}"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="container">
+                                            <div class="row g-3">
+                                                <div class="col-md-4">
+                                                    <label for="id_codigo" class="form-label">Código</label>
+                                                    {{ form.codigo }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_partida" class="form-label">Partida</label>
+                                                    {{ form.partida }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_fecha" class="form-label">Fecha</label>
+                                                    {{ form.fecha }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_descripcion" class="form-label">Descripción</label>
+                                                    {{ form.descripcion }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_pg" class="form-label"># Páginas</label>
+                                                    {{ form.pg }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_ubicacion" class="form-label">Ubicación</label>
+                                                    {{ form.ubicacion }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_costo" class="form-label">Costo</label>
+                                                    {{ form.costo }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_centro_costos" class="form-label">Centro de
+                                                        Costos</label>
+                                                    {{ form.centro_costos }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_responsable" class="form-label">Responsable</label>
+                                                    {{ form.responsable }}
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label for="id_pdf" class="form-label">Archivo PDF</label>
+                                                    {{ form.pdf }}
+                                                </div>
+                                            </div>
+                                            <div class="text-center mt-4">
+                                                <button type="submit" class="btn px-5 py-2 btnGuardar"
+                                                    style="background-color: #02737e; color: #edeff4;">Guardar</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Tabla -->
+                    <div class="table-responsive py-2">
+                        <table class="table table-striped" id="documentsTable">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Fecha</th>
+                                    <th>Partida</th>
+                                    <th>Descripción</th>
+                                    <th>Pg.</th>
+                                    <th>Ubicación</th>
+                                    <th>Costo</th>
+                                    <th>Centro de Costos</th>
+                                    <th>Documento</th>
+                                    <th>Responsable</th>
+                                    {% if request.user.role != 1 %}
+                                    <th>Acciones</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for partida in partidas %}
+                                <tr>
+                                    <td>{{ partida.codigo }}</td>
+                                    <td>{{ partida.fecha|date:"m-d-Y" }}</td>
+                                    <td>{{ partida.partida }}</td>
+                                    <td>{{ partida.descripcion }}</td>
+                                    <td>{{ partida.pg }}</td>
+                                    <td>{{ partida.ubicacion }}</td>
+                                    <td>{{ partida.costo }}</td>
+                                    <td>{{ partida.centro_costos }}</td>
+
+                                    <td>
+                                        {% if partida.pdf %}
+                                        <button type="button"
+                                            style="background: none; border: none; color: #9c0101; text-decoration: none; cursor: pointer;"
+                                            data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
+                                            data-pdf-url="{{ partida.pdf.url }}" class="ver-pdf-btn">
+                                            Ver PDF
+                                        </button>
+                                        {% else %}
+                                        No disponible
+                                        {% endif %}
+                                    </td>
+
+                                    <td>{{ partida.responsable }}</td>
+
+                                    <!-- Acciones en una sola columna -->
+                                    {% if request.user.role != 1 %}
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm text-white me-2 btn-editar"
+                                                style="background-color: #02737e;" data-bs-toggle="modal"
+                                                data-bs-target="#editPartidaModal" data-id="{{ partida.id }}"
+                                                data-codigo="{{ partida.codigo }}" data-partida="{{ partida.partida }}"
+                                                data-fecha="{{ partida.fecha|date:'Y-m-d' }}"
+                                                data-descripcion="{{ partida.descripcion }}" data-pg="{{ partida.pg }}"
+                                                data-ubicacion="{{ partida.ubicacion }}"
+                                                data-costo="{{ partida.costo }}"
+                                                data-centro_costos="{{ partida.centro_costos }}"
+                                                data-responsable="{{ partida.responsable }}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+
+                                            <a href="{% url 'eliminar_partida' partida.id %}"
+                                                class="btn btn-sm text-white btnEliminar"
+                                                style="background-color: #811f1f;" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    {% endif %}
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ver PDF -->
+<div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content" style="background-color: black">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color: #edeff4;">Visualizar documento PDF</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
+                    style="background-color: #ff3f3f;"></button>
+            </div>
+            <div class="modal-body" style="height: 80vh;">
+                <iframe id="pdfIframe" src="" width="100%" height="100%" style="border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar partida -->
+<div class="modal fade" id="editPartidaModal" tabindex="-1" aria-labelledby="editPartidaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #02737e;">
+                <h5 class="modal-title" id="editPartidaModalLabel">Editar Partida</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'editar_partida' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit_id" name="id">
+                    <div class="container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="edit_id_codigo" class="form-label">Codigo</label>
+                                <input type="text" class="form-control" id="edit_id_codigo" name="codigo">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_partida" class="form-label">Partida</label>
+                                <input type="text" class="form-control" id="edit_id_partida" name="partida">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_fecha" class="form-label">Fecha</label>
+                                <input type="date" class="form-control" id="edit_id_fecha" name="fecha">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_descripcion" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="edit_id_descripcion" name="descripcion">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_pg" class="form-label"># Páginas</label>
+                                <input type="text" class="form-control" id="edit_id_pg" name="pg">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_ubicacion" class="form-label">Ubicación</label>
+                                <input type="text" class="form-control" id="edit_id_ubicacion" name="ubicacion">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_costo" class="form-label">Costo</label>
+                                <input type="text" class="form-control" id="edit_id_costo" name="costo">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_centro_costos" class="form-label">Centro de Costos</label>
+                                <input type="text" class="form-control" id="edit_id_centro_costos" name="centro_costos">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_responsable" class="form-label">Responsable</label>
+                                <input type="text" class="form-control" id="edit_id_responsable" name="responsable">
+                            </div>
+                            <div class="col-md-12">
+                                <label for="edit_id_pdf" class="form-label">Archivo PDF</label>
+                                <input type="file" class="form-control" id="edit_id_pdf" name="pdf">
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn px-5 py-2 btnGuardar2"
+                                style="background-color: #02737e; color: #edeff4;">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //FILTRO TANGO DE FECHAS
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     const startDateInput = document.getElementById("startDateFilter");
+    //     const endDateInput = document.getElementById("endDateFilter");
+    //     const table = document.getElementById("documentsTable");
+    //     const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+    //     function filterByDateRange() {
+    //         const startDate = startDateInput.value ? new Date(startDateInput.value) : null;
+    //         const endDate = endDateInput.value ? new Date(endDateInput.value) : null;
+
+    //         Array.from(rows).forEach(row => {
+    //             const dateCell = row.cells[1]; // columna de fecha
+    //             const cellDate = new Date(dateCell.textContent);
+
+    //             let show = true;
+
+    //             if (startDate && cellDate < startDate) {
+    //                 show = false;
+    //             }
+
+    //             if (endDate && cellDate > endDate) {
+    //                 show = false;
+    //             }
+
+    //             row.style.display = show ? "" : "none";
+    //         });
+    //     }
+
+    //     startDateInput.addEventListener("change", filterByDateRange);
+    //     endDateInput.addEventListener("change", filterByDateRange);
+
+    //     document.getElementById("clearFilters").addEventListener("click", function () {
+    //         startDateInput.value = "";
+    //         endDateInput.value = "";
+    //         Array.from(rows).forEach(row => row.style.display = "");
+    //     });
+    // });
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        //PDF MODAL
+        const pdfModal = document.getElementById('pdfViewerModal');
+        const iframe = document.getElementById('pdfIframe');
+
+        pdfModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const pdfUrl = button.getAttribute('data-pdf-url');
+            iframe.src = pdfUrl;
+        });
+
+        pdfModal.addEventListener('hidden.bs.modal', function () {
+            iframe.src = '';
+        });
+
+        // FORMATO CODIGO
+        function formatCodigoInput(input) {
+            input.placeholder = 'XXX-XX';
+
+            input.addEventListener('input', function () {
+                let value = this.value.replace(/\D/g, '').slice(0, 5); // max 5 digits
+                if (value.length > 3) value = value.slice(0, 3) + '-' + value.slice(3);
+                this.value = value;
+            });
+        }
+
+        // Aplica a ambos campos si existen
+        const codigoInput = document.getElementById('id_codigo');
+        if (codigoInput) formatCodigoInput(codigoInput);
+
+        const editCodigoInput = document.getElementById('edit_id_codigo');
+        if (editCodigoInput) formatCodigoInput(editCodigoInput);
+        // CAMPO # PAGINAS NUMERICO
+        const inputPg = document.getElementById("id_pg");
+        inputPg.addEventListener("input", function (e) {
+            // Elimina cualquier carácter que no sea número
+            this.value = this.value.replace(/\D/g, "");
+        });
+        // También evita pegar caracteres no numéricos
+        inputPg.addEventListener("paste", function (e) {
+            e.preventDefault();
+            const paste = (e.clipboardData || window.clipboardData).getData('text');
+            this.value = paste.replace(/\D/g, "");
+        });
+
+        // FILTRO EN TIEMPO REAL
+        document.querySelectorAll('.filter-input').forEach(input => {
+            input.addEventListener('keyup', function () {
+                const columnIndex = this.dataset.column;
+                const searchTerm = this.value.toLowerCase();
+
+                document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
+                    const cell = row.cells[columnIndex];
+                    const cellText = cell.textContent.toLowerCase();
+                    if (cellText.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.filter-input').forEach(input => {
+            input.addEventListener('input', filterTable);
+            input.addEventListener('change', filterTable); // para selects
+        });
+
+        // FILTRO PARA AÑO SELECT
+        function filterTable() {
+            const filters = {};
+
+            document.querySelectorAll('.filter-input').forEach(input => {
+                const columnIndex = input.dataset.column;
+                const value = input.value.toLowerCase();
+                if (value) {
+                    filters[columnIndex] = value;
+                }
+            });
+
+            document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
+                let visible = true;
+
+                for (const columnIndex in filters) {
+                    const cell = row.cells[columnIndex];
+                    if (cell) {
+                        const cellText = cell.textContent.toLowerCase();
+                        if (!cellText.includes(filters[columnIndex])) {
+                            visible = false;
+                            break;
+                        }
+                    }
+                }
+
+                row.style.display = visible ? '' : 'none';
+            });
+        }
+
+        // EDITAR REGISTRO
+        const editButtons = document.querySelectorAll('.btn-editar');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const codigo = button.getAttribute('data-codigo');
+                const partida = button.getAttribute('data-partida');
+                const id = button.getAttribute('data-id');
+                console.log("Código:", codigo);
+                console.log("Partida:", partida);
+                console.log("Id:", id);
+                document.getElementById('edit_id').value = button.getAttribute('data-id');
+                document.getElementById('edit_id_codigo').value = button.getAttribute('data-codigo');
+                document.getElementById('edit_id_partida').value = button.getAttribute('data-partida');
+                document.getElementById('edit_id_fecha').value = button.getAttribute('data-fecha');
+                document.getElementById('edit_id_descripcion').value = button.getAttribute('data-descripcion');
+                document.getElementById('edit_id_pg').value = button.getAttribute('data-pg');
+                document.getElementById('edit_id_ubicacion').value = button.getAttribute('data-ubicacion');
+                document.getElementById('edit_id_costo').value = button.getAttribute('data-costo');
+                document.getElementById('edit_id_centro_costos').value = button.getAttribute('data-centro_costos');
+                document.getElementById('edit_id_responsable').value = button.getAttribute('data-responsable');
+            });
+        });
+    });
+
+
+    //ALERT ELIMINAR
+    (function () {
+        const botonesEliminar = document.querySelectorAll('.btnEliminar');
+
+        botonesEliminar.forEach(boton => {
+            boton.addEventListener('click', function (e) {
+                e.preventDefault(); // Evita que el enlace se siga inmediatamente
+
+                Swal.fire({
+                    title: '¿Estás seguro de eliminar?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ad075a',
+                    cancelButtonColor: '#033a8c',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirige al href del botón
+                        window.location.href = this.href;
+                    }
+                });
+            });
+        });
+    })();
+
+    // BTN GUARDAR
+    (function () {
+        const botonesGuardar = document.querySelectorAll('.btnGuardar');
+
+        botonesGuardar.forEach(boton => {
+            boton.addEventListener('click', function (e) {
+                e.preventDefault(); // Previene el submit inmediato
+
+                const form = this.closest('form');
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: "Registro guardado correctamente"
+                }).then(() => {
+                    form.submit(); // Enviar el formulario después del toast
+                });
+            });
+        });
+    })();
+
+    // BTN ACTUALIZAR
+    (function () {
+        const botonesGuardar = document.querySelectorAll('.btnGuardar2');
+
+        botonesGuardar.forEach(boton => {
+            boton.addEventListener('click', function (e) {
+                e.preventDefault(); // Previene el submit inmediato
+
+                const form = this.closest('form');
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+
+                Toast.fire({
+                    icon: "success",
+                    title: "Registro actualizado correctamente"
+                }).then(() => {
+                    form.submit(); // Enviar el formulario después del toast
+                });
+            });
+        });
+    })();
+</script>
+
+{% endblock %}

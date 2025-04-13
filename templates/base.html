@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!--BOOSTRAP-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'logo/favicon.ico' %}" type="image/x-icon">
+    <title>{% block title %}Bienes Raíces Santa Clara SAC{% endblock %}</title>
+</head>
+
+<body>
+
+    <style>
+        .navbar {
+            box-shadow: 0 4px 6px 2px #d8dee9;
+        }
+
+        .navbar-brand span {
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            color: #edeff4;
+            ;
+            transition: color 0.3s;
+        }
+
+        .navbar-brand span:hover {
+            color: #d8dee9;
+        }
+
+        .nav-link-hover-underline:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar-dark"
+        style="background-color: #02737e; padding-top: 5px; padding-bottom: 5px;">
+        <div class="container-fluid">
+            <!-- Logo e identidad -->
+            <a class="navbar-brand d-flex align-items-center" style="margin-left: 10px;" href="{% url 'home' %}">
+                <img src="{% static 'logo/logotipo_empresa.png' %}" alt="Logo" style="height: 40px; width: auto;"
+                    class="d-inline-block align-text-top me-2">
+                <span style="font-weight: bold; font-size: 1.2rem;">Bienes Raíces Santa Clara S.A.C.</span>
+            </a>
+            <!-- Botón toggle para móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Contenido del navbar -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    {% if user.is_authenticated %}
+                    <!-- Usuario autenticado: mostrar nombre y cerrar sesión -->
+                    <li class="nav-item d-flex align-items-center">
+                        <span class="nav-link text-white d-flex align-items-center" style="margin-right: 10px;">
+                            <i class="bi bi-person-circle" style="font-size: 1.1rem; line-height: 1;"></i>&nbsp;Perfil:
+                            {{ user.get_role_display }}
+                        </span>
+
+                        <div style="background-color: #edeff4; color: #edeff4;">
+                            |
+                        </div>
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit"
+                                style="color: #edeff4; background-color: #02737e; border: 1px solid #02737e;"
+                                onmouseover="this.style.textDecoration='underline';"
+                                onmouseout="this.style.textDecoration='none';">
+                                Cerrar sesión</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <!-- Usuario no autenticado: mostrar iniciar sesión -->
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-hover-underline" style="margin-right: 10px; color: #fff"
+                            href="{% url 'login' %}">
+                            <i class="bi bi-person-circle"></i> Iniciar sesión
+                        </a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    {% block body %}
+
+    {% endblock %}
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.7/pdfobject.min.js"></script>
+
+
+</html>

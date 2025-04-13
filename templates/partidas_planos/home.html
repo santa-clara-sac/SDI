@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Tipo de documentos {% endblock %}
+
+{% block body %}
+
+<style>
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .card-link .card {
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .card-link:hover .card {
+        background-color: #f1f3f3 !important;
+        transform: scale(1.03);
+        color: #1c536d;
+    }
+</style>
+
+<div class="container text-center" style="padding-top: 150px;">
+    <div class="row justify-content-center">
+
+        <!-- Cuadro 1 -->
+        <div class="col-6 col-md-3 mb-4">
+            <a href="{% url 'lista_partidas' %}" class="card-link">
+                <div class="card h-100 shadow-sm">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 150px; ">
+                        <img src="{% static 'images/partidos_planos.png' %}" alt="Imagen 1"
+                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Partidas</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+
+        <!-- Cuadro 2 -->
+        <div class="col-6 col-md-3 mb-4">
+            <a href="{% url 'lista_planos' %}" class="card-link">
+                <div class="card h-100 shadow-sm">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 150px; ">
+                        <img src="{% static 'images/centro_costos.png' %}" alt="Imagen 2"
+                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Planos y otros</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
