@@ -30,6 +30,7 @@ def lista_partidas(request):
         'partidas': partidas,
     })
 
+
 def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')

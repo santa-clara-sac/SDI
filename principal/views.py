@@ -10,7 +10,6 @@ from django.contrib.auth.hashers import make_password
 def home(request):
     return render(request, 'home.html')
 
-
 @login_required
 def lista_usuarios(request):
     usuarios = User.objects.all()

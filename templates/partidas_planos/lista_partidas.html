@@ -28,20 +28,20 @@
     }
 </style>
 
-<div style="text-align: center; margin-top: 30px;">
+<div style="text-align: center; margin-top: 20px;">
     <div style="font-weight: bold; font-size: 24px;">
         Listado General de Partidas
     </div>
 </div>
 
-<div class="container mt-4" style="max-width: 95%;">
+<div class="container mt-2" style="max-width: 100%;">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-11">
             <div class="card shadow-sm">
                 <div class="card-body">
 
                     <!-- Sección de búsqueda -->
-                    <h5 class="mb-3">Utiliza los filtros para localizar el documento</h5>
+                    <h5 class="mb-2">Utiliza los filtros para localizar el documento</h5>
 
                     <div class="row mb-3">
                         <!-- Año -->
@@ -111,7 +111,7 @@
                     </div>
 
                     <!-- Botón para abrir el modal de agregar -->
-                    {% if request.user.role != 1 %}
+                    {% if request.user.role != 1 and request.user.role != 2 %}
                     <center>
                         <button type="button" class="btn text-white mt-4" style="background-color: #02737e;"
                             data-bs-toggle="modal" data-bs-target="#documentModal">
@@ -193,90 +193,84 @@
 
                     <hr>
 
-                    <!-- Tabla -->
-                    <div class="table-responsive py-2">
-                        <table class="table table-striped" id="documentsTable">
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Fecha</th>
-                                    <th>Partida</th>
-                                    <th>Descripción</th>
-                                    <th>Pg.</th>
-                                    <th>Ubicación</th>
-                                    <th>Costo</th>
-                                    <th>Centro de Costos</th>
-                                    <th>Documento</th>
-                                    <th>Responsable</th>
-                                    {% if request.user.role != 1 %}
-                                    <th>Acciones</th>
-                                    {% endif %}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for partida in partidas %}
-                                <tr>
-                                    <td>{{ partida.codigo }}</td>
-                                    <td>{{ partida.fecha|date:"m-d-Y" }}</td>
-                                    <td>{{ partida.partida }}</td>
-                                    <td>{{ partida.descripcion }}</td>
-                                    <td>{{ partida.pg }}</td>
-                                    <td>{{ partida.ubicacion }}</td>
-                                    <td>{{ partida.costo }}</td>
-                                    <td>{{ partida.centro_costos }}</td>
+                   <!-- Tabla -->
+<div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
+    <table class="table table-striped" id="documentsTable">
+        <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+            <tr>
+                <th>Código</th>
+                <th>Fecha</th>
+                <th>Partida</th>
+                <th>Descripción</th>
+                <th>Pg.</th>
+                <th>Ubicación</th>
+                <th>Costo</th>
+                <th>Centro de Costos</th>
+                <th>Documento</th>
+                <th>Responsable</th>
+                {% if request.user.role != 1 and request.user.role != 2 %}
+                <th>Acciones</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for partida in partidas %}
+            <tr>
+                <td>{{ partida.codigo }}</td>
+                <td class="text-nowrap">{{ partida.fecha|date:"d-m-Y" }}</td>
+                <td>{{ partida.partida }}</td>
+                <td>{{ partida.descripcion }}</td>
+                <td>{{ partida.pg }}</td>
+                <td>{{ partida.ubicacion }}</td>
+                <td>{{ partida.costo }}</td>
+                <td>{{ partida.centro_costos }}</td>
 
-                                    <td>
-                                        {% if partida.pdf %}
-                                        <button type="button"
-                                            style="background: none; border: none; color: #9c0101; text-decoration: none; cursor: pointer;"
-                                            data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
-                                            data-pdf-url="{{ partida.pdf.url }}" class="ver-pdf-btn">
-                                            Ver PDF
-                                        </button>
-                                        {% else %}
-                                        No disponible
-                                        {% endif %}
-                                    </td>
+                <td>
+                    {% if partida.pdf %}
+                    <button type="button"
+                        style="background: none; border: none; color: #9c0101; text-decoration: none; cursor: pointer;"
+                        data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
+                        data-pdf-url="{{ partida.pdf.url }}" class="ver-pdf-btn">
+                        Ver PDF
+                    </button>
+                    {% else %}
+                    No disponible
+                    {% endif %}
+                </td>
 
-                                    <td>{{ partida.responsable }}</td>
+                <td>{{ partida.responsable }}</td>
 
-                                    <!-- Acciones en una sola columna -->
-                                    {% if request.user.role != 1 %}
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-sm text-white me-2 btn-editar"
-                                                style="background-color: #02737e;" data-bs-toggle="modal"
-                                                data-bs-target="#editPartidaModal" data-id="{{ partida.id }}"
-                                                data-codigo="{{ partida.codigo }}" data-partida="{{ partida.partida }}"
-                                                data-fecha="{{ partida.fecha|date:'Y-m-d' }}"
-                                                data-descripcion="{{ partida.descripcion }}" data-pg="{{ partida.pg }}"
-                                                data-ubicacion="{{ partida.ubicacion }}"
-                                                data-costo="{{ partida.costo }}"
-                                                data-centro_costos="{{ partida.centro_costos }}"
-                                                data-responsable="{{ partida.responsable }}">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
+                {% if request.user.role != 1 and request.user.role != 2 %}
+                <td>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sm text-white me-2 btn-editar"
+                            style="background-color: #02737e;" data-bs-toggle="modal"
+                            data-bs-target="#editPartidaModal" data-id="{{ partida.id }}"
+                            data-codigo="{{ partida.codigo }}" data-partida="{{ partida.partida }}"
+                            data-fecha="{{ partida.fecha|date:'Y-m-d' }}"
+                            data-descripcion="{{ partida.descripcion }}" data-pg="{{ partida.pg }}"
+                            data-ubicacion="{{ partida.ubicacion }}" data-costo="{{ partida.costo }}"
+                            data-centro_costos="{{ partida.centro_costos }}"
+                            data-responsable="{{ partida.responsable }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
 
-                                            <a href="{% url 'eliminar_partida' partida.id %}"
-                                                class="btn btn-sm text-white btnEliminar"
-                                                style="background-color: #811f1f;" title="Eliminar">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    {% endif %}
+                        <a href="{% url 'eliminar_partida' partida.id %}"
+                            class="btn btn-sm text-white btnEliminar"
+                            style="background-color: #811f1f;" title="Eliminar">
+                            <i class="bi bi-trash"></i>
+                        </a>
 
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
                     </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
+
+
 
 <!-- Modal para ver PDF -->
 <div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerModalLabel" aria-hidden="true">
@@ -450,56 +444,40 @@
 
         // FILTRO EN TIEMPO REAL
         document.querySelectorAll('.filter-input').forEach(input => {
-            input.addEventListener('keyup', function () {
-                const columnIndex = this.dataset.column;
-                const searchTerm = this.value.toLowerCase();
+    input.addEventListener('input', filtrarTabla); // Detecta tanto texto como selects
+});
 
-                document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
-                    const cell = row.cells[columnIndex];
-                    const cellText = cell.textContent.toLowerCase();
-                    if (cellText.includes(searchTerm)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-        });
+function filtrarTabla() {
+    const filtros = {};
 
-        document.querySelectorAll('.filter-input').forEach(input => {
-            input.addEventListener('input', filterTable);
-            input.addEventListener('change', filterTable); // para selects
-        });
-
-        // FILTRO PARA AÑO SELECT
-        function filterTable() {
-            const filters = {};
-
-            document.querySelectorAll('.filter-input').forEach(input => {
-                const columnIndex = input.dataset.column;
-                const value = input.value.toLowerCase();
-                if (value) {
-                    filters[columnIndex] = value;
-                }
-            });
-
-            document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
-                let visible = true;
-
-                for (const columnIndex in filters) {
-                    const cell = row.cells[columnIndex];
-                    if (cell) {
-                        const cellText = cell.textContent.toLowerCase();
-                        if (!cellText.includes(filters[columnIndex])) {
-                            visible = false;
-                            break;
-                        }
-                    }
-                }
-
-                row.style.display = visible ? '' : 'none';
-            });
+    // Recolectamos todos los filtros activos
+    document.querySelectorAll('.filter-input').forEach(input => {
+        const columna = input.dataset.column;
+        const valor = input.value.trim().toLowerCase();
+        if (valor) {
+            filtros[columna] = valor;
         }
+    });
+
+    // Recorremos cada fila de la tabla
+    document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
+        let mostrar = true;
+
+        for (const columna in filtros) {
+            const celda = fila.cells[columna];
+            if (celda) {
+                const textoCelda = celda.textContent.toLowerCase();
+                if (!textoCelda.includes(filtros[columna])) {
+                    mostrar = false;
+                    break;
+                }
+            }
+        }
+
+        fila.style.display = mostrar ? '' : 'none';
+    });
+}
+
 
         // EDITAR REGISTRO
         const editButtons = document.querySelectorAll('.btn-editar');

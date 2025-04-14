@@ -28,27 +28,27 @@
     }
 </style>
 
-<div style="text-align: center; margin-top: 30px;">
+<div style="text-align: center; margin-top: 20px;">
     <div style="font-weight: bold; font-size: 24px;">
         Listado de Planos y Documentación Asociados
     </div>
 </div>
 
 
-<div class="container mt-4" style="max-width: 95%;">
+<div class="container mt-2" style="max-width: 100%;">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-11">
             <div class="card shadow-sm">
                 <div class="card-body">
 
                     <!-- Sección de búsqueda -->
-                    <h5 class="mb-3">Utiliza los filtros para localizar el documento</h5>
+                    <h5 class="mb-2">Utiliza los filtros para localizar el documento</h5>
 
                     <div class="row mb-3">
                         <!-- Año -->
                         <div class="col">
                             <label for="yearFilter" class="form-label">Año</label>
-                            <select class="form-select filter-input" data-column="1" id="yearFilter">
+                            <select class="form-select filter-input" data-column="0" id="yearFilter">
                                 <option value="">Seleccionar Año</option>
                                 <option value="2014">2014</option>
                                 <option value="2015">2015</option>
@@ -68,30 +68,30 @@
                         <!-- plano -->
                         <div class="col">
                             <label class="form-label">Partida</label>
-                            <input type="text" class="form-control filter-input" data-column="2">
+                            <input type="text" class="form-control filter-input" data-column="1">
                         </div>
 
                         <!-- Descripción -->
                         <div class="col">
                             <label class="form-label">Descripción</label>
-                            <input type="text" class="form-control filter-input" data-column="3">
+                            <input type="text" class="form-control filter-input" data-column="2">
                         </div>
 
                         <!-- Ubicación -->
                         <div class="col">
                             <label class="form-label">Ubicación</label>
-                            <input type="text" class="form-control filter-input" data-column="5">
+                            <input type="text" class="form-control filter-input" data-column="4">
                         </div>
 
                         <!-- Costo -->
                         <div class="col">
                             <label class="form-label">Costo</label>
-                            <input type="text" class="form-control filter-input" data-column="6">
+                            <input type="text" class="form-control filter-input" data-column="5">
                         </div>
 
                         <!-- Botón Limpiar Filtros -->
                         <div class="col">
-                            <label class="form-label" style="color: #edeff4;">Limpiar</label>
+                            <label class="form-label" style="color: #ffffff;">Limpiar</label>
                             <a href="{% url 'lista_planos' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
                                 style="background-color: #02737e; line-height: 25px;">Limpiar Filtros</a>
@@ -100,7 +100,7 @@
                     </div>
 
                     <!-- Botón para abrir el modal de agregar -->
-                    {% if request.user.role != 1 %}
+                    {% if request.user.role != 1 and request.user.role != 2 %}
                     <center>
                         <button type="button" class="btn text-white mt-4" style="background-color: #02737e;"
                             data-bs-toggle="modal" data-bs-target="#documentModal">
@@ -174,9 +174,9 @@
                     <hr>
 
                     <!-- Tabla -->
-                    <div class="table-responsive py-2">
+                    <div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
                         <table class="table table-striped" id="documentsTable">
-                            <thead>
+                            <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
                                     <th>Fecha</th>
                                     <th>Partida</th>
@@ -186,7 +186,7 @@
                                     <th>Costo</th>
                                     <th>Centro de Costos</th>
                                     <th>Documento</th>
-                                    {% if request.user.role != 1 %}
+                                    {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>
                                     {% endif %}
                                 </tr>
@@ -194,7 +194,7 @@
                             <tbody>
                                 {% for plano in planos %}
                                 <tr>
-                                    <td>{{ plano.fecha|date:"m-d-Y" }}</td>
+                                    <td class="text-nowrap">{{ plano.fecha|date:"d-m-Y" }}</td>
                                     <td>{{ plano.partida }}</td>
                                     <td>{{ plano.descripcion }}</td>
                                     <td>{{ plano.pg }}</td>
@@ -216,7 +216,7 @@
                                     </td>
 
                                     <!-- Acciones en una sola columna -->
-                                    {% if request.user.role != 1 %}
+                                    {% if request.user.role != 1 and request.user.role != 2 %}
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm text-white me-2 btn-editar"
@@ -358,58 +358,42 @@
             this.value = paste.replace(/\D/g, "");
         });
 
+
         // FILTRO EN TIEMPO REAL
-        document.querySelectorAll('.filter-input').forEach(input => {
-            input.addEventListener('keyup', function () {
-                const columnIndex = this.dataset.column;
-                const searchTerm = this.value.toLowerCase();
+        // Escuchar cambios en todos los inputs y selects
+document.querySelectorAll('.filter-input').forEach(input => {
+    input.addEventListener('input', filterTable);
+    input.addEventListener('change', filterTable); // útil para selects
+});
 
-                document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
-                    const cell = row.cells[columnIndex];
-                    const cellText = cell.textContent.toLowerCase();
-                    if (cellText.includes(searchTerm)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-        });
+function filterTable() {
+    const filters = {};
 
-        document.querySelectorAll('.filter-input').forEach(input => {
-            input.addEventListener('input', filterTable);
-            input.addEventListener('change', filterTable); // para selects
-        });
-
-        // FILTRO PARA AÑO SELECT
-        function filterTable() {
-            const filters = {};
-
-            document.querySelectorAll('.filter-input').forEach(input => {
-                const columnIndex = input.dataset.column;
-                const value = input.value.toLowerCase();
-                if (value) {
-                    filters[columnIndex] = value;
-                }
-            });
-
-            document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
-                let visible = true;
-
-                for (const columnIndex in filters) {
-                    const cell = row.cells[columnIndex];
-                    if (cell) {
-                        const cellText = cell.textContent.toLowerCase();
-                        if (!cellText.includes(filters[columnIndex])) {
-                            visible = false;
-                            break;
-                        }
-                    }
-                }
-
-                row.style.display = visible ? '' : 'none';
-            });
+    // Recolectar valores no vacíos de cada filtro
+    document.querySelectorAll('.filter-input').forEach(input => {
+        const columnIndex = input.dataset.column;
+        const value = input.value.trim().toLowerCase();
+        if (value) {
+            filters[columnIndex] = value;
         }
+    });
+
+    // Filtrar filas de la tabla
+    document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
+        let visible = true;
+
+        for (const columnIndex in filters) {
+            const cell = row.cells[columnIndex];
+            if (!cell || !cell.textContent.toLowerCase().includes(filters[columnIndex])) {
+                visible = false;
+                break;
+            }
+        }
+
+        row.style.display = visible ? '' : 'none';
+    });
+}
+
 
         // EDITAR REGISTRO
         const editButtons = document.querySelectorAll('.btn-editar');

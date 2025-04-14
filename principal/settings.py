@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-h5)1hfx3qxizlp53yt-_=04pfhu!vjlo9n98(b4()og*55n@86
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 X_FRAME_OPTIONS = 'ALLOWALL'
 
 # Application definition
@@ -58,11 +58,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'principal.wsgi.application'
 
 # Database
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'mssql',
+        'NAME': 'SDI',
+        'USER': 'Admin',
+        'PASSWORD': 'root',
+        'HOST': r'PC-03\SQLEXPRESS',
+        'PORT': '',  # por defecto es 1433
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # asegúrate de tener este instalado
+            #'driver': 'ODBC Driver 18 for SQL Server',  # si estás usando el 18
+            'extra_params': 'TrustServerCertificate=yes;',  # útil para evitar errores SSL
+        },
     }
 }
 
@@ -102,3 +117,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # USER CUSTOMIZE
 AUTH_USER_MODEL = 'partidas_planos.User'
 LOGIN_URL = '/login/' 
+
+# PATH FILES
+MEDIA_ROOT = r'\\Pc-03\d\Partidas y Planos 2024 - 2025\temp'

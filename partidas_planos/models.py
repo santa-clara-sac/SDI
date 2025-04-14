@@ -82,7 +82,7 @@ class Partida(models.Model):
     costo = models.CharField(max_length=100)
     centro_costos = models.CharField(max_length=100)
     responsable = models.CharField(max_length=100)
-    pdf = models.FileField(upload_to='documentos/partidas', blank=True, null=True)
+    pdf = models.FileField(upload_to='documentos/partidas', blank=True, null=True, max_length=255)
 
 
 class Plano(models.Model):
@@ -93,7 +93,7 @@ class Plano(models.Model):
     ubicacion = models.CharField(max_length=100)
     costo = models.CharField(max_length=100)
     centro_costos = models.CharField(max_length=100)
-    pdf = models.FileField(upload_to='documentos/planos_y_otros', blank=True, null=True)
+    pdf = models.FileField(upload_to='documentos/planos_y_otros', blank=True, null=True, max_length=255)
 
 
 
