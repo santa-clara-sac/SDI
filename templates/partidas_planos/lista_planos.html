@@ -67,7 +67,7 @@
 
                         <!-- plano -->
                         <div class="col">
-                            <label class="form-label">Partida</label>
+                            <label class="form-label">Trámite</label>
                             <input type="text" class="form-control filter-input" data-column="1">
                         </div>
 
@@ -126,7 +126,7 @@
                                         <div class="container">
                                             <div class="row g-3">
                                                 <div class="col-md-4">
-                                                    <label for="id_plano" class="form-label">Partida</label>
+                                                    <label for="id_plano" class="form-label">Trámite</label>
                                                     {{ form.partida }}
                                                 </div>
                                                 <div class="col-md-4">
@@ -235,6 +235,13 @@
                                                 style="background-color: #811f1f;" title="Eliminar">
                                                 <i class="bi bi-trash"></i>
                                             </a>
+
+                                            <!-- <a href="https://web.whatsapp.com/send?text=Aquí tienes el documento: http://192.168.18.145:8000{{ plano.pdf.url|urlencode }}" 
+   target="_blank" class="btn btn-sm text-white"
+   style="background-color: #25d366;">
+    <i class="bi bi-whatsapp"></i> WhatsApp
+</a> -->
+                                            
                                         </div>
                                     </td>
                                     {% endif %}

@@ -14,4 +14,4 @@ INSERT INTO partidas_planos_plano (partida,fecha,descripcion,pg,ubicacion,costo,
 ('','04/01/2023','Instalaciones electricas - Distribución de alimentadores 1° Piso Sub Lote A-1-3 Lamina IE-03',1,'Los Olivos',0,'Canta Callao','planos_y_otros/Instalaciones electricas - Distribución de alimentadores 1° Piso Sub Lote A-1-3 Lamina IE-03.pdf'),
 ('','10/01/2023','Solicitud de medidor Trifásico - Instalación eléctrica - Jr. Los Tornos N° 100 SMP - Lamina IE-01 - Primera, segunda y tercera piso.',1,'SMP',0,'Tornos','planos_y_otros/Solicitud de medidor Trifásico - Instalación eléctrica - Jr. Los Tornos N° 100 SMP - Lamina IE-01.pdf'),
 ('','06/11/2022','AYUDA MEMORIA A-1-3 CONDOMINIO CANTA CALLAO ',12,'Los Olivos',0,'Canta Callao','planos_y_otros/AYUDA MEMORIA A-1-3 CONDOMINIO CANTA CALLAO (1).pdf'),
-('','08/31/2023','AYUDA MEMORIA A-1-4 CONDOMINIO CANTA CALLAO',16,'Los Olivos',0,'Canta Callao','planos_y_otros/AYUDA MEMORIA DEL CONDOMINIO CANTA CALLAO - A-1-4.pdf');
+('','08/31/2023','AYUDA MEMORIA A-1-4 CONDOMINIO CANTA CALLAO',16,'Los Olivos',0,'Canta Callao','planos_y_otros/AYUDA MEMORIA A-1-4 CONDOMINIO CANTA CALLAO.pdf');

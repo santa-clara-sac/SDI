@@ -119,4 +119,4 @@ AUTH_USER_MODEL = 'partidas_planos.User'
 LOGIN_URL = '/login/' 
 
 # PATH FILES
-MEDIA_ROOT = r'\\Pc-03\d\Partidas y Planos 2024 - 2025\temp'
+# MEDIA_ROOT = r'\\Pc-03\d\Partidas y Planos 2024 - 2025'
