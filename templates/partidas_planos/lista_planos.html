@@ -179,7 +179,7 @@
                             <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
                                     <th>Fecha</th>
-                                    <th>Partida</th>
+                                    <th>Trámite</th>
                                     <th>Descripción</th>
                                     <th>Pg.</th>
                                     <th>Ubicación</th>
@@ -195,7 +195,8 @@
                                 {% for plano in planos %}
                                 <tr>
                                     <td class="text-nowrap">{{ plano.fecha|date:"d-m-Y" }}</td>
-                                    <td>{{ plano.partida }}</td>
+                                    <td>{% if plano.partida and plano.partida != "NULL" and plano.partida != "None" %}
+                                        {{ plano.partida }}{% else %}&nbsp;{% endif %}</td>
                                     <td>{{ plano.descripcion }}</td>
                                     <td>{{ plano.pg }}</td>
                                     <td>{{ plano.ubicacion }}</td>
@@ -241,7 +242,7 @@
    style="background-color: #25d366;">
     <i class="bi bi-whatsapp"></i> WhatsApp
 </a> -->
-                                            
+
                                         </div>
                                     </td>
                                     {% endif %}
@@ -368,38 +369,38 @@
 
         // FILTRO EN TIEMPO REAL
         // Escuchar cambios en todos los inputs y selects
-document.querySelectorAll('.filter-input').forEach(input => {
-    input.addEventListener('input', filterTable);
-    input.addEventListener('change', filterTable); // útil para selects
-});
+        document.querySelectorAll('.filter-input').forEach(input => {
+            input.addEventListener('input', filterTable);
+            input.addEventListener('change', filterTable); // útil para selects
+        });
 
-function filterTable() {
-    const filters = {};
+        function filterTable() {
+            const filters = {};
 
-    // Recolectar valores no vacíos de cada filtro
-    document.querySelectorAll('.filter-input').forEach(input => {
-        const columnIndex = input.dataset.column;
-        const value = input.value.trim().toLowerCase();
-        if (value) {
-            filters[columnIndex] = value;
+            // Recolectar valores no vacíos de cada filtro
+            document.querySelectorAll('.filter-input').forEach(input => {
+                const columnIndex = input.dataset.column;
+                const value = input.value.trim().toLowerCase();
+                if (value) {
+                    filters[columnIndex] = value;
+                }
+            });
+
+            // Filtrar filas de la tabla
+            document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
+                let visible = true;
+
+                for (const columnIndex in filters) {
+                    const cell = row.cells[columnIndex];
+                    if (!cell || !cell.textContent.toLowerCase().includes(filters[columnIndex])) {
+                        visible = false;
+                        break;
+                    }
+                }
+
+                row.style.display = visible ? '' : 'none';
+            });
         }
-    });
-
-    // Filtrar filas de la tabla
-    document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
-        let visible = true;
-
-        for (const columnIndex in filters) {
-            const cell = row.cells[columnIndex];
-            if (!cell || !cell.textContent.toLowerCase().includes(filters[columnIndex])) {
-                visible = false;
-                break;
-            }
-        }
-
-        row.style.display = visible ? '' : 'none';
-    });
-}
 
 
         // EDITAR REGISTRO

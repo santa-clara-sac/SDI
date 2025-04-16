@@ -51,8 +51,8 @@ def editar_partida(request):
         partida = get_object_or_404(Partida, id=partida_id)
 
         form = PartidaForm(request.POST, request.FILES, instance=partida)
-        print(form)
-        print(form.is_valid())
+        # print(form)
+        # print(form.is_valid())
         if form.is_valid():
             form.save()
             return redirect('lista_partidas')

@@ -65,22 +65,35 @@ WSGI_APPLICATION = 'principal.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'SDI',
+#         'USER': 'Admin',
+#         'PASSWORD': 'root',
+#         'HOST': r'PC-03\SQLEXPRESS',
+#         'PORT': '',  # por defecto es 1433
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',  # asegúrate de tener este instalado
+#             'extra_params': 'TrustServerCertificate=yes;',  # útil para evitar errores SSL
+#         },
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'SDI',
-        'USER': 'Admin',
-        'PASSWORD': 'root',
-        'HOST': r'PC-03\SQLEXPRESS',
+        'USER': 'sa',
+        'PASSWORD': 'sa',
+        'HOST': r'192.168.100.108',
         'PORT': '',  # por defecto es 1433
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # asegúrate de tener este instalado
-            #'driver': 'ODBC Driver 18 for SQL Server',  # si estás usando el 18
             'extra_params': 'TrustServerCertificate=yes;',  # útil para evitar errores SSL
         },
     }
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

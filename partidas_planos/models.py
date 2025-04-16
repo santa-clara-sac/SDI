@@ -86,7 +86,7 @@ class Partida(models.Model):
 
 
 class Plano(models.Model):
-    partida = models.CharField(max_length=100)
+    partida = models.CharField(max_length=100,blank=True, null=True)
     fecha = models.DateField()
     descripcion = models.CharField(max_length=255)
     pg = models.CharField(max_length=50)
