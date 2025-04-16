@@ -83,7 +83,7 @@ def lista_planos(request):
             form.save()
             return redirect('lista_planos')
 
-    planos = Plano.objects.all()
+    planos = Plano.objects.all().order_by('fecha')
 
     return render(request, 'partidas_planos/lista_planos.html', {
         'form': form,

@@ -17,5 +17,5 @@ urlpatterns = [
 
 
     path('', include('partidas_planos.urls')),
-    # path('centro_costos/', include('centro_costos.urls')),
+    path('', include('centro_costos.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

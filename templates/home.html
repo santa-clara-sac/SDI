@@ -83,7 +83,7 @@
             {% else %}
             <!-- No Legal: Centro de Costos -->
             <div class="col-6 col-md-3 mb-4">
-                <a href="#" class="card-link">
+                <a href="{% url 'centro_costos:centro_costos_home' %}" class="card-link">
                     <div class="card h-100 shadow-sm">
                         <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
                             <img src="{% static 'images/centro_costos.png' %}" alt="Centro Costos"
