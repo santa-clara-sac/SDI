@@ -52,6 +52,4 @@ C:\Users\Admin\Desktop\SDI\.venv\Scripts\wfastcgi.exe
 python C:\Users\Admin\Desktop\SDI\.venv\Lib\site-packages\wfastcgi.py
 ```
 
-## DNS
-
-http://sdi-bssc.com:8000/
+C:\inetpub\wwwroot\SDI\.venv\Scripts\python.exe, C:\inetpub\wwwroot\SDI\.venv\Lib\site-packages\wfastcgi.py

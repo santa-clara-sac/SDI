@@ -4,12 +4,12 @@ from partidas_planos.models import User
 class UserForm(forms.ModelForm):
     password = forms.CharField(
         required=False,
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
         label="Contraseña"
     )
     confirm_password = forms.CharField(
         required=False,
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Repetir contraseña'}),
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
         label="Repetir Contraseña"
     )
 
@@ -17,11 +17,11 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'phone_number', 'role', 'password', 'confirm_password']
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombres'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Apellidos'}),
-            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Usuario'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Correo'}),
-            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Teléfono'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
             'role': forms.Select(attrs={'class': 'form-control'}),
         }
 
