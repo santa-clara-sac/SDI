@@ -3,7 +3,6 @@
 ## Despliegue en desarrollo
 
 ### Cambiar la política de ejecución temporalmente
-
 ```sh
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
@@ -12,15 +11,9 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 python -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
-django-admin startproject principal .
-python manage.py startapp partidas_planos
-python manage.py startapp centro_costos
-python manage.py startapp control_expediente
-python manage.py startapp hoja_requerimiento
 ```
 
 ## Migraciones
-
 ```sh
 python manage.py makemigrations
 python manage.py migrate partidas_planos
@@ -66,4 +59,10 @@ body::before {
   /* Cambia el 0.4 para más o menos claridad */
   z-index: 0;
 }
+```
+
+### Eliminar DB
+```sql
+ALTER DATABASE SDI_dev SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE SDI_dev;
 ```
