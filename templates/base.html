@@ -21,7 +21,7 @@
 
     <style>
         .navbar {
-            box-shadow: 0 4px 6px 2px #d8dee9;
+            box-shadow: 0 1px 3px 1px #a5a5a5;
         }
 
         .navbar-brand span {
@@ -43,14 +43,15 @@
     </style>
 
     <nav class="navbar navbar-expand-lg navbar-dark"
-        style="background-color: #02737e; padding-top: 5px; padding-bottom: 5px;">
+        style="background-color: {% if request.user.role == 3 %}#7c1c1c{% else %}#02737e{% endif %}; padding-top: 5px; padding-bottom: 5px;">
         <div class="container-fluid">
             <!-- Logo e identidad -->
-            <a class="navbar-brand d-flex align-items-center" style="margin-left: 10px;" href="{% url 'home' %}">
+            <a class="navbar-brand d-flex align-items-center me-4" href="{% url 'home' %}">
                 <img src="{% static 'logo/logotipo_empresa.png' %}" alt="Logo" style="height: 40px; width: auto;"
                     class="d-inline-block align-text-top me-2">
                 <span style="font-weight: bold; font-size: 1.2rem;">Bienes Raíces Santa Clara S.A.C.</span>
             </a>
+
             <!-- Botón toggle para móviles -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,42 +59,40 @@
             </button>
 
             <!-- Contenido del navbar -->
-            <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Enlaces a la izquierda -->
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% block link %}
+
+                    {% endblock %}
+                </ul>
+
+
+                <!-- Usuario autenticado / Cierre de sesión -->
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     {% if user.is_authenticated %}
-                    <!-- Usuario autenticado: mostrar nombre y cerrar sesión -->
                     <li class="nav-item d-flex align-items-center">
-                        <span class="nav-link text-white d-flex align-items-center" style="margin-right: 10px;">
+                        <span class="nav-link text-white d-flex align-items-center me-2">
                             <i class="bi bi-person-circle" style="font-size: 1.1rem; line-height: 1;"></i>&nbsp;Perfil:
                             {{ user.get_role_display }}
                         </span>
-
-                        <div style="background-color: #edeff4; color: #edeff4;">
-                            |
-                        </div>
-                        <form action="{% url 'logout' %}" method="post">
+                        <div class="text-white mx-2">|</div>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit"
-                                style="color: #edeff4; background-color: #02737e; border: 1px solid #02737e;"
+                            <button type="submit" class="btn btn-sm text-white" style=""
                                 onmouseover="this.style.textDecoration='underline';"
                                 onmouseout="this.style.textDecoration='none';">
-                                Cerrar sesión</button>
+                                Cerrar sesión
+                            </button>
                         </form>
                     </li>
-                    {% else %}
-                    <!-- Usuario no autenticado: mostrar iniciar sesión -->
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-hover-underline" style="margin-right: 10px; color: #fff"
-                            href="{% url 'login' %}">
-                            <i class="bi bi-person-circle"></i> Iniciar sesión
-                        </a>
-                    </li>
                     {% endif %}
-
                 </ul>
             </div>
         </div>
     </nav>
+
 
 
     {% block body %}

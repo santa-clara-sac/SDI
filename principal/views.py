@@ -5,9 +5,25 @@ from django.contrib import messages
 from partidas_planos.models import User
 from .forms import UserForm, UserEditForm
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login as auth_login
 
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+            return redirect('home')  # Cambia según el nombre de tu vista home
+        else:
+            return render(request, 'login.html', {'error': 'Usuario o contraseña incorrectos.'})
+
+    return render(request, 'login.html')
 
 def home(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     return render(request, 'home.html')
 
 @login_required

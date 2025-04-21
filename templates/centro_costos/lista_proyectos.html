@@ -91,431 +91,401 @@
                                                         proyecto</label>
                                                     {{ form.nombre }}
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <label for="id_codigo_proyecto" class="form-label">Código del
                                                         proyecto</label>
                                                     {{ form.codigo }}
                                                 </div>
+
                                                 <div class="col-md-6">
-                                                    <label for="id_centro_de_costos" class="form-label">Centro de
+                                                    <label for="centro_de_costos_selector" class="form-label">Centro de
                                                         costos</label>
-                                                    {{ form.centro_de_costos }}
+                                                    <select id="centro_de_costos_selector" name="centro_de_costos"
+                                                        class="form-select">
+
+                                                        <option value="">Seleccione tipo de costo</option>
+                                                        {% for centro in centros_de_costos %}
+                                                        <option value="{{ centro.id }}">{{ centro.nombre }}</option>
+                                                        {% endfor %}
+                                                        <option value="otros">Otros</option>
+                                                    </select>
+                                                    <input type="text" name="nuevo_centro_de_costos"
+                                                        id="nuevo_centro_de_costos" class="form-control mt-2"
+                                                        placeholder="Ingrese nuevo centro de costos"
+                                                        style="display: none;">
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <label for="id_tipo_gasto" class="form-label">Tipo de gasto</label>
                                                     {{ form.tipo_gasto }}
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <label for="id_responsable" class="form-label">Responsable</label>
                                                     {{ form.responsable }}
                                                 </div>
                                             </div>
-                                            <div class="text-center mt-4">
-                                                <button type="submit" class="btn px-5 py-2 btnGuardar"
-                                                    style="background-color: #02737e; color: #edeff4;">Guardar</button>
-                                            </div>
                                         </div>
-                                    </form>
+
+
+                                        <div class="text-center mt-4">
+                                            <button type="submit" class="btn px-5 py-2 btnGuardar"
+                                                style="background-color: #02737e; color: #edeff4;">Guardar</button>
+                                        </div>
                                 </div>
+                                </form>
                             </div>
                         </div>
                     </div>
+                </div>
 
 
-                    <hr>
+                <hr>
 
-                    <!-- Tabla -->
-                    <div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
-                        <table class="table table-striped" id="documentsTable">
-                            <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Centro de Costos</th>
-                                    <th>Tipo de gasto</th>
-                                    <th>Responsable</th>
-                                    {% if request.user.role != 1 and request.user.role != 2 %}
-                                    <th>Acciones</th>
-                                    {% endif %}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for proyecto in proyectos %}
-                                <tr>
-                                    <td>{{ proyecto.codigo }}</td>
-                                    <td>{{ proyecto.nombre }}</td>
-                                    <td>{{ proyecto.centro_de_costos }}</td>
-                                    <td>{{ proyecto.tipo_gasto }}</td>
-                                    <td>{{ proyecto.responsable }}</td>
+                <!-- Tabla -->
+                <div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
+                    <table class="table table-striped" id="documentsTable">
+                        <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>Centro de Costos</th>
+                                <th>Tipo de gasto</th>
+                                <th>Responsable</th>
+                                {% if request.user.role != 1 and request.user.role != 2 %}
+                                <th>Acciones</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for proyecto in proyectos %}
+                            <tr>
+                                <td>{{ proyecto.codigo }}</td>
+                                <td>{{ proyecto.nombre }}</td>
+                                <td>{{ proyecto.centro_de_costos }}</td>
+                                <td>{{ proyecto.tipo_gasto }}</td>
+                                <td>{{ proyecto.responsable }}</td>
 
-                                    {% if request.user.role != 1 and request.user.role != 2 %}
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-sm text-white me-2 btn-editar"
-                                                style="background-color: #02737e;" data-bs-toggle="modal"
-                                                data-bs-target="#editProyectoModal" data-id="{{ proyecto.id }}"
-                                                data-codigo="{{ proyecto.codigo }}" data-nombre="{{ proyecto.nombre }}"
-                                                data-centro_de_costos="{{ proyecto.centro_de_costos }}"
-                                                data-tipo_gasto="{{ proyecto.tipo_gasto }}"
-                                                data-responsable="{{ proyecto.responsable.id }}">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
+                                {% if request.user.role != 1 and request.user.role != 2 %}
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-sm text-white me-2 btn-editar"
+                                            style="background-color: #02737e;" data-bs-toggle="modal"
+                                            data-bs-target="#editProyectoModal" data-id="{{ proyecto.id }}"
+                                            data-codigo="{{ proyecto.codigo }}" data-nombre="{{ proyecto.nombre }}"
+                                            data-centro-id="{{ proyecto.centro_de_costos.id }}"
+                                            data-centro-nombre="{{ proyecto.centro_de_costos.nombre }}"
+                                            data-tipo_gasto="{{ proyecto.tipo_gasto }}"
+                                            data-responsable="{{ proyecto.responsable.id }}">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
 
-                                            <a href="#" class="btn btn-sm text-white btnEliminar"
-                                                style="background-color: #811f1f;" title="Eliminar">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
+                                        <a href="{% url 'centro_costos:eliminar_proyecto' proyecto.id %}"
+                                            class="btn btn-sm text-white btnEliminar" style="background-color: #811f1f;"
+                                            title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
 
-                                        </div>
-                                    </td>
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                    </div>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
 
 
-                    <!-- Modal para editar proyecto -->
-                    <div class="modal fade" id="editProyectoModal" tabindex="-1"
-                        aria-labelledby="editProyectoModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-xl">
-                            <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #02737e;">
-                                    <h5 class="modal-title" id="editProyectoModalLabel">Editar Responsable</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form method="POST" action="{% url 'centro_costos:editar_proyecto' %}"
-                                        enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        <input type="hidden" id="edit_id" name="id">
-                                        <div class="container">
-                                            <div class="row g-3">
-                                                <!-- Nombre completo: campo ancho arriba -->
-                                                <div class="col-12">
-                                                    <label for="edit_nombre" class="form-label">Nombre</label>
-                                                    <input type="text" class="form-control" id="edit_nombre"
-                                                        name="nombre">
-                                                </div>
-
-                                                <!-- Documento, Correo y Teléfono alineados -->
-                                                <div class="col-md-4">
-                                                    <label for="edit_codigo" class="form-label">Código</label>
-                                                    <input type="text" class="form-control" id="edit_codigo"
-                                                        name="codigo">
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="edit_centro_de_costos" class="form-label">Centro de
-                                                        costos</label>
-                                                    <select class="form-select" id="edit_centro_de_costos"
-                                                        name="centro_de_costos">
-                                                        {% for centro in centros_de_costos %}
-                                                        <option value="{{ centro }}">{{ centro }}</option>
-                                                        {% endfor %}
-                                                        <option value="Otros">Otros</option>
-                                                    </select>
-
-                                                    <!-- Input oculto que se muestra si se elige "Otros" -->
-                                                    <input type="text" class="form-control mt-2 d-none"
-                                                        id="nuevo_centro_de_costos"
-                                                        placeholder="Nuevo centro de costos">
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label for="edit_tipo_gasto" class="form-label">Tipo de
-                                                        gasto</label>
-                                                    <select class="form-select" id="edit_tipo_gasto" name="tipo_gasto">
-                                                        <option value="Por separado">Por separado</option>
-                                                        <option value="A todo costo">A todo costo</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="edit_responsable" class="form-label">Responsable</label>
-                                                    <select class="form-select" id="edit_responsable"
-                                                        name="responsable">
-                                                        {% for responsable in responsables %}
-                                                        <option value="{{ responsable.id }}">
-                                                            {{ responsable.nombre_completo }}
-                                                        </option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-
-                                            </div>
-
-                                            <!-- Botón guardar centrado -->
-                                            <div class="text-center mt-4">
-                                                <button type="submit" class="btn px-5 py-2 btnGuardar2"
-                                                    id="btn_guardar_edicion"
-                                                    style="background-color: #02737e; color: #edeff4;">Guardar</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
+                <!-- Modal para editar proyecto -->
+                <div class="modal fade" id="editProyectoModal" tabindex="-1" aria-labelledby="editProyectoModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header text-white" style="background-color: #02737e;">
+                                <h5 class="modal-title" id="editProyectoModalLabel">Editar Responsable</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
+                            <div class="modal-body">
+                                <form method="POST" action="{% url 'centro_costos:editar_proyecto' %}"
+                                    enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" id="edit_id" name="id">
+                                    <div class="container">
+                                        <div class="row g-3">
+                                            <!-- Nombre completo: campo ancho arriba -->
+                                            <div class="col-12">
+                                                <label for="edit_nombre" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" id="edit_nombre" name="nombre">
+                                            </div>
+
+                                            <!-- Documento, Correo y Teléfono alineados -->
+                                            <div class="col-md-4">
+                                                <label for="edit_codigo" class="form-label">Código</label>
+                                                <input type="text" class="form-control" id="edit_codigo" name="codigo">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="edit_centro_de_costos" class="form-label">Centro de
+                                                    costos</label>
+                                                <select class="form-select" id="edit_centro_de_costos"
+                                                    name="centro_de_costos">
+                                                    {% for centro in centros_de_costos %}
+                                                    <option value="{{ centro.id }}">{{ centro.nombre }}</option>
+                                                    {% endfor %}
+                                                    <!-- <option value="otros">Otros</option> -->
+                                                    <!-- ❌ Eliminar esta línea -->
+                                                </select>
+
+
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label for="edit_tipo_gasto" class="form-label">Tipo de
+                                                    gasto</label>
+                                                <select class="form-select" id="edit_tipo_gasto" name="tipo_gasto">
+                                                    <option value="Por separado">Por separado</option>
+                                                    <option value="A todo costo">A todo costo</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="edit_responsable" class="form-label">Responsable</label>
+                                                <select class="form-select" id="edit_responsable" name="responsable">
+                                                    {% for responsable in responsables %}
+                                                    <option value="{{ responsable.id }}">
+                                                        {{ responsable.nombre_completo }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Botón guardar centrado -->
+                                        <div class="text-center mt-4">
+                                            <button type="submit" class="btn px-5 py-2 btnGuardar2"
+                                                id="btn_guardar_edicion"
+                                                style="background-color: #02737e; color: #edeff4;">Guardar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
+                </div>
 
-                    <script>
+                <script>
 
-                        document.addEventListener('DOMContentLoaded', function () {
+                    document.addEventListener('DOMContentLoaded', function () {
 
-                            // FILTRO EN TIEMPO REAL
+                        // FILTRO EN TIEMPO REAL
+                        document.querySelectorAll('.filter-input').forEach(input => {
+                            input.addEventListener('input', filtrarTabla); // Detecta tanto texto como selects
+                        });
+
+                        function filtrarTabla() {
+                            const filtros = {};
+
+                            // Recolectamos todos los filtros activos
                             document.querySelectorAll('.filter-input').forEach(input => {
-                                input.addEventListener('input', filtrarTabla); // Detecta tanto texto como selects
-                            });
-
-                            function filtrarTabla() {
-                                const filtros = {};
-
-                                // Recolectamos todos los filtros activos
-                                document.querySelectorAll('.filter-input').forEach(input => {
-                                    const columna = input.dataset.column;
-                                    const valor = input.value.trim().toLowerCase();
-                                    if (valor) {
-                                        filtros[columna] = valor;
-                                    }
-                                });
-
-                                // Recorremos cada fila de la tabla
-                                document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
-                                    let mostrar = true;
-
-                                    for (const columna in filtros) {
-                                        const celda = fila.cells[columna];
-                                        if (celda) {
-                                            const textoCelda = celda.textContent.toLowerCase();
-                                            if (!textoCelda.includes(filtros[columna])) {
-                                                mostrar = false;
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    fila.style.display = mostrar ? '' : 'none';
-                                });
-                            }
-
-
-                            // EDITAR REGISTRO
-                            const editButtons = document.querySelectorAll('.btn-editar');
-                            const centroSelect = document.getElementById('edit_centro_de_costos');
-                            const nuevoCentroInput = document.getElementById('nuevo_centro_de_costos');
-
-                            // Cargar centros de costos guardados al cargar la página
-                            function cargarCentrosDeCostos() {
-                                const defaultOptions = ["Tupac Amaru", "Canta Callao", "Bienes Raices"];
-                                const guardados = JSON.parse(localStorage.getItem('centros_de_costos_extra')) || [];
-                                const opciones = [...defaultOptions, ...guardados];
-
-                                // Limpiar opciones existentes
-                                centroSelect.innerHTML = "";
-
-                                opciones.forEach(op => {
-                                    const option = document.createElement('option');
-                                    option.value = op;
-                                    option.textContent = op;
-                                    centroSelect.appendChild(option);
-                                });
-
-                                // Agrega la opción "Otros" al final
-                                const otros = document.createElement('option');
-                                otros.value = "Otros";
-                                otros.textContent = "Otros";
-                                centroSelect.appendChild(otros);
-                            }
-
-                            cargarCentrosDeCostos();
-
-                            // Mostrar u ocultar el campo extra si seleccionan "Otros"
-                            centroSelect.addEventListener('change', function () {
-                                if (this.value === "Otros") {
-                                    nuevoCentroInput.classList.remove('d-none');
-                                } else {
-                                    nuevoCentroInput.classList.add('d-none');
+                                const columna = input.dataset.column;
+                                const valor = input.value.trim().toLowerCase();
+                                if (valor) {
+                                    filtros[columna] = valor;
                                 }
                             });
 
-                            // Botón de editar
-                            editButtons.forEach(button => {
-                                button.addEventListener('click', function () {
-                                    document.getElementById('edit_id').value = button.getAttribute('data-id');
-                                    document.getElementById('edit_nombre').value = button.getAttribute('data-nombre');
-                                    document.getElementById('edit_codigo').value = button.getAttribute('data-codigo');
+                            // Recorremos cada fila de la tabla
+                            document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
+                                let mostrar = true;
 
-                                    // Setear tipo de gasto
-                                    const tipoGasto = button.getAttribute('data-tipo_gasto');
-                                    document.getElementById('edit_tipo_gasto').value = tipoGasto;
-
-                                    // Setear responsable
-                                    const responsable = button.getAttribute('data-responsable');
-                                    const responsableSelect = document.getElementById('edit_responsable');
-                                    [...responsableSelect.options].forEach(option => {
-                                        option.selected = option.value === responsable;
-                                    });
-
-                                    // Setear centro de costos
-                                    const centro = button.getAttribute('data-centro_de_costos');
-                                    cargarCentrosDeCostos(); // Por si hay uno nuevo
-                                    const found = [...centroSelect.options].some(option => option.value === centro);
-                                    if (found) {
-                                        centroSelect.value = centro;
-                                        nuevoCentroInput.classList.add('d-none');
-                                        nuevoCentroInput.value = "";
-                                    } else {
-                                        centroSelect.value = "Otros";
-                                        nuevoCentroInput.classList.remove('d-none');
-                                        nuevoCentroInput.value = centro;
-                                    }
-                                });
-                            });
-
-                            // Guardar nuevo centro en localStorage si se escribió uno nuevo
-                            document.getElementById('btn_guardar_edicion').addEventListener('click', function () {
-                                if (centroSelect.value === "Otros") {
-                                    const nuevoCentro = nuevoCentroInput.value.trim();
-                                    if (nuevoCentro) {
-                                        let guardados = JSON.parse(localStorage.getItem('centros_de_costos_extra')) || [];
-
-                                        if (!guardados.includes(nuevoCentro)) {
-                                            guardados.push(nuevoCentro);
-                                            localStorage.setItem('centros_de_costos_extra', JSON.stringify(guardados));
+                                for (const columna in filtros) {
+                                    const celda = fila.cells[columna];
+                                    if (celda) {
+                                        const textoCelda = celda.textContent.toLowerCase();
+                                        if (!textoCelda.includes(filtros[columna])) {
+                                            mostrar = false;
+                                            break;
                                         }
                                     }
                                 }
+
+                                fila.style.display = mostrar ? '' : 'none';
                             });
+                        }
 
-                            // Guardar nuevo centro al enviar el formulario
-                            const form = document.querySelector('form');
-                            form.addEventListener('submit', function () {
-                                if (centroSelect.value === "Otros" && nuevoCentroInput.value.trim() !== "") {
-                                    let nuevos = JSON.parse(localStorage.getItem('centros_de_costos_extra')) || [];
-                                    const nuevo = nuevoCentroInput.value.trim();
-                                    if (!nuevos.includes(nuevo)) {
-                                        nuevos.push(nuevo);
-                                        localStorage.setItem('centros_de_costos_extra', JSON.stringify(nuevos));
-                                    }
 
-                                    // Cambiar valor del select antes de enviar
-                                    centroSelect.value = nuevo;
-                                }
+                        // EDITAR
+                        const editButtons = document.querySelectorAll('.btn-editar');
+
+                        editButtons.forEach(button => {
+                            button.addEventListener('click', function () {
+                                // Obtener referencias
+                                const centroSelect = document.getElementById('edit_centro_de_costos');
+
+                                // Setear valores básicos
+                                document.getElementById('edit_id').value = button.getAttribute('data-id');
+                                document.getElementById('edit_nombre').value = button.getAttribute('data-nombre');
+                                document.getElementById('edit_codigo').value = button.getAttribute('data-codigo');
+                                document.getElementById('edit_tipo_gasto').value = button.getAttribute('data-tipo_gasto');
+
+                                // Responsable
+                                const responsable = button.getAttribute('data-responsable');
+                                const responsableSelect = document.getElementById('edit_responsable');
+                                [...responsableSelect.options].forEach(option => {
+                                    option.selected = option.value === responsable;
+                                });
+
+                                // Centro de costos (ya no hay opción "otros")
+                                const centroId = button.getAttribute('data-centro-id');
+                                centroSelect.value = centroId;
                             });
                         });
 
+                    });
 
-                        //ALERT ELIMINAR
-                        (function () {
-                            const botonesEliminar = document.querySelectorAll('.btnEliminar');
 
-                            botonesEliminar.forEach(boton => {
-                                boton.addEventListener('click', function (e) {
-                                    e.preventDefault(); // Evita que el enlace se siga inmediatamente
+                    //ALERT ELIMINAR
+                    (function () {
+                        const botonesEliminar = document.querySelectorAll('.btnEliminar');
 
-                                    Swal.fire({
-                                        title: '¿Estás seguro de eliminar?',
-                                        text: "Esta acción no se puede deshacer.",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#ad075a',
-                                        cancelButtonColor: '#033a8c',
-                                        confirmButtonText: 'Sí, eliminar',
-                                        cancelButtonText: 'Cancelar'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            // Redirige al href del botón
-                                            window.location.href = this.href;
-                                        }
-                                    });
-                                });
-                            });
-                        })();
+                        botonesEliminar.forEach(boton => {
+                            boton.addEventListener('click', function (e) {
+                                e.preventDefault(); // Evita que el enlace se siga inmediatamente
 
-                        // BTN GUARDAR
-                        // BTN GUARDAR CON VALIDACIÓN
-                        (function () {
-                            const botonesGuardar = document.querySelectorAll('.btnGuardar');
-
-                            botonesGuardar.forEach(boton => {
-                                boton.addEventListener('click', function (e) {
-                                    e.preventDefault();
-
-                                    const form = this.closest('form');
-
-                                    const nombre = document.getElementById("id_nombre").value.trim();
-                                    const codigo = document.getElementById("id_codigo").value.trim();
-                                    const centro = document.getElementById("id_centro_de_costos").value.trim();
-                                    const tipoGasto = document.getElementById("id_tipo_gasto").value;
-                                    const responsable = document.getElementById("id_responsable").value;
-
-                                    if (!nombre || !codigo || !centro || tipoGasto === "" || responsable === "") {
-                                        Swal.fire({
-                                            title: "Campos incompletos",
-                                            text: "Por favor, completa todos los campos antes de guardar.",
-                                            icon: "warning",
-                                            confirmButtonColor: '#02737e',
-                                        });
-                                        return; // No continúa si hay campos vacíos
+                                Swal.fire({
+                                    title: '¿Estás seguro de eliminar?',
+                                    text: "Esta acción no se puede deshacer.",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#ad075a',
+                                    cancelButtonColor: '#033a8c',
+                                    confirmButtonText: 'Sí, eliminar',
+                                    cancelButtonText: 'Cancelar'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Redirige al href del botón
+                                        window.location.href = this.href;
                                     }
-
-                                    // Si todo está ok, muestra el toast y luego envía
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: "top-end",
-                                        showConfirmButton: false,
-                                        timer: 2000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.onmouseenter = Swal.stopTimer;
-                                            toast.onmouseleave = Swal.resumeTimer;
-                                        }
-                                    });
-
-                                    Toast.fire({
-                                        icon: "success",
-                                        title: "Registro guardado correctamente"
-                                    }).then(() => {
-                                        form.submit();
-                                    });
                                 });
                             });
-                        })();
+                        });
+                    })();
 
+                    // BTN GUARDAR
+                    // BTN GUARDAR CON VALIDACIÓN (adaptado para "centro de costos" con opción "otros")
+                    (function () {
+                        const botonesGuardar = document.querySelectorAll('.btnGuardar');
 
-                        // BTN ACTUALIZAR
-                        (function () {
-                            const botonesGuardar = document.querySelectorAll('.btnGuardar2');
+                        // Función para mostrar u ocultar el campo "Nuevo centro de costos"
+                        const mostrarCampoNuevoCentro = () => {
+                            const centroSelector = document.getElementById("centro_de_costos_selector");
+                            const nuevoCentroInput = document.getElementById("nuevo_centro_de_costos");
+                            if (centroSelector.value === "otros") {
+                                nuevoCentroInput.style.display = 'block'; // Mostrar el campo
+                            } else {
+                                nuevoCentroInput.style.display = 'none'; // Ocultar el campo
+                            }
+                        };
 
-                            botonesGuardar.forEach(boton => {
-                                boton.addEventListener('click', function (e) {
-                                    e.preventDefault(); // Previene el submit inmediato
+                        // Llamar a la función al cargar la página para que se verifique el estado del selector
+                        mostrarCampoNuevoCentro();
 
-                                    const form = this.closest('form');
+                        // Escuchar cambios en el selector de centro de costos
+                        document.getElementById("centro_de_costos_selector").addEventListener('change', mostrarCampoNuevoCentro);
 
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: "top-end",
-                                        showConfirmButton: false,
-                                        timer: 1000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.onmouseenter = Swal.stopTimer;
-                                            toast.onmouseleave = Swal.resumeTimer;
-                                        }
+                        botonesGuardar.forEach(boton => {
+                            boton.addEventListener('click', function (e) {
+                                e.preventDefault();
+
+                                const form = this.closest('form');
+
+                                const nombre = document.getElementById("id_nombre").value.trim();
+                                const codigo = document.getElementById("id_codigo").value.trim();
+                                const tipoGasto = document.getElementById("id_tipo_gasto").value;
+                                const responsable = document.getElementById("id_responsable").value;
+
+                                const centroSelector = document.getElementById("centro_de_costos_selector");
+                                //const centroOriginal = document.getElementById("id_centro_de_costos");
+                                const nuevoCentro = document.getElementById("nuevo_centro_de_costos").value.trim();
+
+                                let centroValido = false;
+
+                                if (centroSelector.value === "otros") {
+                                    centroValido = nuevoCentro !== "";
+                                } else {
+                                    centroValido = centroSelector.value !== "";
+                                    //centroOriginal.value = centroSelector.value; // asegura que se envíe el valor correcto
+                                }
+
+                                if (!nombre || !codigo || !centroValido || tipoGasto === "" || responsable === "") {
+                                    Swal.fire({
+                                        title: "Campos incompletos",
+                                        text: "Por favor, completa todos los campos antes de guardar.",
+                                        icon: "warning",
+                                        confirmButtonColor: '#02737e',
                                     });
+                                    return; // No continúa si hay campos vacíos
+                                }
 
-                                    Toast.fire({
-                                        icon: "success",
-                                        title: "Registro actualizado correctamente"
-                                    }).then(() => {
-                                        form.submit(); // Enviar el formulario después del toast
-                                    });
+                                // Si todo está ok, muestra el toast y luego envía
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.onmouseenter = Swal.stopTimer;
+                                        toast.onmouseleave = Swal.resumeTimer;
+                                    }
+                                });
+
+                                Toast.fire({
+                                    icon: "success",
+                                    title: "Registro guardado correctamente"
+                                }).then(() => {
+                                    form.submit();
                                 });
                             });
-                        })();
-                    </script>
+                        });
+                    })();
 
-                    {% endblock %}
+
+
+                    // BTN ACTUALIZAR
+                    (function () {
+                        const botonesGuardar = document.querySelectorAll('.btnGuardar2');
+
+                        botonesGuardar.forEach(boton => {
+                            boton.addEventListener('click', function (e) {
+                                e.preventDefault(); // Previene el submit inmediato
+
+                                const form = this.closest('form');
+
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: "top-end",
+                                    showConfirmButton: false,
+                                    timer: 1000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.onmouseenter = Swal.stopTimer;
+                                        toast.onmouseleave = Swal.resumeTimer;
+                                    }
+                                });
+
+                                Toast.fire({
+                                    icon: "success",
+                                    title: "Registro actualizado correctamente"
+                                }).then(() => {
+                                    form.submit(); // Enviar el formulario después del toast
+                                });
+                            });
+                        });
+                    })();
+                </script>
+
+                {% endblock %}

@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from django.contrib.auth import authenticate, login as auth_login
 
 from .forms import PartidaForm,PlanoForm
 from .models import Partida,Plano, User
@@ -12,9 +11,6 @@ def documentacion(request):
 
 @login_required
 def lista_partidas(request):
-    # if request.user.role != User.ADMINISTRADOR:
-    #     return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
-
     form = PartidaForm()
 
     if request.method == 'POST':
@@ -29,21 +25,6 @@ def lista_partidas(request):
         'form': form,
         'partidas': partidas,
     })
-
-
-def login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            auth_login(request, user)
-            return redirect('home')  # Cambia según el nombre de tu vista home
-        else:
-            return render(request, 'login.html', {'error': 'Usuario o contraseña incorrectos.'})
-
-    return render(request, 'login.html')
 
 def editar_partida(request):
     if request.method == 'POST':

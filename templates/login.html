@@ -1,11 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %} Iniciar sesión {% endblock %}
-
-{% block body %}
+{% block title %}
+Iniciar sesión
+{% endblock %} {% block body %}
 
 <style>
+    main,
+    header,
+    footer {
+        position: relative;
+        z-index: 1;
+        /* Asegura que el contenido esté por encima del overlay */
+    }
+
     input:focus {
         outline: none;
         border-color: #7a7a7a !important;
@@ -68,32 +76,41 @@
         width: 350px;
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.399);
+        /* fondo blanco semitransparente */
+        backdrop-filter: blur(10px);
+        /* aplica el blur */
+        -webkit-backdrop-filter: blur(10px);
+        /* soporte para Safari */
+        border-radius: 10px;
     }
 </style>
 
-<div style="display: flex; justify-content: center; align-items: center; height: 90vh;">
+<div style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+  ">
     <div class="card p-4 shadow">
         <div class="text-center mb-4">
-            <img src="{% static 'images/login.png' %}" alt="Logo" class="img-fluid" style="height: 80px;">
+            <img src="{% static 'images/login.png' %}" alt="Logo" class="img-fluid" style="height: 80px" />
         </div>
 
         <h5 class="text-center mb-4">Iniciar sesión</h5>
 
         <form method="POST">
-            {% csrf_token %}
-            {% if error %}
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-            </div>
+            {% csrf_token %} {% if error %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
             {% endif %}
             <div class="mb-3">
                 <label for="userField" class="form-label">Nombre de usuario</label>
-                <input type="text" id="userField" name="username" class="form-control" required>
+                <input type="text" id="userField" name="username" class="form-control" required />
             </div>
 
             <div class="mb-3 password-wrapper">
                 <label for="passwordField" class="form-label">Contraseña</label>
-                <input type="password" id="passwordField" name="password" class="form-control" required>
+                <input type="password" id="passwordField" name="password" class="form-control" required />
                 <span class="toggle-password">
                     <i class="bi bi-eye" id="toggleIcon" aria-hidden="true"></i>
                 </span>
@@ -108,18 +125,18 @@
 
 <!-- JavaScript para alternar visibilidad de la contraseña -->
 <script>
-    const passwordField = document.getElementById('passwordField');
-    const togglePassword = document.getElementById('toggleIcon');
+    const passwordField = document.getElementById("passwordField");
+    const togglePassword = document.getElementById("toggleIcon");
 
-    togglePassword.addEventListener('click', function () {
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
+    togglePassword.addEventListener("click", function () {
+        const type =
+            passwordField.getAttribute("type") === "password" ? "text" : "password";
+        passwordField.setAttribute("type", type);
 
         // Cambiar el ícono
-        this.classList.toggle('bi-eye');
-        this.classList.toggle('bi-eye-slash');
+        this.classList.toggle("bi-eye");
+        this.classList.toggle("bi-eye-slash");
     });
 </script>
-
 
 {% endblock %}

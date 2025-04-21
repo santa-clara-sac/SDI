@@ -16,6 +16,8 @@ class PartidaForm(forms.ModelForm):
 
         # 'responsable' no sea obligatorio
         self.fields['responsable'].required = False
+        self.fields['centro_costos'].required = False
+        self.fields['partida'].required = False
 
 ################################################################
 

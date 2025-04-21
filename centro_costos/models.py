@@ -12,6 +12,12 @@ class Responsable(models.Model):
     def __str__(self):
         return self.nombre_completo
 
+class CentroDeCostos(models.Model):
+    nombre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nombre
+    
 class Proyecto(models.Model):
     TIPO_GASTO_CHOICES = [
         ('Por separado', 'Por separado'),
@@ -20,7 +26,7 @@ class Proyecto(models.Model):
 
     nombre = models.CharField(max_length=100)
     codigo = models.CharField(max_length=50)
-    centro_de_costos = models.CharField(max_length=100) ####
+    centro_de_costos = models.ForeignKey(CentroDeCostos, on_delete=models.CASCADE)
     tipo_gasto = models.CharField(max_length=20, choices=TIPO_GASTO_CHOICES)
     responsable = models.ForeignKey(Responsable, on_delete=models.CASCADE)
     fecha_registro = models.DateTimeField(auto_now_add=True)

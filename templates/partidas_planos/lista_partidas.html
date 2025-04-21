@@ -26,6 +26,10 @@
     .ver-pdf-btn:hover {
         text-decoration: underline !important;
     }
+
+    .fila-seleccionada {
+        background-color: #cdcdcd !important;
+    }
 </style>
 
 <div style="text-align: center; margin-top: 20px;">
@@ -410,6 +414,25 @@
                         //         Array.from(rows).forEach(row => row.style.display = "");
                         //     });
                         // });
+
+                        // FILAS RESALTADAS
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const filas = document.querySelectorAll('#documentsTable tbody tr');
+
+                            filas.forEach(fila => {
+                                fila.addEventListener('click', function () {
+                                    // Si ya está seleccionada, la quitamos
+                                    if (this.classList.contains('fila-seleccionada')) {
+                                        this.classList.remove('fila-seleccionada');
+                                    } else {
+                                        // Primero quitamos la clase de todas las filas
+                                        filas.forEach(f => f.classList.remove('fila-seleccionada'));
+                                        // Luego la agregamos a la que se hizo click
+                                        this.classList.add('fila-seleccionada');
+                                    }
+                                });
+                            });
+                        });
 
                         document.addEventListener("DOMContentLoaded", function () {
                             const table = document.getElementById("documentsTable");

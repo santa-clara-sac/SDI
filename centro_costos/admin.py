@@ -1,7 +1,7 @@
 # admin.py
 
 from django.contrib import admin
-from .models import Responsable, Proyecto, Actividad, Gasto
+from .models import Responsable, Proyecto, Actividad, Gasto, CentroDeCostos
 
 @admin.register(Responsable)
 class ResponsableAdmin(admin.ModelAdmin):
@@ -25,3 +25,8 @@ class GastoAdmin(admin.ModelAdmin):
     list_display = ('actividad', 'item', 'fecha', 'documento', 'fecha_registro')
     search_fields = ('item', 'documento')
     list_filter = ('fecha',)
+
+@admin.register(CentroDeCostos)
+class CentroDeCostosAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombre')
+    search_fields = ('nombre',)

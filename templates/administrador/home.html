@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 {% block title %} Lista de Usuarios {% endblock %}
 
+{% block link %}
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="#">Documentación</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="#">Costos</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="#">Expediente</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white" href="#">Requerimientos</a>
+</li>
+{% endblock %}
+
 {% block body %}
 
 <style>
@@ -237,7 +255,8 @@
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btnGuardar2" style="background-color: #02737e; color: #edeff4;">
+                        <button type="submit" class="btn btnGuardar2"
+                            style="background-color: #02737e; color: #edeff4;">
                             Guardar Contraseña
                         </button>
                     </div>
