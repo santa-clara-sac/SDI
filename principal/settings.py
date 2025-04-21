@@ -68,7 +68,7 @@ WSGI_APPLICATION = 'principal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'SDI',
+        'NAME': 'SDI_dev',
         'USER': 'Admin',
         'PASSWORD': 'root',
         'HOST': r'PC-03\SQLEXPRESS',

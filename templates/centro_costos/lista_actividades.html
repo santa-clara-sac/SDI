@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Listado de Proyectos {% endblock %}
+{% block title %} Listado de Actividades {% endblock %}
 
 {% block body %}
 
@@ -30,7 +30,7 @@
 
 <div style="text-align: center; margin-top: 20px;">
     <div style="font-weight: bold; font-size: 24px;">
-        Listado de Proyectos
+        Listado de Actividades
     </div>
 </div>
 
@@ -60,38 +60,36 @@
                     {% if request.user.role != 1 and request.user.role != 2 %}
                     <center>
                         <button type="button" class="btn text-white mt-4" style="background-color: #02737e;"
-                            data-bs-toggle="modal" data-bs-target="#proyectoModal">
-                            <i class="bi bi-plus-lg"></i> Agregar Nuevo Proyecto
+                            data-bs-toggle="modal" data-bs-target="#actividadModal">
+                            <i class="bi bi-plus-lg"></i> Agregar Nueva Actividad
                         </button>
                     </center>
                     {% endif %}
 
 
-                    <!-- Modal para agregar nuevo proyecto -->
-                    <div class="modal fade" id="proyectoModal" tabindex="-1" aria-labelledby="proyectoModalLabel"
+                    <!-- Modal para agregar nuevo actividad -->
+                    <div class="modal fade" id="actividadModal" tabindex="-1" aria-labelledby="actividadModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header text-white" style="background-color: #02737e;">
-                                    <h5 class="modal-title" id="proyectoModalLabel">Agregar Nuevo Proyecto</h5>
+                                    <h5 class="modal-title" id="actividadModalLabel">Agregar Nueva Actividad</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="POST" action="{% url 'centro_costos:lista_proyectos' %}"
+                                    <form method="POST" action="{% url 'centro_costos:lista_actividades' %}"
                                         id="formProyecto">
                                         {% csrf_token %}
                                         <div class="container">
                                             <div class="row g-3">
                                                 <div class="col-md-6">
-                                                    <label for="id_nombre_proyecto" class="form-label">Nombre del
-                                                        proyecto</label>
+                                                    <label for="id_nombre_proyecto" class="form-label">Nombre de la actividad</label>
                                                     {{ form.nombre }}
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    <label for="id_codigo_proyecto" class="form-label">Código del
-                                                        proyecto</label>
+                                                    <label for="id_codigo_proyecto" class="form-label">Código</label>
                                                     {{ form.codigo }}
                                                 </div>
 
@@ -101,7 +99,7 @@
                                                     <select id="centro_de_costos_selector" name="centro_de_costos"
                                                         class="form-select">
 
-                                                        <option value="">Seleccione tipo de costo</option>
+                                                        <option value="">Seleccione centro de costo</option>
                                                         {% for centro in centros_de_costos %}
                                                         <option value="{{ centro.id }}">{{ centro.nombre }}</option>
                                                         {% endfor %}
@@ -114,12 +112,12 @@
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    <label for="id_tipo_gasto" class="form-label">Tipo de gasto</label>
-                                                    {{ form.tipo_gasto }}
+                                                    <label for="id_tipo_gasto" class="form-label">Tipo</label>
+                                                    {{ form.tipo }}
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    <label for="id_responsable" class="form-label">Responsable</label>
+                                                    <label for="id_responsable" class="form-label">Responsable (opcional)</label>
                                                     {{ form.responsable }}
                                                 </div>
                                             </div>
@@ -148,7 +146,7 @@
                                 <th>Código</th>
                                 <th>Nombre</th>
                                 <th>Centro de Costos</th>
-                                <th>Tipo de gasto</th>
+                                <th>Tipo</th>
                                 <th>Responsable</th>
                                 {% if request.user.role != 1 and request.user.role != 2 %}
                                 <th>Acciones</th>
@@ -156,29 +154,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for proyecto in proyectos %}
+                            {% for actividad in actividades %}
                             <tr>
-                                <td>{{ proyecto.codigo }}</td>
-                                <td>{{ proyecto.nombre }}</td>
-                                <td>{{ proyecto.centro_de_costos }}</td>
-                                <td>{{ proyecto.tipo_gasto }}</td>
-                                <td>{{ proyecto.responsable }}</td>
+                                <td>{{ actividad.codigo }}</td>
+                                <td>{{ actividad.nombre }}</td>
+                                <td>{{ actividad.centro_de_costos }}</td>
+                                <td>{{ actividad.tipo }}</td>
+                                <td>{{ actividad.responsable }}</td>
 
                                 {% if request.user.role != 1 and request.user.role != 2 %}
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button type="button" class="btn btn-sm text-white me-2 btn-editar"
                                             style="background-color: #02737e;" data-bs-toggle="modal"
-                                            data-bs-target="#editProyectoModal" data-id="{{ proyecto.id }}"
-                                            data-codigo="{{ proyecto.codigo }}" data-nombre="{{ proyecto.nombre }}"
-                                            data-centro-id="{{ proyecto.centro_de_costos.id }}"
-                                            data-centro-nombre="{{ proyecto.centro_de_costos.nombre }}"
-                                            data-tipo_gasto="{{ proyecto.tipo_gasto }}"
-                                            data-responsable="{{ proyecto.responsable.id }}">
+                                            data-bs-target="#editactividadModal" data-id="{{ actividad.id }}"
+                                            data-codigo="{{ actividad.codigo }}" data-nombre="{{ actividad.nombre }}"
+                                            data-centro-id="{{ actividad.centro_de_costos.id }}"
+                                            data-centro-nombre="{{ actividad.centro_de_costos.nombre }}"
+                                            data-tipo="{{ actividad.tipo }}"
+                                            data-responsable="{{ actividad.responsable }}">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
 
-                                        <a href="{% url 'centro_costos:eliminar_proyecto' proyecto.id %}"
+                                        <a href="{% url 'centro_costos:eliminar_actividad' actividad.id %}"
                                             class="btn btn-sm text-white btnEliminar" style="background-color: #811f1f;"
                                             title="Eliminar">
                                             <i class="bi bi-trash"></i>
@@ -196,17 +194,17 @@
 
 
                 <!-- Modal para editar proyecto -->
-                <div class="modal fade" id="editProyectoModal" tabindex="-1" aria-labelledby="editProyectoModalLabel"
+                <div class="modal fade" id="editactividadModal" tabindex="-1" aria-labelledby="editactividadModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-xl">
                         <div class="modal-content">
                             <div class="modal-header text-white" style="background-color: #02737e;">
-                                <h5 class="modal-title" id="editProyectoModalLabel">Editar Responsable</h5>
+                                <h5 class="modal-title" id="editactividadModalLabel">Editar Actividad</h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="{% url 'centro_costos:editar_proyecto' %}"
+                                <form method="POST" action="{% url 'centro_costos:editar_actividad' %}"
                                     enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <input type="hidden" id="edit_id" name="id">
@@ -231,30 +229,21 @@
                                                     {% for centro in centros_de_costos %}
                                                     <option value="{{ centro.id }}">{{ centro.nombre }}</option>
                                                     {% endfor %}
-                                                    <!-- <option value="otros">Otros</option> -->
-                                                    <!-- ❌ Eliminar esta línea -->
                                                 </select>
 
 
                                             </div>
 
                                             <div class="col-md-4">
-                                                <label for="edit_tipo_gasto" class="form-label">Tipo de
-                                                    gasto</label>
-                                                <select class="form-select" id="edit_tipo_gasto" name="tipo_gasto">
+                                                <label for="edit_tipo_gasto" class="form-label">Tipo</label>
+                                                <select class="form-select" id="edit_tipo" name="tipo">
                                                     <option value="Por separado">Por separado</option>
                                                     <option value="A todo costo">A todo costo</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="edit_responsable" class="form-label">Responsable</label>
-                                                <select class="form-select" id="edit_responsable" name="responsable">
-                                                    {% for responsable in responsables %}
-                                                    <option value="{{ responsable.id }}">
-                                                        {{ responsable.nombre_completo }}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
+                                                <label for="edit_responsable" class="form-label">Responsable (opcional)</label>
+                                                <input type="text" class="form-control" id="edit_responsable" name="responsable">
                                             </div>
 
                                         </div>
@@ -326,14 +315,8 @@
                                 document.getElementById('edit_id').value = button.getAttribute('data-id');
                                 document.getElementById('edit_nombre').value = button.getAttribute('data-nombre');
                                 document.getElementById('edit_codigo').value = button.getAttribute('data-codigo');
-                                document.getElementById('edit_tipo_gasto').value = button.getAttribute('data-tipo_gasto');
-
-                                // Responsable
-                                const responsable = button.getAttribute('data-responsable');
-                                const responsableSelect = document.getElementById('edit_responsable');
-                                [...responsableSelect.options].forEach(option => {
-                                    option.selected = option.value === responsable;
-                                });
+                                document.getElementById('edit_tipo').value = button.getAttribute('data-tipo');
+                                document.getElementById('edit_responsable').value = button.getAttribute('data-responsable');
 
                                 // Centro de costos (ya no hay opción "otros")
                                 const centroId = button.getAttribute('data-centro-id');
@@ -401,7 +384,8 @@
 
                                 const nombre = document.getElementById("id_nombre").value.trim();
                                 const codigo = document.getElementById("id_codigo").value.trim();
-                                const tipoGasto = document.getElementById("id_tipo_gasto").value;
+                                const tipoGasto = document.getElementById("id_tipo").value;
+                                console.log(tipoGasto);
                                 const responsable = document.getElementById("id_responsable").value;
 
                                 const centroSelector = document.getElementById("centro_de_costos_selector");
@@ -417,7 +401,7 @@
                                     //centroOriginal.value = centroSelector.value; // asegura que se envíe el valor correcto
                                 }
 
-                                if (!nombre || !codigo || !centroValido || tipoGasto === "" || responsable === "") {
+                                if (!nombre || !codigo || !centroValido || tipoGasto === "") {
                                     Swal.fire({
                                         title: "Campos incompletos",
                                         text: "Por favor, completa todos los campos antes de guardar.",

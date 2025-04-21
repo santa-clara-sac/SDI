@@ -23,46 +23,12 @@
 <div class="container text-center" style="padding-top: 150px;">
 
     <div>Módulo centro de costos</div>
+    <div>Tupac Amaru</div>
 
-    <div class="row justify-content-center">
-
-        <!-- Cuadro común: Documentación -->
-        <div class="col-6 col-md-3 mb-4">
-            <a href="{% url 'centro_costos:lista_responsables' %}" class="card-link">
-                <div class="card h-100 shadow-sm">
-                    <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                        <img src="{% static 'images/centro_costos/responsables.png' %}" alt="Responsables"
-                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Responsables</h5>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Legal: Control Expediente -->
-        <div class="col-6 col-md-3 mb-4">
-            <a href="{% url 'centro_costos:lista_proyectos' %}" class="card-link">
-                <div class="card h-100 shadow-sm">
-                    <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                        <img src="{% static 'images/centro_costos/proyectos.png' %}" alt="Proyectos"
-                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Proyectos</h5>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-    </div>
-
-    <!-- Fila adicional solo para roles distintos a Legal -->
     <div class="row justify-content-center">
         <!-- Cuadro: Control Expediente -->
         <div class="col-6 col-md-3 mb-4">
-            <a href="#" class="card-link">
+            <a href="{% url 'centro_costos:lista_actividades' %}" class="card-link">
                 <div class="card h-100 shadow-sm">
                     <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
                         <img src="{% static 'images/centro_costos/actividades.png' %}" alt="Actividades"
@@ -75,12 +41,45 @@
             </a>
         </div>
 
-        <!-- Cuadro: Hoja de gastos -->
         <div class="col-6 col-md-3 mb-4">
-            <a href="#" class="card-link">
+            <a href="{% url 'centro_costos:lista_gastos' %}" class="card-link">
                 <div class="card h-100 shadow-sm">
                     <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
                         <img src="{% static 'images/centro_costos/gastos.png' %}" alt="gastos"
+                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Gastos</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        
+        <div class="col-6 col-md-3 mb-4">
+            <div>Canta Callao</div>
+            <a href="{% url 'centro_costos:lista_actividades' %}" class="card-link">
+                <div class="card h-100 shadow-sm">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
+                        <img src="{% static 'images/centro_costos/actividades.png' %}" alt="Actividades"
+                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Gastos</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        
+        <div class="col-6 col-md-3 mb-4">
+            <div>Bienes Raices</div>
+            <a href="#" class="card-link">
+                <div class="card h-100 shadow-sm">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
+                        <img src="{% static 'images/centro_costos/actividades.png' %}" alt="Actividades"
                             style="max-height: 100%; max-width: 100%; object-fit: contain;">
                     </div>
                     <div class="card-body">
