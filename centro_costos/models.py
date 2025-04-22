@@ -27,6 +27,9 @@ class Actividad(models.Model):
     responsable = models.CharField(max_length=50)
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.nombre
+
 class Gasto(models.Model):
     actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE)
     item = models.CharField(max_length=100)

@@ -38,7 +38,7 @@ class ActividadForm(forms.ModelForm):
 class GastoForm(forms.ModelForm):
     class Meta:
         model = Gasto
-        fields = '__all__'
+        fields = ['actividad', 'item', 'nombre', 'fecha', 'detalle', 'documento', 'debe', 'haber', 'tipo_gasto']
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
         }
@@ -46,6 +46,7 @@ class GastoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['actividad'].empty_label = "Seleccione actividad"
 
         # Estilizar todos los campos
         for field in self.fields.values():

@@ -32,6 +32,14 @@
     <div style="font-weight: bold; font-size: 24px;">
         Listado de Actividades
     </div>
+    <p>Total tipos de gasto: {{ centros_de_costos|length }}</p>
+    <ul>
+        {% for tipo in centros_de_costos %}
+        <li>{{ tipo.nombre }}</li>
+        {% empty %}
+        <li>No hay tipos de gasto disponibles.</li>
+        {% endfor %}
+    </ul>
 </div>
 
 <div class="container mt-2" style="max-width: 100%;">
@@ -84,7 +92,8 @@
                                         <div class="container">
                                             <div class="row g-3">
                                                 <div class="col-md-6">
-                                                    <label for="id_nombre_proyecto" class="form-label">Nombre de la actividad</label>
+                                                    <label for="id_nombre_proyecto" class="form-label">Nombre de la
+                                                        actividad</label>
                                                     {{ form.nombre }}
                                                 </div>
 
@@ -117,7 +126,8 @@
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    <label for="id_responsable" class="form-label">Responsable (opcional)</label>
+                                                    <label for="id_responsable" class="form-label">Responsable
+                                                        (opcional)</label>
                                                     {{ form.responsable }}
                                                 </div>
                                             </div>
@@ -230,8 +240,6 @@
                                                     <option value="{{ centro.id }}">{{ centro.nombre }}</option>
                                                     {% endfor %}
                                                 </select>
-
-
                                             </div>
 
                                             <div class="col-md-4">
@@ -242,8 +250,10 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="edit_responsable" class="form-label">Responsable (opcional)</label>
-                                                <input type="text" class="form-control" id="edit_responsable" name="responsable">
+                                                <label for="edit_responsable" class="form-label">Responsable
+                                                    (opcional)</label>
+                                                <input type="text" class="form-control" id="edit_responsable"
+                                                    name="responsable">
                                             </div>
 
                                         </div>

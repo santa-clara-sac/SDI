@@ -126,25 +126,60 @@ def lista_gastos(request):
     form = GastoForm()
 
     if request.method == 'POST':
-        # Verificamos si se eligió "otros" y se escribió un nuevo centro de costos
-        nuevo_centro = request.POST.get('nuevo_centro_de_costos', '').strip()
-        if nuevo_centro:
-            centro_obj, created = TipoDeGasto.objects.get_or_create(nombre=nuevo_centro)
+        # Verificamos si se eligió "otros" y se escribió un nuevo tipo de gasto
+        nuevo_tipo = request.POST.get('nuevo_tipo_gasto', '').strip()
+        if nuevo_tipo:
+            tipo_obj, created = TipoDeGasto.objects.get_or_create(nombre=nuevo_tipo)
             request.POST = request.POST.copy()
-            request.POST['centro_de_costos'] = centro_obj.id
+            request.POST['tipo_gasto'] = tipo_obj.id
 
         form = GastoForm(request.POST)
-        print(form)
-        print(form.is_valid())
         if form.is_valid():
             form.save()
             return redirect('centro_costos:lista_gastos')
 
     gastos = Gasto.objects.all()
-    centros_de_costos = TipoDeGasto.objects.all()
+    tipos_de_gasto = TipoDeGasto.objects.all()
+    actividades = Actividad.objects.all()
 
     return render(request, 'centro_costos/lista_gastos.html', {
         'form': form,
         'gastos': gastos,
-        'centros_de_costos': centros_de_costos,
+        'tipos_de_gasto': tipos_de_gasto,
+        'actividades': actividades,
     })
+
+@login_required
+def editar_gasto(request):
+    if request.method == 'POST':
+        gasto_id = request.POST.get('id')
+        gasto = get_object_or_404(Gasto, id=gasto_id)
+
+        form = GastoForm(request.POST, instance=gasto)
+
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_gastos')
+        else:
+            tipos_de_gasto = TipoDeGasto.objects.all()
+            print(tipos_de_gasto)
+            print(form.errors)
+            return render(request, 'centro_costos/lista_gastos.html', {
+                'form': form,
+                'tipos_de_gasto': tipos_de_gasto,  # Asegúrate de que este esté presente en el contexto
+                'errores': form.errors,
+            })
+
+    # Si es GET
+    gasto_id = request.GET.get('id')
+    gasto = get_object_or_404(Gasto, id=gasto_id)
+    tipos_de_gasto = TipoDeGasto.objects.all()
+    return render(request, 'centro_costos/lista_gastos.html', {
+        'gasto': gasto,
+        'tipos_de_gasto': tipos_de_gasto,  # También aquí debes pasar los tipos de gasto
+    })
+
+def eliminar_gasto(request, doc_id):
+    doc = get_object_or_404(Gasto, id=doc_id)
+    doc.delete()
+    return redirect('centro_costos:lista_gastos')

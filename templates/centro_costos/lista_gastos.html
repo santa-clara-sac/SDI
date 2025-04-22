@@ -32,6 +32,14 @@
     <div style="font-weight: bold; font-size: 24px;">
         Listado de Gastos
     </div>
+    <p>Total tipos de gasto: {{ tipos_de_gasto|length }}</p>
+    <ul>
+        {% for tipo in tipos_de_gasto %}
+        <li>{{ tipo.nombre }}</li>
+        {% empty %}
+        <li>No hay tipos de gasto disponibles.</li>
+        {% endfor %}
+    </ul>
 </div>
 
 <div class="container mt-2" style="max-width: 100%;">
@@ -67,7 +75,7 @@
                     {% endif %}
 
 
-                    <!-- Modal para agregar nuevo actividad -->
+                    <!-- Modal para agregar nuevo gasto -->
                     <div class="modal fade" id="actividadModal" tabindex="-1" aria-labelledby="actividadModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -78,70 +86,81 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="POST" action="{% url 'centro_costos:lista_gastos' %}"
-                                        id="formProyecto">
+                                    <form method="POST" action="{% url 'centro_costos:lista_gastos' %}" id="formGasto">
                                         {% csrf_token %}
                                         <div class="container">
                                             <div class="row g-3">
+
                                                 <div class="col-md-6">
-                                                    <label for="id_nombre_proyecto" class="form-label">Nombre del gasto</label>
+                                                    <label for="id_actividad" class="form-label">Actividad</label>
+                                                    {{ form.actividad }}
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label for="id_item" class="form-label">Item</label>
+                                                    {{ form.item }}
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label for="id_nombre" class="form-label">Nombre</label>
                                                     {{ form.nombre }}
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    <label for="id_codigo_proyecto" class="form-label">Código</label>
-                                                    {{ form.item }}
-                                                </div>
-                                                <div class="col-md-6">
                                                     <label for="id_fecha" class="form-label">Fecha</label>
                                                     {{ form.fecha }}
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <label for="id_detalle" class="form-label">Detalle</label>
                                                     {{ form.detalle }}
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <label for="id_documento" class="form-label">Documento</label>
                                                     {{ form.documento }}
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <label for="id_debe" class="form-label">Debe</label>
                                                     {{ form.debe }}
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <label for="id_haber" class="form-label">Haber</label>
                                                     {{ form.haber }}
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    <label for="id_tipo_gasto" class="form-label">Tipo de gasto</label>
-                                                    <select id="id_tipo_gasto" name="tipo_gasto"
+                                                    <label for="tipo_gasto_selector" class="form-label">Tipo de
+                                                        Gasto</label>
+                                                    <select id="tipo_gasto_selector" name="tipo_gasto"
                                                         class="form-select">
-
                                                         <option value="">Seleccione tipo de gasto</option>
-                                                        {% for centro in centros_de_costos %}
-                                                        <option value="{{ centro.id }}">{{ centro.nombre }}</option>
+                                                        {% for tipo in tipos_gasto %}
+                                                        <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
                                                         {% endfor %}
                                                         <option value="otros">Otros</option>
                                                     </select>
-                                                    <input type="text" name="nuevo_centro_de_costos"
-                                                        id="nuevo_centro_de_costos" class="form-control mt-2"
-                                                        placeholder="Ingrese nuevo tipo"
+                                                    <input type="text" name="nuevo_tipo_gasto" id="nuevo_tipo_gasto"
+                                                        class="form-control mt-2"
+                                                        placeholder="Ingrese nuevo tipo de gasto"
                                                         style="display: none;">
                                                 </div>
+
                                             </div>
                                         </div>
-
 
                                         <div class="text-center mt-4">
                                             <button type="submit" class="btn px-5 py-2 btnGuardar"
                                                 style="background-color: #02737e; color: #edeff4;">Guardar</button>
                                         </div>
+                                    </form>
                                 </div>
-                                </form>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
 
@@ -152,8 +171,9 @@
                     <table class="table table-striped" id="documentsTable">
                         <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                             <tr>
-                                <th>Item</th>
+                                <th>Código</th>
                                 <th>Fecha</th>
+                                <th>Nombre</th>
                                 <th>Detalle</th>
                                 <th>Documento</th>
                                 <th>Tipo</th>
@@ -165,29 +185,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for actividad in actividades %}
+                            {% for gasto in gastos %}
                             <tr>
-                                <td>{{ actividad.codigo }}</td>
-                                <td>{{ actividad.nombre }}</td>
-                                <td>{{ actividad.centro_de_costos }}</td>
-                                <td>{{ actividad.tipo }}</td>
-                                <td>{{ actividad.responsable }}</td>
+                                <td>{{ gasto.item }}</td>
+                                <td>{{ gasto.fecha }}</td>
+                                <td>{{ gasto.nombre }}</td>
+                                <td>{{ gasto.detalle }}</td>
+                                <td>{{ gasto.documento }}</td>
+                                <td>{{ gasto.tipo_gasto.nombre }}</td>
+                                <td data-debe>{{ gasto.debe|floatformat:2 }}</td>
+                                <td data-haber>{{ gasto.haber|floatformat:2 }}</td>
 
                                 {% if request.user.role != 1 and request.user.role != 2 %}
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm text-white me-2 btn-editar"
+                                        <button type="button" class="btn btn-sm text-white me-2 btn-editar-gasto"
                                             style="background-color: #02737e;" data-bs-toggle="modal"
-                                            data-bs-target="#editactividadModal" data-id="{{ actividad.id }}"
-                                            data-codigo="{{ actividad.codigo }}" data-nombre="{{ actividad.nombre }}"
-                                            data-centro-id="{{ actividad.centro_de_costos.id }}"
-                                            data-centro-nombre="{{ actividad.centro_de_costos.nombre }}"
-                                            data-tipo="{{ actividad.tipo }}"
-                                            data-responsable="{{ actividad.responsable }}">
+                                            data-bs-target="#editGastoModal" data-id="{{ gasto.id }}"
+                                            data-actividad="{{ gasto.actividad.id }}" data-item="{{ gasto.item }}"
+                                            data-nombre="{{ gasto.nombre }}" data-fecha="{{ gasto.fecha|date:'Y-m-d' }}"
+                                            data-documento="{{ gasto.documento }}"
+                                            data-tipo-gasto-id="{{ gasto.tipo_gasto.id }}"
+                                            data-tipo-gasto-nombre="{{ gasto.tipo_gasto.nombre }}"
+                                            data-debe="{{ gasto.debe }}" data-haber="{{ gasto.haber }}"
+                                            data-detalle="{{ gasto.detalle }}">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
 
-                                        <a href="{% url 'centro_costos:eliminar_actividad' actividad.id %}"
+                                        <a href="{% url 'centro_costos:eliminar_gasto' gasto.id %}"
                                             class="btn btn-sm text-white btnEliminar" style="background-color: #811f1f;"
                                             title="Eliminar">
                                             <i class="bi bi-trash"></i>
@@ -204,66 +229,92 @@
 
 
 
-                <!-- Modal para editar proyecto -->
-                <div class="modal fade" id="editactividadModal" tabindex="-1" aria-labelledby="editactividadModalLabel"
+                <!-- Modal para editar gasto -->
+                <div class="modal fade" id="editGastoModal" tabindex="-1" aria-labelledby="editGastoModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-xl">
                         <div class="modal-content">
                             <div class="modal-header text-white" style="background-color: #02737e;">
-                                <h5 class="modal-title" id="editactividadModalLabel">Editar Actividad</h5>
+                                <h5 class="modal-title" id="editGastoModalLabel">Editar Gasto</h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="{% url 'centro_costos:editar_actividad' %}"
+                                <form method="POST" action="{% url 'centro_costos:editar_gasto' %}"
                                     enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    <input type="hidden" id="edit_id" name="id">
+                                    <input type="hidden" id="edit_id_gasto" name="id">
                                     <div class="container">
                                         <div class="row g-3">
-                                            <!-- Nombre completo: campo ancho arriba -->
-                                            <div class="col-12">
-                                                <label for="edit_nombre" class="form-label">Nombre</label>
-                                                <input type="text" class="form-control" id="edit_nombre" name="nombre">
-                                            </div>
 
-                                            <!-- Documento, Correo y Teléfono alineados -->
-                                            <div class="col-md-4">
-                                                <label for="edit_codigo" class="form-label">Código</label>
-                                                <input type="text" class="form-control" id="edit_codigo" name="codigo">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="edit_centro_de_costos" class="form-label">Centro de
-                                                    costos</label>
-                                                <select class="form-select" id="edit_centro_de_costos"
-                                                    name="centro_de_costos">
-                                                    {% for centro in centros_de_costos %}
-                                                    <option value="{{ centro.id }}">{{ centro.nombre }}</option>
+                                            <div class="col-md-6">
+                                                <label for="edit_actividad" class="form-label">Actividad</label>
+                                                <select class="form-select" id="edit_actividad" name="actividad"
+                                                    required>
+                                                    <option value="">Seleccione actividad</option>
+                                                    {% for actividad in actividades %}
+                                                    <option value="{{ actividad.id }}">{{ actividad.nombre }}</option>
                                                     {% endfor %}
                                                 </select>
-
-
                                             </div>
 
-                                            <div class="col-md-4">
-                                                <label for="edit_tipo_gasto" class="form-label">Tipo</label>
-                                                <select class="form-select" id="edit_tipo" name="tipo">
-                                                    <option value="Por separado">Por separado</option>
-                                                    <option value="A todo costo">A todo costo</option>
+                                            <div class="col-md-6">
+                                                <label for="edit_item" class="form-label">Item</label>
+                                                <input type="text" class="form-control" id="edit_item" name="item"
+                                                    required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="edit_nombre" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" id="edit_nombre" name="nombre"
+                                                    required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="edit_fecha" class="form-label">Fecha</label>
+                                                <input type="date" class="form-control" id="edit_fecha" name="fecha"
+                                                    required>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="edit_documento" class="form-label">Documento</label>
+                                                <input type="text" class="form-control" id="edit_documento"
+                                                    name="documento">
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="edit_tipo_gasto" class="form-label">Tipo de Gasto</label>
+                                                <select class="form-select" id="edit_tipo_gasto" name="tipo_gasto">
+                                                    {% for tipo in tipos_de_gasto %}
+                                                    <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
-                                            <div class="col-md-4">
-                                                <label for="edit_responsable" class="form-label">Responsable (opcional)</label>
-                                                <input type="text" class="form-control" id="edit_responsable" name="responsable">
+
+                                            <div class="col-md-6">
+                                                <label for="edit_debe" class="form-label">Debe</label>
+                                                <input type="number" step="0.01" class="form-control" id="edit_debe"
+                                                    name="debe">
                                             </div>
 
+                                            <div class="col-md-6">
+                                                <label for="edit_haber" class="form-label">Haber</label>
+                                                <input type="number" step="0.01" class="form-control" id="edit_haber"
+                                                    name="haber">
+                                            </div>
+
+                                            <div class="col-12">
+                                                <label for="edit_detalle" class="form-label">Detalle</label>
+                                                <textarea class="form-control" id="edit_detalle" name="detalle"
+                                                    rows="3"></textarea>
+                                            </div>
                                         </div>
 
-                                        <!-- Botón guardar centrado -->
                                         <div class="text-center mt-4">
                                             <button type="submit" class="btn px-5 py-2 btnGuardar2"
-                                                id="btn_guardar_edicion"
-                                                style="background-color: #02737e; color: #edeff4;">Guardar</button>
+                                                style="background-color: #02737e; color: #edeff4;">
+                                                Guardar
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
@@ -273,16 +324,47 @@
                     </div>
                 </div>
 
+
+
                 <script>
 
-const selectElement = document.getElementById("id_tipo_gasto");
-
-// Agregamos un listener para detectar cambios
-selectElement.addEventListener("change", function() {
-  // Imprimimos el valor seleccionado
-  console.log(selectElement.value);
-});
                     document.addEventListener('DOMContentLoaded', function () {
+
+                        // EDITAR
+                        const editButtons = document.querySelectorAll('.btn-editar-gasto');
+
+                        editButtons.forEach(button => {
+                            button.addEventListener('click', function () {
+                                const centroSelect = document.getElementById('edit_tipo_gasto');
+                                // Setear valores en los campos del modal
+                                document.getElementById('edit_id_gasto').value = button.getAttribute('data-id');
+                                document.getElementById('edit_actividad').value = button.getAttribute('data-actividad');
+                                document.getElementById('edit_item').value = button.getAttribute('data-item');
+                                document.getElementById('edit_nombre').value = button.getAttribute('data-nombre');
+                                document.getElementById('edit_fecha').value = button.getAttribute('data-fecha');
+                                document.getElementById('edit_detalle').value = button.getAttribute('data-detalle');
+                                document.getElementById('edit_documento').value = button.getAttribute('data-documento');
+                                document.getElementById('edit_debe').value = button.getAttribute('data-debe').replace(',', '.');
+                                document.getElementById('edit_haber').value = button.getAttribute('data-haber').replace(',', '.');
+
+                                const centroId = button.getAttribute('data-tipo-gasto-id');
+                                console.log(centroId);
+
+                                centroSelect.value = centroId;
+                            });
+                        });
+
+                        // PUNTO POR COMA EN TABLA
+                        const celdasDebe = document.querySelectorAll('td[data-debe]');
+                        const celdasHaber = document.querySelectorAll('td[data-haber]');
+
+                        celdasDebe.forEach(function (celda) {
+                            celda.textContent = celda.textContent.replace(',', '.');
+                        });
+
+                        celdasHaber.forEach(function (celda) {
+                            celda.textContent = celda.textContent.replace(',', '.');
+                        });
 
                         // FILTRO EN TIEMPO REAL
                         document.querySelectorAll('.filter-input').forEach(input => {
@@ -320,28 +402,6 @@ selectElement.addEventListener("change", function() {
                             });
                         }
 
-
-                        // EDITAR
-                        const editButtons = document.querySelectorAll('.btn-editar');
-
-                        editButtons.forEach(button => {
-                            button.addEventListener('click', function () {
-                                // Obtener referencias
-                                const centroSelect = document.getElementById('edit_centro_de_costos');
-
-                                // Setear valores básicos
-                                document.getElementById('edit_id').value = button.getAttribute('data-id');
-                                document.getElementById('edit_nombre').value = button.getAttribute('data-nombre');
-                                document.getElementById('edit_codigo').value = button.getAttribute('data-codigo');
-                                document.getElementById('edit_tipo').value = button.getAttribute('data-tipo');
-                                document.getElementById('edit_responsable').value = button.getAttribute('data-responsable');
-
-                                // Centro de costos (ya no hay opción "otros")
-                                const centroId = button.getAttribute('data-centro-id');
-                                centroSelect.value = centroId;
-                            });
-                        });
-
                     });
 
 
@@ -377,22 +437,24 @@ selectElement.addEventListener("change", function() {
                     (function () {
                         const botonesGuardar = document.querySelectorAll('.btnGuardar');
 
-                        // Función para mostrar u ocultar el campo "Nuevo centro de costos"
-                        const mostrarCampoNuevoCentro = () => {
-                            const centroSelector = document.getElementById("id_tipo_gasto");
-                            const nuevoCentroInput = document.getElementById("nuevo_centro_de_costos");
-                            if (centroSelector.value === "otros") {
-                                nuevoCentroInput.style.display = 'block'; // Mostrar el campo
+                        // Mostrar/Ocultar campo de "nuevo tipo de gasto"
+                        const mostrarCampoNuevoTipoGasto = () => {
+                            const tipoGastoSelector = document.getElementById("tipo_gasto_selector");
+                            const nuevoTipoInput = document.getElementById("nuevo_tipo_gasto");
+
+                            if (tipoGastoSelector.value === "otros") {
+                                nuevoTipoInput.style.display = 'block';
                             } else {
-                                nuevoCentroInput.style.display = 'none'; // Ocultar el campo
+                                nuevoTipoInput.style.display = 'none';
+                                nuevoTipoInput.value = '';
                             }
                         };
 
-                        // Llamar a la función al cargar la página para que se verifique el estado del selector
-                        mostrarCampoNuevoCentro();
+                        // Inicializar estado del campo oculto
+                        mostrarCampoNuevoTipoGasto();
 
-                        // Escuchar cambios en el selector de centro de costos
-                        document.getElementById("id_tipo_gasto").addEventListener('change', mostrarCampoNuevoCentro);
+                        // Evento al cambiar el select
+                        document.getElementById("tipo_gasto_selector").addEventListener('change', mostrarCampoNuevoTipoGasto);
 
                         botonesGuardar.forEach(boton => {
                             boton.addEventListener('click', function (e) {
@@ -400,36 +462,38 @@ selectElement.addEventListener("change", function() {
 
                                 const form = this.closest('form');
 
+                                // Obtener valores
+                                const actividad = document.getElementById("id_actividad").value;
+                                const item = document.getElementById("id_item").value.trim();
                                 const nombre = document.getElementById("id_nombre").value.trim();
-                                const codigo = document.getElementById("id_item").value.trim();
-                                const tipoGasto = document.getElementById("id_tipo_gasto").value;
-                                console.log(tipoGasto);
-                                const responsable = document.getElementById("id_documento").value;
+                                const fecha = document.getElementById("id_fecha").value;
+                                const detalle = document.getElementById("id_detalle").value.trim();
+                                const documento = document.getElementById("id_documento").value.trim();
+                                const debe = document.getElementById("id_debe").value;
+                                const haber = document.getElementById("id_haber").value;
 
-                                const centroSelector = document.getElementById("id_tipo_gasto");
-                                //const centroOriginal = document.getElementById("id_centro_de_costos");
-                                const nuevoCentro = document.getElementById("nuevo_centro_de_costos").value.trim();
+                                const tipoSelector = document.getElementById("tipo_gasto_selector");
+                                const nuevoTipo = document.getElementById("nuevo_tipo_gasto").value.trim();
 
-                                let centroValido = false;
-
-                                if (centroSelector.value === "otros") {
-                                    centroValido = nuevoCentro !== "";
+                                let tipoValido = false;
+                                if (tipoSelector.value === "otros") {
+                                    tipoValido = nuevoTipo !== "";
                                 } else {
-                                    centroValido = centroSelector.value !== "";
-                                    //centroOriginal.value = centroSelector.value; // asegura que se envíe el valor correcto
+                                    tipoValido = tipoSelector.value !== "";
                                 }
 
-                                if (!nombre || !codigo || !centroValido || tipoGasto === "") {
+                                // Validar campos requeridos
+                                if (!actividad || !item || !nombre || !fecha || !detalle || !documento || !debe || !haber || !tipoValido) {
                                     Swal.fire({
                                         title: "Campos incompletos",
-                                        text: "Por favor, completa todos los campos antes de guardar.",
+                                        text: "Por favor, completa todos los campos obligatorios.",
                                         icon: "warning",
                                         confirmButtonColor: '#02737e',
                                     });
-                                    return; // No continúa si hay campos vacíos
+                                    return;
                                 }
 
-                                // Si todo está ok, muestra el toast y luego envía
+                                // Si todo está ok, mostrar Toast y enviar
                                 const Toast = Swal.mixin({
                                     toast: true,
                                     position: "top-end",
@@ -451,8 +515,6 @@ selectElement.addEventListener("change", function() {
                             });
                         });
                     })();
-
-
 
                     // BTN ACTUALIZAR
                     (function () {

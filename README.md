@@ -3,6 +3,7 @@
 ## Despliegue en desarrollo
 
 ### Cambiar la política de ejecución temporalmente
+
 ```sh
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
@@ -14,8 +15,9 @@ pip install -r requirements.txt
 ```
 
 ## Migraciones
+
 ```sh
-python manage.py makemigrations
+python manage.py makemigrations partidas_planos
 python manage.py migrate partidas_planos
 python manage.py createsuperuser
 ```
@@ -62,6 +64,7 @@ body::before {
 ```
 
 ### Eliminar DB
+
 ```sql
 ALTER DATABASE SDI_dev SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 DROP DATABASE SDI_dev;
