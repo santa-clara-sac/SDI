@@ -65,28 +65,13 @@ WSGI_APPLICATION = 'principal.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mssql',
-#         'NAME': 'SDI_dev',
-#         'USER': 'Admin',
-#         'PASSWORD': 'root',
-#         'HOST': r'PC-03\SQLEXPRESS',
-#         'PORT': '',  # por defecto es 1433
-#         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',  # asegúrate de tener este instalado
-#             'extra_params': 'TrustServerCertificate=yes;',  # útil para evitar errores SSL
-#         },
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'SDI',
-        'USER': 'sa',
-        'PASSWORD': 'sa',
-        'HOST': r'192.168.100.108',
+        'NAME': 'SDI_dev3',
+        'USER': 'Admin',
+        'PASSWORD': 'root',
+        'HOST': r'PC-03\SQLEXPRESS',
         'PORT': '',  # por defecto es 1433
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # asegúrate de tener este instalado
@@ -94,6 +79,21 @@ DATABASES = {
         },
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'SDI',
+#         'USER': 'sa',
+#         'PASSWORD': 'sa',
+#         'HOST': r'192.168.100.108',
+#         'PORT': '',  # por defecto es 1433
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',  # asegúrate de tener este instalado
+#             'extra_params': 'TrustServerCertificate=yes;',  # útil para evitar errores SSL
+#         },
+#     }
+# }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -113,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'en'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True

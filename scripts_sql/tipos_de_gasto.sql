@@ -1,0 +1,5 @@
+INSERT [dbo].[centro_costos_tipodegasto] ([nombre]) VALUES (N'A todo gasto')
+INSERT [dbo].[centro_costos_tipodegasto] ([nombre]) VALUES (N'Adicional')
+INSERT [dbo].[centro_costos_tipodegasto] ([nombre]) VALUES (N'Mano de obra')
+INSERT [dbo].[centro_costos_tipodegasto] ([nombre]) VALUES (N'Materiales')
+INSERT [dbo].[centro_costos_tipodegasto] ([nombre]) VALUES (N'Sub División Tupac Amaru')

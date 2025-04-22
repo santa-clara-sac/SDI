@@ -1,4 +1,4 @@
 @echo off
-cd /d C:\Users\Administrador\Desktop\temp
-call .venv\Scripts\activate
-python manage.py runserver 0.0.0.0:8000
+cd /d C:\Users\Admin\Desktop\SDI
+call .asd\Scripts\activate
+python manage.py runserver 0.0.0.0:9090

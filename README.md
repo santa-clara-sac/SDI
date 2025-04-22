@@ -19,7 +19,9 @@ pip install -r requirements.txt
 ```sh
 python manage.py makemigrations partidas_planos
 python manage.py migrate partidas_planos
-python manage.py createsuperuser
+python manage.py makemigrations centro_costos
+python manage.py migrate centro_costos
+python manage.py migrate
 ```
 
 ## Aditional

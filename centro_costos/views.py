@@ -5,55 +5,11 @@ from django.contrib import messages
 from partidas_planos.models import User
 from django.contrib.auth.hashers import make_password
 
-from .forms import ActividadForm, GastoForm
-from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto
+from .forms import ActividadForm, GastoForm, CantaCallaoForm
+from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao
 
 def centro_costos_home(request):
      return render(request, 'centro_costos/home.html')
-
-# @login_required
-# def lista_responsables(request):
-
-#     form = ResponsableForm()
-
-#     if request.method == 'POST':
-#         form = ResponsableForm(request.POST)
-
-#         if form.is_valid():
-#             form.save()
-#             return redirect('centro_costos:lista_responsables') 
-
-#     responsables = Responsable.objects.all()  
-
-#     return render(request, 'centro_costos/lista_responsables.html', {
-#         'form': form,
-#         'responsables': responsables,
-#     })
-
-
-# def editar_responsable(request):
-#     if request.method == 'POST':
-#         responsable_id = request.POST.get('id')
-#         responsable = get_object_or_404(Responsable, id=responsable_id)
-
-#         form = ResponsableForm(request.POST, instance=responsable)
-#         # print(form)
-#         # print(form.is_valid())
-#         if form.is_valid():
-#             form.save()
-#             return redirect('centro_costos:lista_responsables')
-#         else:
-#             print(form.errors)  # Muy útil para debug
-#             return redirect('lista_responsales')
-
-#     return redirect('lista_responsables')
-
-# def eliminar_responsable(request, doc_id):
-#     doc = get_object_or_404(Responsable, id=doc_id)
-#     doc.delete()
-#     return redirect('centro_costos:lista_responsables')
-
-# #############################################################################################
 
 @login_required
 def lista_actividades(request):
@@ -183,3 +139,46 @@ def eliminar_gasto(request, doc_id):
     doc = get_object_or_404(Gasto, id=doc_id)
     doc.delete()
     return redirect('centro_costos:lista_gastos')
+
+#############################################################################
+
+@login_required
+def lista_canta_callao(request):
+    form = CantaCallaoForm()
+
+    if request.method == 'POST':
+        form = CantaCallaoForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_canta_callao')
+
+    canta_callao = CantaCallao.objects.all().order_by('fecha')
+
+    return render(request, 'centro_costos/lista_canta_callao.html', {
+        'form': form,
+        'canta_callao': canta_callao,
+    })
+
+@login_required
+def editar_canta_callao(request):
+    if request.method == 'POST':
+        canta_callao_id = request.POST.get('id')
+        canta_callao = get_object_or_404(CantaCallao, id=canta_callao_id)
+
+        form = CantaCallaoForm(request.POST, instance=canta_callao)
+        print(form)
+        print(form.is_valid())
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_canta_callao')
+        else:
+            print(form.errors)
+            return redirect('centro_costos:lista_canta_callao')
+
+    return redirect('centro_costos:lista_canta_callao')
+
+def eliminar_canta_callao(request, doc_id):
+    doc = get_object_or_404(CantaCallao, id=doc_id)
+    doc.delete()
+    return redirect('centro_costos:lista_canta_callao')

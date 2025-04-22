@@ -1,15 +1,5 @@
 from django import forms
-from .models import Actividad, Gasto
-
-# class ResponsableForm(forms.ModelForm):
-#     class Meta:
-#         model = Responsable
-#         fields = '__all__'
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         for field in self.fields.values():
-#             field.widget.attrs['class'] = 'form-control'
+from .models import Actividad, Gasto, CantaCallao
 
 class ActividadForm(forms.ModelForm):
     class Meta:
@@ -38,7 +28,7 @@ class ActividadForm(forms.ModelForm):
 class GastoForm(forms.ModelForm):
     class Meta:
         model = Gasto
-        fields = ['actividad', 'item', 'nombre', 'fecha', 'detalle', 'documento', 'debe', 'haber', 'tipo_gasto']
+        fields = ['actividad', 'item', 'fecha', 'detalle', 'documento', 'debe', 'haber', 'tipo_gasto']
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
         }
@@ -51,3 +41,17 @@ class GastoForm(forms.ModelForm):
         # Estilizar todos los campos
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+class CantaCallaoForm(forms.ModelForm):
+    class Meta:
+        model = CantaCallao
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+        

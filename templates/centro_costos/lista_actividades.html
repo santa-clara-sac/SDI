@@ -32,14 +32,7 @@
     <div style="font-weight: bold; font-size: 24px;">
         Listado de Actividades
     </div>
-    <p>Total tipos de gasto: {{ centros_de_costos|length }}</p>
-    <ul>
-        {% for tipo in centros_de_costos %}
-        <li>{{ tipo.nombre }}</li>
-        {% empty %}
-        <li>No hay tipos de gasto disponibles.</li>
-        {% endfor %}
-    </ul>
+
 </div>
 
 <div class="container mt-2" style="max-width: 100%;">

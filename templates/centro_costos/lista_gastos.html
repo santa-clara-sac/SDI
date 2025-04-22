@@ -32,14 +32,8 @@
     <div style="font-weight: bold; font-size: 24px;">
         Listado de Gastos
     </div>
-    <p>Total tipos de gasto: {{ tipos_de_gasto|length }}</p>
-    <ul>
-        {% for tipo in tipos_de_gasto %}
-        <li>{{ tipo.nombre }}</li>
-        {% empty %}
-        <li>No hay tipos de gasto disponibles.</li>
-        {% endfor %}
-    </ul>
+    
+</div>
 </div>
 
 <div class="container mt-2" style="max-width: 100%;">
@@ -102,11 +96,6 @@
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    <label for="id_nombre" class="form-label">Nombre</label>
-                                                    {{ form.nombre }}
-                                                </div>
-
-                                                <div class="col-md-6">
                                                     <label for="id_fecha" class="form-label">Fecha</label>
                                                     {{ form.fecha }}
                                                 </div>
@@ -137,7 +126,7 @@
                                                     <select id="tipo_gasto_selector" name="tipo_gasto"
                                                         class="form-select">
                                                         <option value="">Seleccione tipo de gasto</option>
-                                                        {% for tipo in tipos_gasto %}
+                                                        {% for tipo in tipos_de_gasto %}
                                                         <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
                                                         {% endfor %}
                                                         <option value="otros">Otros</option>
@@ -173,7 +162,6 @@
                             <tr>
                                 <th>Código</th>
                                 <th>Fecha</th>
-                                <th>Nombre</th>
                                 <th>Detalle</th>
                                 <th>Documento</th>
                                 <th>Tipo</th>
@@ -189,9 +177,8 @@
                             <tr>
                                 <td>{{ gasto.item }}</td>
                                 <td>{{ gasto.fecha }}</td>
-                                <td>{{ gasto.nombre }}</td>
                                 <td>{{ gasto.detalle }}</td>
-                                <td>{{ gasto.documento }}</td>
+                                <td>{{ gasto.documento|default_if_none:""|default:"" }}</td>
                                 <td>{{ gasto.tipo_gasto.nombre }}</td>
                                 <td data-debe>{{ gasto.debe|floatformat:2 }}</td>
                                 <td data-haber>{{ gasto.haber|floatformat:2 }}</td>
@@ -203,8 +190,8 @@
                                             style="background-color: #02737e;" data-bs-toggle="modal"
                                             data-bs-target="#editGastoModal" data-id="{{ gasto.id }}"
                                             data-actividad="{{ gasto.actividad.id }}" data-item="{{ gasto.item }}"
-                                            data-nombre="{{ gasto.nombre }}" data-fecha="{{ gasto.fecha|date:'Y-m-d' }}"
-                                            data-documento="{{ gasto.documento }}"
+                                            data-fecha="{{ gasto.fecha|date:'Y-m-d' }}"
+                                            data-documento="{{ gasto.documento|default_if_none:'' }}"
                                             data-tipo-gasto-id="{{ gasto.tipo_gasto.id }}"
                                             data-tipo-gasto-nombre="{{ gasto.tipo_gasto.nombre }}"
                                             data-debe="{{ gasto.debe }}" data-haber="{{ gasto.haber }}"
@@ -340,7 +327,6 @@
                                 document.getElementById('edit_id_gasto').value = button.getAttribute('data-id');
                                 document.getElementById('edit_actividad').value = button.getAttribute('data-actividad');
                                 document.getElementById('edit_item').value = button.getAttribute('data-item');
-                                document.getElementById('edit_nombre').value = button.getAttribute('data-nombre');
                                 document.getElementById('edit_fecha').value = button.getAttribute('data-fecha');
                                 document.getElementById('edit_detalle').value = button.getAttribute('data-detalle');
                                 document.getElementById('edit_documento').value = button.getAttribute('data-documento');
@@ -465,7 +451,6 @@
                                 // Obtener valores
                                 const actividad = document.getElementById("id_actividad").value;
                                 const item = document.getElementById("id_item").value.trim();
-                                const nombre = document.getElementById("id_nombre").value.trim();
                                 const fecha = document.getElementById("id_fecha").value;
                                 const detalle = document.getElementById("id_detalle").value.trim();
                                 const documento = document.getElementById("id_documento").value.trim();
@@ -483,7 +468,7 @@
                                 }
 
                                 // Validar campos requeridos
-                                if (!actividad || !item || !nombre || !fecha || !detalle || !documento || !debe || !haber || !tipoValido) {
+                                if (!actividad || !item || !fecha || !detalle || !debe || !haber || !tipoValido) {
                                     Swal.fire({
                                         title: "Campos incompletos",
                                         text: "Por favor, completa todos los campos obligatorios.",
