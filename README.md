@@ -71,3 +71,13 @@ body::before {
 ALTER DATABASE SDI_dev SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 DROP DATABASE SDI_dev;
 ```
+
+### EXCEL BuscarV
+
+```
+=SI.ERROR(BUSCARV(A4,Table1[#Todo], 9, FALSO), "")
+```
+
+Set WshShell = CreateObject("WScript.Shell")
+WshShell.Run chr(34) & "C:\Users\Admin\Desktop\SDI\iniciar_server.bat" & Chr(34), 0
+Set WshShell = Nothing
