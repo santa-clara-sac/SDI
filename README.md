@@ -27,10 +27,29 @@ python manage.py migrate
 ## Aditional
 
 #### COLOR PRINCIPAL
+##### POLAR NIGHT
+#2e3440
+#3b4252
+#434c5e
+#4c566a
+###### SNOW STORM
+#d8dee9
+#e5e9f0
+#eceff4
+##### FROST
+#8fbcbb
+#88c0d0
+#81a1c1
+#5e81ac
+##### AURORA
+#bf616a
+#d08770
+#ebcb8b
+#a3be8c
+#b48ead
 
 ```sh
-#02737e
-find . -type f \( -name "*.css" -o -name "*.html" -o -name "*.js" \) -exec sed -i 's/#434c5e/#02737e/g' {} +
+find . -type f \( -name "*.css" -o -name "*.html" -o -name "*.js" \) -exec sed -i 's/#02737e/#3b4252/g' {} +
 ```
 
 #### ADD PATH PARTIDAS
@@ -81,3 +100,9 @@ DROP DATABASE SDI_dev;
 Set WshShell = CreateObject("WScript.Shell")
 WshShell.Run chr(34) & "C:\Users\Admin\Desktop\SDI\iniciar_server.bat" & Chr(34), 0
 Set WshShell = Nothing
+
+Msg 2627, Level 14, State 1, Line 1861
+Violation of UNIQUE KEY constraint 'UQ__centro_c__40F9A206D69EA8F9'. Cannot insert duplicate key in object 'dbo.centro_costos_cantacallao'. The duplicate key value is (CC-019-22).
+
+INSERT INTO [centro_costos_cantacallao] (codigo, fecha, concepto, detalle, referencia, monto1, monto2) VALUES ('CC-019-22', '2022-06-11', 'Gastos Canta Callao', 'PINTADO DEL TEJADO Y PARTE DEL TECHO, FACHADA', '', '1356.6', '');
+INSERT INTO [centro_costos_cantacallao] (codigo, fecha, concepto, detalle, referencia, monto1, monto2) VALUES ('CC-019-22', '2022-02-16', 'Municipalidad de los Olivos', '1 SOLICITUD DE CERTIFICACION DE NUMERACION A-1-4', '', '44', '');

@@ -6,6 +6,28 @@ Iniciar sesión
 {% endblock %} {% block body %}
 
 <style>
+
+body {
+  background-image: url("{% static 'images/bgg.png' %}");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
+  margin: 0;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(216, 222, 233, 0.495);
+  /* Cambia el 0.4 para más o menos claridad */
+  z-index: 0;
+}
     main,
     header,
     footer {
@@ -23,7 +45,7 @@ Iniciar sesión
     }
 
     button {
-        background-color: #02737e !important;
+        background-color: #3b4252 !important;
         color: aliceblue !important;
     }
 
@@ -57,9 +79,9 @@ Iniciar sesión
     }
 
     .ajs-message.ajs-custom {
-        color: #02737e;
+        color: #3b4252;
         background-color: #d9edf7;
-        border-color: #02737e;
+        border-color: #3b4252;
     }
 
     /* Estilos para centrar el formulario */

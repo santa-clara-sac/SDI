@@ -6,10 +6,10 @@
     <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link text-white me-2" href="#">Documentación</a>
+    <a class="nav-link text-white me-2" href="{% url 'documentacion' %}">Documentación</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link text-white me-2" href="#">Costos</a>
+    <a class="nav-link text-white me-2" href="{% url 'centro_costos:centro_costos_home' %}">Costos</a>
 </li>
 <li class="nav-item">
     <a class="nav-link text-white me-2" href="#">Expediente</a>
@@ -45,7 +45,7 @@
 
                     <!-- Botón para agregar usuario -->
                     <center>
-                        <button type="button" class="btn text-white mt-4" style="background-color: #02737e;"
+                        <button type="button" class="btn text-white mt-4" style="background-color: #3b4252;"
                             data-bs-toggle="modal" data-bs-target="#userModal">
                             <i class="bi bi-plus-lg"></i> Agregar nuevo usuario
                         </button>
@@ -55,7 +55,7 @@
                     <div class="modal fade" id="userModal" tabindex="-1">
                         <div class="modal-dialog modal-xl modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #02737e;">
+                                <div class="modal-header text-white" style="background-color: #3b4252;">
                                     <h5 class="modal-title">Agregar Usuario</h5>
                                     <button type="button" class="btn-close btn-close-white"
                                         data-bs-dismiss="modal"></button>
@@ -100,7 +100,7 @@
                                         </div>
                                         <div class="text-center mt-4">
                                             <button type="submit" class="btn px-5 py-2 btnGuardar"
-                                                style="background-color: #02737e; color: #edeff4;">Guardar</button>
+                                                style="background-color: #3b4252; color: #edeff4;">Guardar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -141,7 +141,7 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm text-white me-2 btn-editar"
-                                                style="background-color: #02737e;" data-bs-toggle="modal"
+                                                style="background-color: #3b4252;" data-bs-toggle="modal"
                                                 data-bs-target="#editUserModal" data-id="{{ user.id }}"
                                                 data-first_name="{{ user.first_name }}"
                                                 data-last_name="{{ user.last_name }}"
@@ -180,7 +180,7 @@
 <div class="modal fade" id="editUserModal" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header text-white" style="background-color: #02737e;">
+            <div class="modal-header text-white" style="background-color: #3b4252;">
                 <h5 class="modal-title">Editar Usuario</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -223,7 +223,7 @@
                     </div>
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btnGuardar2"
-                            style="background-color: #02737e; color: #edeff4;">Actualizar</button>
+                            style="background-color: #3b4252; color: #edeff4;">Actualizar</button>
                     </div>
                 </form>
             </div>
@@ -236,7 +236,7 @@
 <div class="modal fade" id="passwordModal" tabindex="-1">
     <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header text-white" style="background-color: #02737e;">
+            <div class="modal-header text-white" style="background-color: #3b4252;">
                 <h5 class="modal-title">Cambiar Contraseña</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -256,7 +256,7 @@
 
                     <div class="text-center">
                         <button type="submit" class="btn btnGuardar2"
-                            style="background-color: #02737e; color: #edeff4;">
+                            style="background-color: #3b4252; color: #edeff4;">
                             Guardar Contraseña
                         </button>
                     </div>

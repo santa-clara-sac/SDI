@@ -109,7 +109,7 @@
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
                             <a href="{% url 'lista_partidas' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
-                                style="background-color: #02737e; line-height: 25px;">Limpiar Filtros</a>
+                                style="background-color: #3b4252; line-height: 25px;">Limpiar Filtros</a>
                         </div>
 
                     </div>
@@ -117,7 +117,7 @@
                     <!-- Botón para abrir el modal de agregar -->
                     {% if request.user.role != 1 and request.user.role != 2 %}
                     <center>
-                        <button type="button" class="btn text-white mt-4" style="background-color: #02737e;"
+                        <button type="button" class="btn text-white mt-4" style="background-color: #3b4252;"
                             data-bs-toggle="modal" data-bs-target="#documentModal">
                             <i class="bi bi-plus-lg"></i> Agregar Nueva Partida
                         </button>
@@ -130,7 +130,7 @@
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #02737e;">
+                                <div class="modal-header text-white" style="background-color: #3b4252;">
                                     <h5 class="modal-title" id="documentModalLabel">Agregar Nueva Partida</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -185,7 +185,7 @@
                                             </div>
                                             <div class="text-center mt-4">
                                                 <button type="submit" class="btn px-5 py-2 btnGuardar"
-                                                    style="background-color: #02737e; color: #edeff4;">Guardar</button>
+                                                    style="background-color: #3b4252; color: #edeff4;">Guardar</button>
 
                                             </div>
                                         </div>
@@ -248,7 +248,7 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm text-white me-2 btn-editar"
-                                                style="background-color: #02737e;" data-bs-toggle="modal"
+                                                style="background-color: #3b4252;" data-bs-toggle="modal"
                                                 data-bs-target="#editPartidaModal" data-id="{{ partida.id }}"
                                                 data-codigo="{{ partida.codigo }}" data-partida="{{ partida.partida }}"
                                                 data-fecha="{{ partida.fecha|date:'Y-m-d' }}"
@@ -300,7 +300,7 @@
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #02737e;">
+                                <div class="modal-header text-white" style="background-color: #3b4252;">
                                     <h5 class="modal-title" id="editPartidaModalLabel">Editar Partida</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -366,7 +366,7 @@
                                             </div>
                                             <div class="text-center mt-4">
                                                 <button type="submit" class="btn px-5 py-2 btnGuardar2"
-                                                    style="background-color: #02737e; color: #edeff4;">Guardar</button>
+                                                    style="background-color: #3b4252; color: #edeff4;">Guardar</button>
                                             </div>
                                         </div>
                                     </form>

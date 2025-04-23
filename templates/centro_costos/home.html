@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block link %}
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
+</li>
+{% endblock %}
+
 {% block body %}
 <style>
     .card-link {
@@ -20,46 +26,55 @@
     }
 </style>
 
-<div class="container text-center" style="padding-top: 150px;">
+<div class="container text-center" style="padding-top: 100px;">
 
-    <div>Módulo centro de costos</div>
-    <div>Tupac Amaru</div>
-
-    <div class="row justify-content-center">
-        <!-- Cuadro: Control Expediente -->
-        <div class="col-6 col-md-3 mb-4">
-            <a href="{% url 'centro_costos:lista_actividades' %}" class="card-link">
-                <div class="card h-100 shadow-sm">
-                    <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                        <img src="{% static 'images/centro_costos/actividades.png' %}" alt="Actividades"
-                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Actividades</h5>
-                    </div>
-                </div>
-            </a>
+    <div style="font-weight: bold; font-size: 24px; padding-bottom: 10px;">
+        Módulo Centro de Costos
+    </div>
+    <!-- COSTO TUPAC MARU-->
+    <div style="background-color: #f1f3f3;">
+        <div style="font-weight: bold; font-size: 18px; padding-bottom: 5px;">
+            Túpac Amaru
         </div>
-
-        <div class="col-6 col-md-3 mb-4">
-            <a href="{% url 'centro_costos:lista_gastos' %}" class="card-link">
-                <div class="card h-100 shadow-sm">
-                    <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                        <img src="{% static 'images/centro_costos/gastos.png' %}" alt="gastos"
-                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+    
+        <div class="row justify-content-center">
+            <!-- Cuadro: Control Expediente -->
+            <div class="col-6 col-md-3 mb-4">
+                <a href="{% url 'centro_costos:lista_actividades' %}" class="card-link">
+                    <div class="card h-100 shadow-sm">
+                        <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
+                            <img src="{% static 'images/centro_costos/actividades.png' %}" alt="Actividades"
+                                style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Actividades</h5>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Gastos</h5>
+                </a>
+            </div>
+    
+            <div class="col-6 col-md-3 mb-4">
+                <a href="{% url 'centro_costos:lista_gastos' %}" class="card-link">
+                    <div class="card h-100 shadow-sm">
+                        <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
+                            <img src="{% static 'images/centro_costos/gastos.png' %}" alt="gastos"
+                                style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Gastos</h5>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     </div>
 
     <div class="row justify-content-center">
         
         <div class="col-6 col-md-3 mb-4">
-            <div>Canta Callao</div>
+            <div style="font-weight: bold; font-size: 18px; padding-bottom: 5px; padding-top: 10px;">
+                Canta Callao
+            </div>
             <a href="{% url 'centro_costos:lista_canta_callao' %}" class="card-link">
                 <div class="card h-100 shadow-sm">
                     <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
@@ -75,7 +90,9 @@
 
         
         <div class="col-6 col-md-3 mb-4">
-            <div>Bienes Raices</div>
+            <div style="font-weight: bold; font-size: 18px; padding-bottom: 5px; padding-top: 10px;">
+                Bienes Raices
+            </div>
             <a href="#" class="card-link">
                 <div class="card h-100 shadow-sm">
                     <div class="d-flex align-items-center justify-content-center" style="height: 150px;">

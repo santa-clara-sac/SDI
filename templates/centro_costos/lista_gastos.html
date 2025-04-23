@@ -43,25 +43,99 @@
                 <div class="card-body">
 
                     <!-- Sección de búsqueda -->
-                    <!-- <h5 class="mb-2">Utiliza los filtros para su búsqueda</h5>
+                    <h5 class="mb-2">Utiliza los filtros para su búsqueda</h5>
 
                     <div class="row mb-3">
-
+                        <!-- Año -->
                         <div class="col">
-                            <label class="form-label">Documento</label>
+                            <label for="yearFilter" class="form-label">Año</label>
+                            <select class="form-select filter-input" data-column="1" id="yearFilter">
+                                <option value="">Seleccionar Año</option>
+                                <option value="2010">2010</option>
+                                <option value="2011">2011</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+
+                        <!-- codigo -->
+                        <div class="col">
+                            <label class="form-label">Código</label>
                             <input type="text" class="form-control filter-input" data-column="0">
                         </div>
 
+                        <!-- concepto -->
                         <div class="col">
-                            <label class="form-label">Nombre</label>
-                            <input type="text" class="form-control filter-input" data-column="1">
+                            <label class="form-label">Detalle</label>
+                            <input type="text" class="form-control filter-input" data-column="3">
                         </div>
-                    </div> -->
+
+                        <!-- detalle -->
+                        <div class="col">
+                            <label class="form-label">Tipo</label>
+                            <input type="text" class="form-control filter-input" data-column="5">
+                        </div>
+
+                                               <!-- Actividad -->
+                                               <div class="col">
+                                                <label for="actividadFilter" class="form-label">Actividad</label>
+                                                <select class="form-select filter-input" data-column="2" id="actividadFilter">
+                                                    <option value="">Seleccionar Actividad</option>
+                                                    {% for actividad in actividades %}
+                                                        <option value="{{ actividad.nombre|lower }}">{{ actividad.nombre }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                        <!-- Botón Limpiar Filtros -->
+                        <div class="col">
+                            <label class="form-label" style="color: #ffffff;">Limpiar</label>
+                            <a href="{% url 'centro_costos:lista_gastos' %}" id="clearFilters"
+                                class="form-control btn btn-secondary text-center"
+                                style="background-color: #3b4252; line-height: 25px;">Limpiar Filtros</a>
+                        </div>
+
+                        <div class="col">
+                            <label class="form-label" style="color: #ffffff;">Excel</label>
+                            <button id="exportBtn" class="btn btn-success form-control btn btn-secondary text-center"
+                                style="background-color: #3b4252; line-height: 25px;">
+                                <i class="bi-file-earmark-excel"></i>
+                                Exportar excel
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Totales -->
+                    <div class="row mb-1">
+                        <div class="col">
+                            <label class="form-label">Total Debe</label>
+                            <input type="text" id="totalDebe" class="form-control" disabled>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Total Haber</label>
+                            <input type="text" id="totalHaber" class="form-control" disabled>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Total Saldo</label>
+                            <input type="text" id="totalSaldo" class="form-control" disabled>
+                        </div>
+                    </div>
 
                     <!-- Botón para abrir el modal de agregar -->
                     {% if request.user.role != 1 and request.user.role != 2 %}
                     <center>
-                        <button type="button" class="btn text-white mt-4" style="background-color: #02737e;"
+                        <button type="button" class="btn text-white mt-4" style="background-color: #3b4252;"
                             data-bs-toggle="modal" data-bs-target="#actividadModal">
                             <i class="bi bi-plus-lg"></i> Agregar Nuevo Gasto
                         </button>
@@ -74,7 +148,7 @@
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #02737e;">
+                                <div class="modal-header text-white" style="background-color: #3b4252;">
                                     <h5 class="modal-title" id="actividadModalLabel">Agregar Nuevo Gasto</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -142,7 +216,7 @@
 
                                         <div class="text-center mt-4">
                                             <button type="submit" class="btn px-5 py-2 btnGuardar"
-                                                style="background-color: #02737e; color: #edeff4;">Guardar</button>
+                                                style="background-color: #3b4252; color: #edeff4;">Guardar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -162,6 +236,7 @@
                             <tr>
                                 <th>Código</th>
                                 <th>Fecha</th>
+                                <th class="d-non">Actividad</th>
                                 <th>Detalle</th>
                                 <th>Documento</th>
                                 <th>Tipo</th>
@@ -176,7 +251,8 @@
                             {% for gasto in gastos %}
                             <tr>
                                 <td>{{ gasto.item }}</td>
-                                <td>{{ gasto.fecha }}</td>
+                                <td class="text-nowrap">{{ gasto.fecha|date:"d-m-Y" }}</td>
+                                <td class="d-non">{{ gasto.actividad }}</td>
                                 <td>{{ gasto.detalle }}</td>
                                 <td>{{ gasto.documento|default_if_none:""|default:"" }}</td>
                                 <td>{{ gasto.tipo_gasto.nombre }}</td>
@@ -187,7 +263,7 @@
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button type="button" class="btn btn-sm text-white me-2 btn-editar-gasto"
-                                            style="background-color: #02737e;" data-bs-toggle="modal"
+                                            style="background-color: #3b4252;" data-bs-toggle="modal"
                                             data-bs-target="#editGastoModal" data-id="{{ gasto.id }}"
                                             data-actividad="{{ gasto.actividad.id }}" data-item="{{ gasto.item }}"
                                             data-fecha="{{ gasto.fecha|date:'Y-m-d' }}"
@@ -195,7 +271,7 @@
                                             data-tipo-gasto-id="{{ gasto.tipo_gasto.id }}"
                                             data-tipo-gasto-nombre="{{ gasto.tipo_gasto.nombre }}"
                                             data-debe="{{ gasto.debe }}" data-haber="{{ gasto.haber }}"
-                                            data-detalle="{{ gasto.detalle }}">
+                                            data-detalle="{{ gasto.detalle|default_if_none:'' }}">
                                             <i class="bi bi-pencil-square"></i>
                                         </button>
 
@@ -221,7 +297,7 @@
                     aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-xl">
                         <div class="modal-content">
-                            <div class="modal-header text-white" style="background-color: #02737e;">
+                            <div class="modal-header text-white" style="background-color: #3b4252;">
                                 <h5 class="modal-title" id="editGastoModalLabel">Editar Gasto</h5>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
@@ -299,7 +375,7 @@
 
                                         <div class="text-center mt-4">
                                             <button type="submit" class="btn px-5 py-2 btnGuardar2"
-                                                style="background-color: #02737e; color: #edeff4;">
+                                                style="background-color: #3b4252; color: #edeff4;">
                                                 Guardar
                                             </button>
                                         </div>
@@ -311,12 +387,76 @@
                     </div>
                 </div>
 
-
-
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
                 <script>
+                    document.getElementById("exportBtn").addEventListener("click", function () {
+                    const table = document.getElementById("documentsTable");
+                    const rows = [];
+
+                    // Obtener encabezados excluyendo "Acciones"
+                    const headers = [];
+                    table.querySelectorAll("thead th").forEach((th, i) => {
+                        if (th.innerText.trim() !== "Acciones") {
+                            headers.push(th.innerText.trim());
+                        }
+                    });
+
+                    headers.push("Saldo"); // Añadimos una columna extra para el saldo
+                    rows.push(headers);
+
+                    let totalDebe = 0;
+                    let totalHaber = 0;
+
+                    // Obtener filas visibles y excluir la columna "Acciones"
+                    table.querySelectorAll("tbody tr").forEach(tr => {
+                        if (tr.style.display !== "none") {
+                            const cells = tr.querySelectorAll("td");
+                            const row = [];
+
+                            // Capturar valores hasta la columna Haber (asumimos penúltima columna)
+                            for (let i = 0; i < cells.length - 1; i++) {
+                                let text = cells[i].innerText.trim();
+                                row.push(text);
+
+                                // Acumulamos debe y haber si corresponde
+                                if (cells[i].hasAttribute('data-debe')) {
+                                    totalDebe += parseFloat(text) || 0;
+                                } else if (cells[i].hasAttribute('data-haber')) {
+                                    totalHaber += parseFloat(text) || 0;
+                                }
+                            }
+
+                            // Calcular saldo por fila
+                            const debe = parseFloat(cells[cells.length - 3].innerText) || 0;
+                            const haber = parseFloat(cells[cells.length - 2].innerText) || 0;
+                            const saldo = debe - haber;
+                            row.push(saldo.toFixed(2));
+
+                            rows.push(row);
+                        }
+                    });
+
+                    // Fila de totales
+                    const totalRow = Array(headers.length).fill("");
+                    totalRow[headers.indexOf("Debe")] = totalDebe.toFixed(2);
+                    totalRow[headers.indexOf("Haber")] = totalHaber.toFixed(2);
+                    totalRow[headers.indexOf("Saldo")] = (totalDebe - totalHaber).toFixed(2);
+                    rows.push(totalRow);
+
+                    // Crear hoja de cálculo
+                    const worksheet = XLSX.utils.aoa_to_sheet(rows);
+                    const workbook = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "Documentos");
+
+                    // Aplicar autofiltro
+                    const range = XLSX.utils.decode_range(worksheet['!ref']);
+                    worksheet['!autofilter'] = { ref: XLSX.utils.encode_range(range) };
+
+                    XLSX.writeFile(workbook, "documentos.xlsx");
+                });
 
                     document.addEventListener('DOMContentLoaded', function () {
-
+                        actualizarTotales();
                         // EDITAR
                         const editButtons = document.querySelectorAll('.btn-editar-gasto');
 
@@ -385,8 +525,36 @@
                                 }
 
                                 fila.style.display = mostrar ? '' : 'none';
+                                actualizarTotales(); // 👈 Llama aquí para actualizar los totales
+
                             });
                         }
+
+                        function actualizarTotales() {
+                            let totalDebe = 0;
+                            let totalHaber = 0;
+
+                            document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
+                                if (fila.style.display !== 'none') {
+                                    const celdaDebe = fila.querySelector('[data-debe]');
+                                    const celdaHaber = fila.querySelector('[data-haber]');
+
+                                    const valorDebe = parseFloat(celdaDebe?.textContent || 0);
+                                    const valorHaber = parseFloat(celdaHaber?.textContent || 0);
+
+                                    totalDebe += valorDebe;
+                                    totalHaber += valorHaber;
+                                }
+                            });
+
+                            const totalSaldo = totalDebe - totalHaber;
+
+                            document.getElementById('totalDebe').value = totalDebe.toFixed(2);
+                            document.getElementById('totalHaber').value = totalHaber.toFixed(2);
+                            document.getElementById('totalSaldo').value = totalSaldo.toFixed(2);
+                        }
+
+
 
                     });
 
@@ -473,7 +641,7 @@
                                         title: "Campos incompletos",
                                         text: "Por favor, completa todos los campos obligatorios.",
                                         icon: "warning",
-                                        confirmButtonColor: '#02737e',
+                                        confirmButtonColor: '#3b4252',
                                     });
                                     return;
                                 }

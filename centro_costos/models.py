@@ -1,6 +1,7 @@
 from django.db import models
 from django.db import models
 from partidas_planos.models import User
+from django.core.validators import MaxLengthValidator
 
 class CentroDeCostos(models.Model):
     nombre = models.CharField(max_length=100)
@@ -49,7 +50,7 @@ class CantaCallao(models.Model):
     codigo = models.CharField(max_length=50, unique=True)
     fecha = models.DateField()
     concepto = models.CharField(max_length=100)
-    detalle = models.TextField()
+    detalle = models.TextField(blank=True, null=True, validators=[MaxLengthValidator(100)])
     referencia = models.CharField(max_length=100, blank=True, null=True)
     # monto1 = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     # monto2 = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)

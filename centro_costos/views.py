@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from partidas_planos.models import User
 from django.contrib.auth.hashers import make_password
+from django.db.models.functions import Substr
 
 from .forms import ActividadForm, GastoForm, CantaCallaoForm
 from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao
@@ -94,7 +95,7 @@ def lista_gastos(request):
             form.save()
             return redirect('centro_costos:lista_gastos')
 
-    gastos = Gasto.objects.all()
+    gastos = Gasto.objects.all().order_by('fecha')
     tipos_de_gasto = TipoDeGasto.objects.all()
     actividades = Actividad.objects.all()
 
@@ -153,8 +154,10 @@ def lista_canta_callao(request):
             form.save()
             return redirect('centro_costos:lista_canta_callao')
 
-    canta_callao = CantaCallao.objects.all().order_by('fecha')
-
+    canta_callao = CantaCallao.objects.annotate(
+        anio=Substr('codigo', 8, 2),       # Año: caracteres 8 y 9 (por ejemplo, '19')
+        idinterno=Substr('codigo', 4, 3),  # ID interno: caracteres 4-6 (por ejemplo, '001')
+    ).order_by('anio', 'idinterno')
     return render(request, 'centro_costos/lista_canta_callao.html', {
         'form': form,
         'canta_callao': canta_callao,
