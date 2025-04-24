@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao
+from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao, GastoGeneral
 
 @admin.register(CentroDeCostos)
 class CentroDeCostosAdmin(admin.ModelAdmin):
@@ -28,3 +28,9 @@ class CantaCallaoAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'fecha', 'referencia', 'monto1', 'monto2')
     search_fields = ('codigo', 'detalle', 'referencia')
     list_filter = ('fecha',)
+
+@admin.register(GastoGeneral)
+class GastoGeneralAdmin(admin.ModelAdmin):
+    list_display = ('codigo', 'fecha', 'actividad', 'tipo_gasto', 'monto_soles', 'monto_dolares')
+    search_fields = ('codigo', 'detalle', 'actividad', 'tipo_gasto')
+    list_filter = ('fecha', 'actividad', 'tipo_gasto')

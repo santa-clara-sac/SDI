@@ -6,8 +6,8 @@ from partidas_planos.models import User
 from django.contrib.auth.hashers import make_password
 from django.db.models.functions import Substr
 
-from .forms import ActividadForm, GastoForm, CantaCallaoForm
-from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao
+from .forms import ActividadForm, GastoForm, CantaCallaoForm, GastoGeneralForm
+from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao, GastoGeneral
 
 def centro_costos_home(request):
      return render(request, 'centro_costos/home.html')
@@ -185,3 +185,45 @@ def eliminar_canta_callao(request, doc_id):
     doc = get_object_or_404(CantaCallao, id=doc_id)
     doc.delete()
     return redirect('centro_costos:lista_canta_callao')
+
+######################################################################################################
+# LISTA GENERAL
+@login_required
+def lista_gasto_general(request):
+    form = GastoGeneralForm()
+
+    if request.method == 'POST':
+        form = GastoGeneralForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_gasto_general')  # O el nombre de tu vista actual
+
+    gasto_general = GastoGeneral.objects.all()  # Si quieres listarlas en la plantilla
+
+    return render(request, 'centro_costos/lista_gasto_general.html', {
+        'form': form,
+        'gasto_general': gasto_general,
+    })
+
+def editar_gasto_general(request):
+    if request.method == 'POST':
+        gasto_general_id = request.POST.get('id')
+        gasto_general = get_object_or_404(GastoGeneral, id=gasto_general_id)
+
+        form = GastoGeneralForm(request.POST, request.FILES, instance=gasto_general)
+        print(form)
+        print(form.is_valid())
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_gasto_general')
+        else:
+            print(form.errors)  # Muy útil para debug
+            return redirect('centro_costos:lista_gasto_general')  # o puedes mostrar un error
+
+    return redirect('centro_costos:lista_gasto_general')
+
+
+def eliminar_gasto_general(request, doc_id):
+    doc = get_object_or_404(GastoGeneral, id=doc_id)
+    doc.delete()
+    return redirect('centro_costos:lista_gasto_general')

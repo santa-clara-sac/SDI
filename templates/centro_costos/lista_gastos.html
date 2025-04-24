@@ -2,6 +2,24 @@
 
 {% block title %} Listado de Gastos {% endblock %}
 
+{% block link %}
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="{% url 'documentacion' %}">Documentación</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="{% url 'centro_costos:centro_costos_home' %}">Costos</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="#">Expediente</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-white" href="#">Requerimientos</a>
+</li>
+{% endblock %}
+
 {% block body %}
 
 <style>
@@ -276,7 +294,7 @@
                                         </button>
 
                                         <a href="{% url 'centro_costos:eliminar_gasto' gasto.id %}"
-                                            class="btn btn-sm text-white btnEliminar" style="background-color: #811f1f;"
+                                            class="btn btn-sm text-white btnEliminar" style="background-color: #bf616a;"
                                             title="Eliminar">
                                             <i class="bi bi-trash"></i>
                                         </a>

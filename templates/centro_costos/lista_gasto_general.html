@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Lista de documentos {% endblock %}
+{% block title %} Lista de genral de gastos {% endblock %}
 
 {% block link %}
 <li class="nav-item">
@@ -46,7 +46,7 @@
 
 <div style="text-align: center; margin-top: 20px;">
     <div style="font-weight: bold; font-size: 24px; color: #3b4252;">
-        Listado General de Partidas
+        Listado General de Gastos
     </div>
 </div>
 
@@ -131,7 +131,7 @@
                     <center>
                         <button type="button" class="btn text-white mt-4" style="background-color: #434c5e;"
                             data-bs-toggle="modal" data-bs-target="#documentModal">
-                            <i class="bi bi-plus-lg"></i> Agregar Nueva Partida
+                            <i class="bi bi-plus-lg"></i> Agregar Nuevo Gasto
                         </button>
                     </center>
                     {% endif %}
@@ -143,12 +143,12 @@
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header text-white" style="background-color: #3b4252;">
-                                    <h5 class="modal-title" id="documentModalLabel">Agregar Nueva Partida</h5>
+                                    <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Gasto</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="POST" action="{% url 'lista_partidas' %}"
+                                    <form method="POST" action="{% url 'centro_costos:lista_gasto_general' %}"
                                         enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <div class="container">
@@ -158,39 +158,34 @@
                                                     {{ form.codigo }}
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="id_partida" class="form-label">Partida</label>
-                                                    {{ form.partida }}
-                                                </div>
-                                                <div class="col-md-4">
                                                     <label for="id_fecha" class="form-label">Fecha</label>
                                                     {{ form.fecha }}
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="id_descripcion" class="form-label">Descripción</label>
-                                                    {{ form.descripcion }}
+                                                    <label for="id_detalle" class="form-label">Detalle</label>
+                                                    {{ form.detalle }}
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="id_pg" class="form-label"># Páginas</label>
-                                                    {{ form.pg }}
+                                                    <label for="id_referencia" class="form-label">Referencia</label>
+                                                    {{ form.referencia }}
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="id_ubicacion" class="form-label">Ubicación</label>
-                                                    {{ form.ubicacion }}
+                                                    <label for="id_monto_soles" class="form-label">Monto (S/)</label>
+                                                    {{ form.monto_soles }}
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="id_costo" class="form-label">Costo</label>
-                                                    {{ form.costo }}
+                                                    <label for="id_monto_dolares" class="form-label">Monto ($/)</label>
+                                                    {{ form.monto_dolares }}
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="id_centro_costos" class="form-label">Centro de
-                                                        Costos</label>
-                                                    {{ form.centro_costos }}
+                                                    <label for="id_actividad" class="form-label">Actividad</label>
+                                                    {{ form.actividad }}
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="id_responsable" class="form-label">Responsable</label>
-                                                    {{ form.responsable }}
+                                                    <label for="id_tipo_gasto" class="form-label">Tipo de gasto</label>
+                                                    {{ form.tipo_gasto }}
                                                 </div>
-                                                <div class="col-md-12">
+                                                <div class="col-md-4">
                                                     <label for="id_pdf" class="form-label">Archivo PDF</label>
                                                     {{ form.pdf }}
                                                 </div>
@@ -216,37 +211,36 @@
                                 <tr>
                                     <th>Código</th>
                                     <th>Fecha</th>
-                                    <th>Partida</th>
-                                    <th>Descripción</th>
-                                    <th>Pg.</th>
-                                    <th>Ubicación</th>
-                                    <th>Costo</th>
-                                    <th>Centro de Costos</th>
-                                    <th>Documento</th>
-                                    <th>Responsable</th>
+                                    <th>Detalle</th>
+                                    <th>referencia</th>
+                                    <th>Monto (S/)</th>
+                                    <th>Monto ($/)</th>
+                                    <th>Actividad</th>
+                                    <th>Tipo de gasto</th>
+                                    <th>PDF</th>
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>
                                     {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for partida in partidas %}
+                                {% for gg in gasto_general %}
                                 <tr>
-                                    <td>{{ partida.codigo }}</td>
-                                    <td class="text-nowrap">{{ partida.fecha|date:"d-m-Y" }}</td>
-                                    <td>{{ partida.partida }}</td>
-                                    <td>{{ partida.descripcion }}</td>
-                                    <td>{{ partida.pg }}</td>
-                                    <td>{{ partida.ubicacion }}</td>
-                                    <td>{{ partida.costo }}</td>
-                                    <td>{{ partida.centro_costos }}</td>
+                                    <td>{{ gg.codigo }}</td>
+                                    <td class="text-nowrap">{{ gg.fecha|date:"d-m-Y" }}</td>
+                                    <td>{{ gg.detalle }}</td>
+                                    <td>{{ gg.referencia }}</td>
+                                    <td>{{ gg.monto_soles }}</td>
+                                    <td>{{ gg.monto_dolares }}</td>
+                                    <td>{{ gg.actividad }}</td>
+                                    <td>{{ gg.tipo_gasto }}</td>
 
                                     <td>
-                                        {% if partida.pdf %}
+                                        {% if gg.pdf %}
                                         <button type="button"
                                             style="background: none; border: none; color: #bf616a; text-decoration: none; cursor: pointer;"
                                             data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
-                                            data-pdf-url="{{ partida.pdf.url }}" class="ver-pdf-btn">
+                                            data-pdf-url="{{ gg.pdf.url }}" class="ver-pdf-btn">
                                             Ver PDF
                                         </button>
                                         {% else %}
@@ -254,30 +248,29 @@
                                         {% endif %}
                                     </td>
 
-                                    <td>{{ partida.responsable }}</td>
-
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm text-white me-2 btn-editar"
                                                 style="background-color: #434c5e;" data-bs-toggle="modal"
-                                                data-bs-target="#editPartidaModal" data-id="{{ partida.id }}"
-                                                data-codigo="{{ partida.codigo }}" data-partida="{{ partida.partida }}"
-                                                data-fecha="{{ partida.fecha|date:'Y-m-d' }}"
-                                                data-descripcion="{{ partida.descripcion }}" data-pg="{{ partida.pg }}"
-                                                data-ubicacion="{{ partida.ubicacion }}"
-                                                data-costo="{{ partida.costo }}"
-                                                data-centro_costos="{{ partida.centro_costos }}"
-                                                data-responsable="{{ partida.responsable }}">
+                                                data-bs-target="#editGastoGeneralModal" data-id="{{ gg.id }}"
+                                                data-codigo="{{ gg.codigo }}"
+                                                data-fecha="{{ gg.fecha|date:'Y-m-d' }}"
+                                                data-detalle="{{ gg.detalle }}"
+                                                data-referencia="{{ gg.referencia }}" data-pdf="{{ gg.pdf }}"
+                                                data-monto_soles="{{ gg.monto_soles }}"
+                                                data-monto_dolares="{{ gg.monto_dolares }}"
+                                                data-actividad="{{ gg.actividad }}"
+                                                data-tipo_gasto="{{ gg.tipo_gasto }}"
+                                                data-pdf="{{ gg.pdf }}">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
 
-                                            <a href="{% url 'eliminar_partida' partida.id %}"
+                                            <a href="{% url 'centro_costos:eliminar_gasto_general' gg.id %}"
                                                 class="btn btn-sm text-white btnEliminar"
                                                 style="background-color: #bf616a;" title="Eliminar">
                                                 <i class="bi bi-trash"></i>
                                             </a>
-
                                         </div>
                                     </td>
                                     {% endif %}
@@ -308,31 +301,26 @@
                     </div>
 
                     <!-- Modal para editar partida -->
-                    <div class="modal fade" id="editPartidaModal" tabindex="-1" aria-labelledby="editPartidaModalLabel"
+                    <div class="modal fade" id="editGastoGeneralModal" tabindex="-1" aria-labelledby="editGastoGeneralModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header text-white" style="background-color: #3b4252;">
-                                    <h5 class="modal-title" id="editPartidaModalLabel">Editar Partida</h5>
+                                    <h5 class="modal-title" id="editGastoGeneralModalLabel">Editar Gasto</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="POST" action="{% url 'editar_partida' %}"
+                                    <form method="POST" action="{% url 'centro_costos:editar_gasto_general' %}"
                                         enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <input type="hidden" id="edit_id" name="id">
                                         <div class="container">
                                             <div class="row g-3">
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_codigo" class="form-label">Codigo</label>
+                                                    <label for="edit_id_codigo" class="form-label">Código</label>
                                                     <input type="text" class="form-control" id="edit_id_codigo"
                                                         name="codigo">
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="edit_id_partida" class="form-label">Partida</label>
-                                                    <input type="text" class="form-control" id="edit_id_partida"
-                                                        name="partida">
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="edit_id_fecha" class="form-label">Fecha</label>
@@ -340,36 +328,34 @@
                                                         name="fecha">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_descripcion"
-                                                        class="form-label">Descripción</label>
-                                                    <input type="text" class="form-control" id="edit_id_descripcion"
-                                                        name="descripcion">
+                                                    <label for="edit_id_detalle" class="form-label">Detalle</label>
+                                                    <input type="text" class="form-control" id="edit_id_detalle"
+                                                        name="detalle">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_pg" class="form-label"># Páginas</label>
-                                                    <input type="text" class="form-control" id="edit_id_pg" name="pg">
+                                                    <label for="edit_id_referencia"
+                                                        class="form-label">Referencia</label>
+                                                    <input type="text" class="form-control" id="edit_id_referencia"
+                                                        name="referencia">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_ubicacion" class="form-label">Ubicación</label>
-                                                    <input type="text" class="form-control" id="edit_id_ubicacion"
-                                                        name="ubicacion">
+                                                    <label for="edit_id_monto_soles" class="form-label">Monto (S/)</label>
+                                                    <input type="number" class="form-control" id="edit_id_monto_soles" name="monto_soles">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_costo" class="form-label">Costo</label>
-                                                    <input type="text" class="form-control" id="edit_id_costo"
-                                                        name="costo">
+                                                    <label for="edit_id_ubicacion" class="form-label">Monto ($/)</label>
+                                                    <input type="text" class="form-control" id="edit_id_monto_dolares"
+                                                        name="monto_dolares">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_centro_costos" class="form-label">Centro de
-                                                        Costos</label>
-                                                    <input type="text" class="form-control" id="edit_id_centro_costos"
-                                                        name="centro_costos">
+                                                    <label for="edit_id_actividad" class="form-label">Actividad</label>
+                                                    <input type="text" class="form-control" id="edit_id_actividad"
+                                                        name="actividad">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_responsable"
-                                                        class="form-label">Responsable</label>
-                                                    <input type="text" class="form-control" id="edit_id_responsable"
-                                                        name="responsable">
+                                                    <label for="edit_id_tipo_gasto" class="form-label">Tipo de gasto</label>
+                                                    <input type="text" class="form-control" id="edit_id_tipo_gasto"
+                                                        name="tipo_gasto">
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label for="edit_id_pdf" class="form-label">Archivo PDF</label>
@@ -511,18 +497,6 @@
 
                             const editCodigoInput = document.getElementById('edit_id_codigo');
                             if (editCodigoInput) formatCodigoInput(editCodigoInput);
-                            // CAMPO # PAGINAS NUMERICO
-                            const inputPg = document.getElementById("id_pg");
-                            inputPg.addEventListener("input", function (e) {
-                                // Elimina cualquier carácter que no sea número
-                                this.value = this.value.replace(/\D/g, "");
-                            });
-                            // También evita pegar caracteres no numéricos
-                            inputPg.addEventListener("paste", function (e) {
-                                e.preventDefault();
-                                const paste = (e.clipboardData || window.clipboardData).getData('text');
-                                this.value = paste.replace(/\D/g, "");
-                            });
 
                             // FILTRO EN TIEMPO REAL
                             document.querySelectorAll('.filter-input').forEach(input => {
@@ -573,14 +547,14 @@
                                     console.log("Id:", id);
                                     document.getElementById('edit_id').value = button.getAttribute('data-id');
                                     document.getElementById('edit_id_codigo').value = button.getAttribute('data-codigo');
-                                    document.getElementById('edit_id_partida').value = button.getAttribute('data-partida');
                                     document.getElementById('edit_id_fecha').value = button.getAttribute('data-fecha');
-                                    document.getElementById('edit_id_descripcion').value = button.getAttribute('data-descripcion');
-                                    document.getElementById('edit_id_pg').value = button.getAttribute('data-pg');
-                                    document.getElementById('edit_id_ubicacion').value = button.getAttribute('data-ubicacion');
-                                    document.getElementById('edit_id_costo').value = button.getAttribute('data-costo');
-                                    document.getElementById('edit_id_centro_costos').value = button.getAttribute('data-centro_costos');
-                                    document.getElementById('edit_id_responsable').value = button.getAttribute('data-responsable');
+                                    document.getElementById('edit_id_detalle').value = button.getAttribute('data-detalle');
+                                    document.getElementById('edit_id_referencia').value = button.getAttribute('data-referencia');
+                                    document.getElementById('edit_id_monto_soles').value = button.getAttribute('data-monto_soles');
+                                    document.getElementById('edit_id_monto_dolares').value = button.getAttribute('data-monto_dolares');
+                                    document.getElementById('edit_id_actividad').value = button.getAttribute('data-actividad');
+                                    document.getElementById('edit_id_tipo_gasto').value = button.getAttribute('data-tipo_gasto');
+                                    document.getElementById('edit_id_pdf').value = button.getAttribute('data-pdf');
                                 });
                             });
                         });

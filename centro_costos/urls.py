@@ -20,4 +20,8 @@ urlpatterns = [
     path('lista_canta_callao/', views.lista_canta_callao, name='lista_canta_callao'),
     path('editar_canta_callao/', views.editar_canta_callao, name='editar_canta_callao'),
     path('eliminar_canta_callao/<int:doc_id>/', views.eliminar_canta_callao, name='eliminar_canta_callao'),
+
+    path('lista_gasto_general/', views.lista_gasto_general, name='lista_gasto_general'),
+    path('editar_gasto_general/', views.editar_gasto_general, name='editar_gasto_general'),
+    path('eliminar_gasto_general/<int:doc_id>/', views.eliminar_gasto_general, name='eliminar_gasto_general'),
 ]

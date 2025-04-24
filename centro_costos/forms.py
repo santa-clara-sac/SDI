@@ -1,5 +1,5 @@
 from django import forms
-from .models import Actividad, Gasto, CantaCallao
+from .models import Actividad, Gasto, CantaCallao, GastoGeneral
 
 class ActividadForm(forms.ModelForm):
     class Meta:
@@ -55,3 +55,15 @@ class CantaCallaoForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
         
+class GastoGeneralForm(forms.ModelForm):
+    class Meta:
+        model = GastoGeneral
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'

@@ -17,6 +17,17 @@
 <li class="nav-item">
     <a class="nav-link text-white" href="#">Requerimientos</a>
 </li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Dropdown
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" href="#">Action</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">Something else here</a>
+    </div>
+  </li>
 {% endblock %}
 
 {% block body %}
@@ -32,8 +43,8 @@
     }
 
     .form-control:focus {
-        border-color: #01117f !important;
-        box-shadow: 0 0 0 0.2rem rgba(41, 72, 227, 0.25);
+        border-color: #d8dee9 !important;
+        box-shadow: 0 0 0 0.2rem rgb(226, 242, 242);
     }
 </style>
 
@@ -141,7 +152,7 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm text-white me-2 btn-editar"
-                                                style="background-color: #3b4252;" data-bs-toggle="modal"
+                                                style="background-color: #4c566a;" data-bs-toggle="modal"
                                                 data-bs-target="#editUserModal" data-id="{{ user.id }}"
                                                 data-first_name="{{ user.first_name }}"
                                                 data-last_name="{{ user.last_name }}"
@@ -152,12 +163,12 @@
 
                                             <a href="{% url 'eliminar_usuario' user.id %}"
                                                 class="btn btn-sm text-white btnEliminar me-2"
-                                                style="background-color: #811f1f;">
+                                                style="background-color: #bf616a;">
                                                 <i class="bi bi-trash"></i>
                                             </a>
 
                                             <button type="button" class="btn btn-sm text-white btn-password"
-                                                style="background-color: #c74d01;" data-bs-toggle="modal"
+                                                style="background-color: #d08770;" data-bs-toggle="modal"
                                                 data-bs-target="#passwordModal" data-id="{{ user.id }}">
                                                 <i class="bi bi-key"></i>
                                             </button>
@@ -213,7 +224,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Rol</label>
                             <select class="form-control" name="role" id="edit_role" required>
-                                <option value="">---------</option>
+                                <option value="">Selecciona tipo de perfil</option>
                                 <option value="1">Estandar</option>
                                 <option value="2">Legal</option>
                                 <option value="3">Administrador</option>

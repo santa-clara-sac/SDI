@@ -2,6 +2,13 @@
 {% load static %}
 {% block title %} Tipo de documentos {% endblock %}
 
+
+{% block link %}
+<li class="nav-item">
+    <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
+</li>
+{% endblock %}
+
 {% block body %}
 
 <style>
@@ -34,7 +41,7 @@
             <a href="{% url 'lista_partidas' %}" class="card-link">
                 <div class="card h-100 shadow-sm">
                     <div class="d-flex align-items-center justify-content-center" style="height: 150px; ">
-                        <img src="{% static 'images/partidos_planos.png' %}" alt="Imagen 1"
+                        <img src="{% static 'images/partidas_planos.png' %}" alt="Imagen 1"
                             style="max-height: 100%; max-width: 100%; object-fit: contain;">
                     </div>
                     <div class="card-body">

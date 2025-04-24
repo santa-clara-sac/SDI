@@ -59,3 +59,19 @@ class CantaCallao(models.Model):
 
     def __str__(self):
         return f"{self.codigo} - {self.detalle[:30]}"
+
+#####################################################################################################
+
+class GastoGeneral(models.Model):
+    codigo = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    fecha = models.DateField(blank=True, null=True)
+    detalle = models.TextField(blank=True, null=True)
+    referencia = models.CharField(max_length=255, blank=True, null=True)
+    pdf = models.FileField(upload_to='gastos', blank=True, null=True, max_length=255)
+    monto_soles = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    monto_dolares = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    actividad = models.CharField(max_length=255, blank=True, null=True)
+    tipo_gasto = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.codigo} - {self.detalle[:50]}" if self.codigo and self.detalle else "Gasto General"
