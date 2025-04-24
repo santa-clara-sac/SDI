@@ -6,28 +6,27 @@ Iniciar sesión
 {% endblock %} {% block body %}
 
 <style>
+    body {
+        background-image: url("{% static 'images/bgg2.jpg' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 100vh;
+        margin: 0;
+        position: relative;
+    }
 
-body {
-  background-image: url("{% static 'images/bgg.png' %}");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 100vh;
-  margin: 0;
-  position: relative;
-}
+    body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(216, 222, 233, 0.495);
+        z-index: 0;
+    }
 
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(216, 222, 233, 0.495);
-  /* Cambia el 0.4 para más o menos claridad */
-  z-index: 0;
-}
     main,
     header,
     footer {
@@ -49,16 +48,8 @@ body::before {
         color: aliceblue !important;
     }
 
-    button:focus {
-        outline: none;
-        border-color: #7a7a7a !important;
-        /* Color medio plomo */
-        box-shadow: 0 0 2px #7a7a7a !important;
-        /* Opcional, añade un efecto de sombra */
-    }
-
     button:hover {
-        background-color: #21607d !important;
+        background-color: #4c566a !important;
     }
 
     .password-wrapper {
@@ -127,7 +118,7 @@ body::before {
             {% endif %}
             <div class="mb-3">
                 <label for="userField" class="form-label">Nombre de usuario</label>
-                <input type="text" id="userField" name="username" class="form-control" required />
+                <input type="text" id="userField" name="username" class="form-control" autocomplete="off" required />
             </div>
 
             <div class="mb-3 password-wrapper">
