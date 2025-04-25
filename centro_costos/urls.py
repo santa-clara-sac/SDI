@@ -24,4 +24,18 @@ urlpatterns = [
     path('lista_gasto_general/', views.lista_gasto_general, name='lista_gasto_general'),
     path('editar_gasto_general/', views.editar_gasto_general, name='editar_gasto_general'),
     path('eliminar_gasto_general/<int:doc_id>/', views.eliminar_gasto_general, name='eliminar_gasto_general'),
+
+    path('lista_gastoTA/', views.lista_gastoTA, name='lista_gastoTA'),
+    path('editar_gastoTA/', views.editar_gastoTA, name='editar_gastoTA'),
+    path('eliminar_gastoTA/<int:doc_id>/', views.eliminar_gastoTA, name='eliminar_gastoTA'),
+
+    path('lista_gastoCC/', views.lista_gastoCC, name='lista_gastoCC'),
+    path('editar_gastoCC/', views.editar_gastoCC, name='editar_gastoCC'),
+    path('eliminar_gastoCC/<int:doc_id>/', views.eliminar_gastoCC, name='eliminar_gastoCC'),
+
+    path('lista_gastoBR/', views.lista_gastoBR, name='lista_gastoBR'),
+    path('editar_gastoBR/', views.editar_gastoBR, name='editar_gastoBR'),
+    path('eliminar_gastoBR/<int:doc_id>/', views.eliminar_gastoBR, name='eliminar_gastoBR'),
+
+
 ]

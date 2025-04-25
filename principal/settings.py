@@ -65,10 +65,12 @@ WSGI_APPLICATION = 'principal.wsgi.application'
 #     }
 # }
 
+# PATH FILES
+#MEDIA_ROOT = r'\\Pc-03\d\Partidas y Planos 2024 - 2025\SDI'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'SDI_dev4',
+        'NAME': 'SDI_dev5',
         'USER': 'Admin',
         'PASSWORD': 'root',
         'HOST': r'PC-03\SQLEXPRESS',
@@ -131,5 +133,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'partidas_planos.User'
 LOGIN_URL = '/login/' 
 
-# PATH FILES
-# MEDIA_ROOT = r'\\Pc-03\d\Partidas y Planos 2024 - 2025\SDI'

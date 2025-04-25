@@ -1,5 +1,5 @@
 from django import forms
-from .models import Actividad, Gasto, CantaCallao, GastoGeneral
+from .models import Actividad, Gasto, CantaCallao, GastoGeneral, GastoTA, GastoCC, GastoBR
 
 class ActividadForm(forms.ModelForm):
     class Meta:
@@ -67,3 +67,47 @@ class GastoGeneralForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+
+###############################################################################################
+class GastoTAForm(forms.ModelForm):
+    class Meta:
+        model = GastoTA
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class GastoCCForm(forms.ModelForm):
+    class Meta:
+        model = GastoCC
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class GastoBRForm(forms.ModelForm):
+    class Meta:
+        model = GastoBR
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+

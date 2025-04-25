@@ -6,11 +6,14 @@ from partidas_planos.models import User
 from django.contrib.auth.hashers import make_password
 from django.db.models.functions import Substr
 
-from .forms import ActividadForm, GastoForm, CantaCallaoForm, GastoGeneralForm
-from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao, GastoGeneral
+from .forms import ActividadForm, GastoForm, CantaCallaoForm, GastoGeneralForm, GastoTAForm, GastoCCForm, GastoBRForm
+from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao, GastoGeneral, GastoTA, GastoCC, GastoBR, NuevoGasto
 
 def centro_costos_home(request):
-     return render(request, 'centro_costos/home.html')
+    ngs = NuevoGasto.objects.filter(flag=True)
+    return render(request, 'centro_costos/home.html', {
+        'ngs': ngs,
+    })
 
 @login_required
 def lista_actividades(request):
@@ -227,3 +230,134 @@ def eliminar_gasto_general(request, doc_id):
     doc = get_object_or_404(GastoGeneral, id=doc_id)
     doc.delete()
     return redirect('centro_costos:lista_gasto_general')
+
+
+######################################################################################################
+######################################################################################################
+######################################################################################################
+######################################################################################################
+######################################################################################################
+
+# LISTA GENERAL TUPAC AMARU
+@login_required
+def lista_gastoTA(request):
+    form = GastoTAForm()
+
+    if request.method == 'POST':
+        form = GastoTAForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_gastoTA')  # O el nombre de tu vista actual
+
+    gastoTA = GastoTA.objects.all()  # Si quieres listarlas en la plantilla
+
+    return render(request, 'centro_costos/lista_gastoTA.html', {
+        'form': form,
+        'gasto_general': gastoTA,
+    })
+
+def editar_gastoTA(request):
+    if request.method == 'POST':
+        gasto_general_id = request.POST.get('id')
+        gasto_general = get_object_or_404(GastoTA, id=gasto_general_id)
+
+        form = GastoTAForm(request.POST, request.FILES, instance=gasto_general)
+        print(form)
+        print(form.is_valid())
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_gastoTA')
+        else:
+            print(form.errors)  # Muy útil para debug
+            return redirect('centro_costos:lista_gastoTA')  # o puedes mostrar un error
+
+    return redirect('centro_costos:lista_gastoTA')
+
+
+def eliminar_gastoTA(request, doc_id):
+    doc = get_object_or_404(GastoTA, id=doc_id)
+    doc.delete()
+    return redirect('centro_costos:lista_gastoTA')
+
+# LISTA GENERAL CANTA CALLAO
+@login_required
+def lista_gastoCC(request):
+    form = GastoCCForm()
+
+    if request.method == 'POST':
+        form = GastoCCForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_gastoCC')  # O el nombre de tu vista actual
+
+    gastoCC = GastoCC.objects.all()  # Si quieres listarlas en la plantilla
+
+    return render(request, 'centro_costos/lista_gastoCC.html', {
+        'form': form,
+        'gasto_general': gastoCC,
+    })
+
+def editar_gastoCC(request):
+    if request.method == 'POST':
+        gasto_general_id = request.POST.get('id')
+        gasto_general = get_object_or_404(GastoCC, id=gasto_general_id)
+
+        form = GastoCCForm(request.POST, request.FILES, instance=gasto_general)
+        print(form)
+        print(form.is_valid())
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_gastoCC')
+        else:
+            print(form.errors)  # Muy útil para debug
+            return redirect('centro_costos:lista_gastoCC')  # o puedes mostrar un error
+
+    return redirect('centro_costos:lista_gastoCC')
+
+
+def eliminar_gastoCC(request, doc_id):
+    doc = get_object_or_404(GastoCC, id=doc_id)
+    doc.delete()
+    return redirect('centro_costos:lista_gastoCC')
+
+
+# LISTA GENERAL BIENES RAICES
+@login_required
+def lista_gastoBR(request):
+    form = GastoBRForm()
+
+    if request.method == 'POST':
+        form = GastoBRForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_gastoBR')  # O el nombre de tu vista actual
+
+    gastoBR = GastoBR.objects.all()  # Si quieres listarlas en la plantilla
+
+    return render(request, 'centro_costos/lista_gastoBR.html', {
+        'form': form,
+        'gasto_general': gastoBR,
+    })
+
+def editar_gastoBR(request):
+    if request.method == 'POST':
+        gasto_general_id = request.POST.get('id')
+        gasto_general = get_object_or_404(GastoBR, id=gasto_general_id)
+
+        form = GastoBRForm(request.POST, request.FILES, instance=gasto_general)
+        print(form)
+        print(form.is_valid())
+        if form.is_valid():
+            form.save()
+            return redirect('centro_costos:lista_gastoBR')
+        else:
+            print(form.errors)  # Muy útil para debug
+            return redirect('centro_costos:lista_gastoBR')  # o puedes mostrar un error
+
+    return redirect('centro_costos:lista_gastoBR')
+
+
+def eliminar_gastoBR(request, doc_id):
+    doc = get_object_or_404(GastoBR, id=doc_id)
+    doc.delete()
+    return redirect('centro_costos:lista_gastoBR')
