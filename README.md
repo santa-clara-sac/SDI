@@ -106,3 +106,13 @@ Violation of UNIQUE KEY constraint 'UQ__centro_c__40F9A206D69EA8F9'. Cannot inse
 
 INSERT INTO [centro_costos_cantacallao] (codigo, fecha, concepto, detalle, referencia, monto1, monto2) VALUES ('CC-019-22', '2022-06-11', 'Gastos Canta Callao', 'PINTADO DEL TEJADO Y PARTE DEL TECHO, FACHADA', '', '1356.6', '');
 INSERT INTO [centro_costos_cantacallao] (codigo, fecha, concepto, detalle, referencia, monto1, monto2) VALUES ('CC-019-22', '2022-02-16', 'Municipalidad de los Olivos', '1 SOLICITUD DE CERTIFICACION DE NUMERACION A-1-4', '', '44', '');
+
+- Codigo (identificacion del documento XX-XXX-XX -> CentroCosto-Sello-Año)
+- Fecha (fecha en la q se realizó el gasto)
+- Detalle (descripcion del gasto)
+- Referencia (codigo del gasto bancario/boleta/)
+- PDF (archivo de sustento)
+- Monto Soles (monto del gasto)
+- Monto Dolares (monto del gasto)
+- Actividad (proyecto, obra, servicio o actividad específica donde se realizó el gasto [PinturaFachada, CajaDeLuzEnel, ReparacionDeTecho])
+- Tipo Gasto (Representa para qué fin contable se usó el dinero [ManoDeObra, Materiales, etc])

@@ -82,26 +82,26 @@
 
                         <!-- Partida -->
                         <div class="col">
-                            <label class="form-label">Partida</label>
+                            <label class="form-label">Detalle</label>
                             <input type="text" class="form-control filter-input" data-column="2">
                         </div>
 
                         <!-- Descripción -->
                         <div class="col">
-                            <label class="form-label">Descripción</label>
+                            <label class="form-label">Referencia</label>
                             <input type="text" class="form-control filter-input" data-column="3">
                         </div>
 
                         <!-- Ubicación -->
                         <div class="col">
-                            <label class="form-label">Ubicación</label>
-                            <input type="text" class="form-control filter-input" data-column="5">
+                            <label class="form-label">Actividad</label>
+                            <input type="text" class="form-control filter-input" data-column="6">
                         </div>
 
                         <!-- Costo -->
                         <div class="col">
-                            <label class="form-label">Costo</label>
-                            <input type="text" class="form-control filter-input" data-column="6">
+                            <label class="form-label">Tipo de gasto</label>
+                            <input type="text" class="form-control filter-input" data-column="7">
                         </div>
 
                         <!-- Fecha Inicio -->
@@ -137,7 +137,7 @@
                     {% endif %}
 
 
-                    <!-- Modal para agregar nueva partida -->
+                    <!-- Modal para agregar nueva gasto general -->
                     <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -170,11 +170,11 @@
                                                     {{ form.referencia }}
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="id_monto_soles" class="form-label">Monto (S/)</label>
+                                                    <label for="id_monto_soles" class="form-label">Monto (S)</label>
                                                     {{ form.monto_soles }}
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="id_monto_dolares" class="form-label">Monto ($/)</label>
+                                                    <label for="id_monto_dolares" class="form-label">Monto ($)</label>
                                                     {{ form.monto_dolares }}
                                                 </div>
                                                 <div class="col-md-4">
@@ -213,8 +213,8 @@
                                     <th>Fecha</th>
                                     <th>Detalle</th>
                                     <th>referencia</th>
-                                    <th>Monto (S/)</th>
-                                    <th>Monto ($/)</th>
+                                    <th>Monto (S)</th>
+                                    <th>Monto ($)</th>
                                     <th>Actividad</th>
                                     <th>Tipo de gasto</th>
                                     <th>PDF</th>
@@ -339,11 +339,11 @@
                                                         name="referencia">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_monto_soles" class="form-label">Monto (S/)</label>
+                                                    <label for="edit_id_monto_soles" class="form-label">Monto (S)</label>
                                                     <input type="number" class="form-control" id="edit_id_monto_soles" name="monto_soles">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_ubicacion" class="form-label">Monto ($/)</label>
+                                                    <label for="edit_id_ubicacion" class="form-label">Monto ($)</label>
                                                     <input type="text" class="form-control" id="edit_id_monto_dolares"
                                                         name="monto_dolares">
                                                 </div>
@@ -481,22 +481,6 @@
                             });
 
                             // FORMATO CODIGO
-                            function formatCodigoInput(input) {
-                                input.placeholder = 'XXX-XX';
-
-                                input.addEventListener('input', function () {
-                                    let value = this.value.replace(/\D/g, '').slice(0, 5); // max 5 digits
-                                    if (value.length > 3) value = value.slice(0, 3) + '-' + value.slice(3);
-                                    this.value = value;
-                                });
-                            }
-
-                            // Aplica a ambos campos si existen
-                            const codigoInput = document.getElementById('id_codigo');
-                            if (codigoInput) formatCodigoInput(codigoInput);
-
-                            const editCodigoInput = document.getElementById('edit_id_codigo');
-                            if (editCodigoInput) formatCodigoInput(editCodigoInput);
 
                             // FILTRO EN TIEMPO REAL
                             document.querySelectorAll('.filter-input').forEach(input => {

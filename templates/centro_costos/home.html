@@ -26,102 +26,92 @@
     }
 </style>
 
-<div class="container text-center" style="padding-top: 100px;">
-
-    <div style="font-weight: bold; font-size: 24px; padding-bottom: 10px;">
+<div class="container text-center" style="padding-top: 30px;">
+    <div style="font-weight: bold; font-size: 24px; margin-bottom: 30px;">
         Módulo Centro de Costos
     </div>
-    <!-- COSTO TUPAC MARU-->
-    <div style="">
-        <div style="font-weight: bold; font-size: 18px; padding-bottom: 5px; color: #5e81ac;">
-            Túpac Amaru
-        </div>
-    
-        <div class="row justify-content-center">
-            <!-- Cuadro: Control Expediente -->
-            <div class="col-6 col-md-3 mb-4">
-                <a href="{% url 'centro_costos:lista_actividades' %}" class="card-link">
-                    <div class="card h-100 shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                            <img src="{% static 'images/centro_costos/actividades.png' %}" alt="Actividades"
-                                style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Actividades</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-    
-            <div class="col-6 col-md-3 mb-4">
-                <a href="{% url 'centro_costos:lista_gastos' %}" class="card-link">
-                    <div class="card h-100 shadow-sm">
-                        <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                            <img src="{% static 'images/centro_costos/gastos.png' %}" alt="gastos"
-                                style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Gastos</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
+
+    <!-- Periodo 2013-2023 -->
+    <div class="mb-4" style="font-weight: bold; font-size: 20px;">
+        Periodo (2013-2023)
     </div>
 
     <div class="row justify-content-center">
-        
-        <div class="col-6 col-md-3 mb-4">
-            <div style="font-weight: bold; font-size: 18px; padding-bottom: 5px; padding-top: 10px; color: #a3be8c;">
+        <!-- Túpac Amaru -->
+        <div class="col-12 col-md-6 mb-4">
+            <div style="font-weight: bold; font-size: 18px; color: #5e81ac; margin-bottom: 10px;">
+                Túpac Amaru
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-6 col-sm-6 col-md-6 mb-4">
+                    <a href="{% url 'centro_costos:lista_actividades' %}" class="card-link">
+                        <div class="card h-100 shadow-sm">
+                            <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
+                                <img src="{% static 'images/centro_costos/actividades.png' %}" alt="Actividades"
+                                     style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Actividades</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-6 col-sm-6 col-md-6 mb-4">
+                    <a href="{% url 'centro_costos:lista_gastos' %}" class="card-link">
+                        <div class="card h-100 shadow-sm">
+                            <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
+                                <img src="{% static 'images/centro_costos/gastos.png' %}" alt="Gastos"
+                                     style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Gastos</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canta Callao -->
+        <div class="col-12 col-md-3 mb-4">
+            <div style="font-weight: bold; font-size: 18px; color: #a3be8c; margin-bottom: 10px;">
                 Canta Callao
             </div>
             <a href="{% url 'centro_costos:lista_canta_callao' %}" class="card-link">
                 <div class="card h-100 shadow-sm">
                     <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                        <img src="{% static 'images/centro_costos/gastos2.png' %}" alt="Actividades"
-                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        <img src="{% static 'images/centro_costos/gastos2.png' %}" alt="Gastos"
+                             style="max-height: 100%; max-width: 100%; object-fit: contain;">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title"></h5>
+                        <h5 class="card-title">Gastos</h5>
                     </div>
                 </div>
             </a>
         </div>
+    </div>
 
-        
-        <div class="col-6 col-md-3 mb-4">
-            <div style="font-weight: bold; font-size: 18px; padding-bottom: 5px; padding-top: 10px; color: #a3be8c;">
-                Bienes Raices
-            </div>
-            <a href="#" class="card-link">
-                <div class="card h-100 shadow-sm">
-                    <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                        <img src="{% static 'images/centro_costos/gastos2.png' %}" alt="Actividades"
-                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title"></h5>
-                    </div>
-                </div>
-            </a>
-        </div>
+    <!-- Periodo 2024 - 20XX -->
+    <div class=" mb-3" style="font-weight: bold; font-size: 20px;">
+        Periodo 2024 - 20XX
+    </div>
 
+    <div class="row justify-content-center">
         <div class="col-6 col-md-3 mb-4">
-            <div style="font-weight: bold; font-size: 18px; padding-bottom: 5px; padding-top: 10px; color: #a3be8c;">
-                2024
-            </div>
             <a href="{% url 'centro_costos:lista_gasto_general' %}" class="card-link">
                 <div class="card h-100 shadow-sm">
                     <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                        <img src="{% static 'images/centro_costos/gastos2.png' %}" alt="Actividades"
-                            style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        <img src="{% static 'images/centro_costos/gastos3.png' %}" alt="Gastos"
+                             style="max-height: 100%; max-width: 100%; object-fit: contain;">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title"></h5>
+                        <h5 class="card-title"></h5> <!-- Dejas vacío si no quieres título -->
                     </div>
                 </div>
             </a>
         </div>
     </div>
 </div>
+
 {% endblock %}
