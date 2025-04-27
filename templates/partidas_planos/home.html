@@ -4,10 +4,48 @@
 
 
 {% block link %}
-<li class="nav-item">
-    <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
-</li>
+{% if user.is_authenticated %}
+    {% if user.role != 2 %}
+        <li class="nav-item">
+            <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a style="color: white;" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Documentos
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'lista_partidas' %}">Partidas</a></li>
+                <li><a class="dropdown-item" href="{% url 'lista_planos' %}">Planos y otros</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white me-2" href="{% url 'centro_costos:centro_costos_home' %}">Costos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white me-2" href="#">Requerimientos</a>
+        </li>
+    {% endif %}
+
+    {% if user.role == 2 %}
+        <li class="nav-item">
+            <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a style="color: white;" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Documentos
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'lista_partidas' %}">Partidas</a></li>
+                <li><a class="dropdown-item" href="{% url 'lista_planos' %}">Planos y otros</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white me-2" href="#">Control Expediente</a>
+        </li>
+    {% endif %}
+{% endif %}
 {% endblock %}
+
 
 {% block body %}
 

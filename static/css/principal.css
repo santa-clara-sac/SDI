@@ -1,0 +1,15 @@
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.card-link .card {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.card-link:hover .card {
+    background-color: #f1f3f3 !important;
+    transform: scale(1.03);
+    color: #1c536d;
+}

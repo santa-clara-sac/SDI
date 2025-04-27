@@ -21,21 +21,15 @@ urlpatterns = [
     path('editar_canta_callao/', views.editar_canta_callao, name='editar_canta_callao'),
     path('eliminar_canta_callao/<int:doc_id>/', views.eliminar_canta_callao, name='eliminar_canta_callao'),
 
-    path('lista_gasto_general/', views.lista_gasto_general, name='lista_gasto_general'),
-    path('editar_gasto_general/', views.editar_gasto_general, name='editar_gasto_general'),
-    path('eliminar_gasto_general/<int:doc_id>/', views.eliminar_gasto_general, name='eliminar_gasto_general'),
+    path('agregar_nuevo_gasto/', views.agregar_nuevo_gasto, name='agregar_nuevo_gasto'),
 
-    path('lista_gastoTA/', views.lista_gastoTA, name='lista_gastoTA'),
-    path('editar_gastoTA/', views.editar_gastoTA, name='editar_gastoTA'),
-    path('eliminar_gastoTA/<int:doc_id>/', views.eliminar_gastoTA, name='eliminar_gastoTA'),
-
-    path('lista_gastoCC/', views.lista_gastoCC, name='lista_gastoCC'),
-    path('editar_gastoCC/', views.editar_gastoCC, name='editar_gastoCC'),
-    path('eliminar_gastoCC/<int:doc_id>/', views.eliminar_gastoCC, name='eliminar_gastoCC'),
-
-    path('lista_gastoBR/', views.lista_gastoBR, name='lista_gastoBR'),
-    path('editar_gastoBR/', views.editar_gastoBR, name='editar_gastoBR'),
-    path('eliminar_gastoBR/<int:doc_id>/', views.eliminar_gastoBR, name='eliminar_gastoBR'),
-
-
+    path('lista_gastoN1/', views.lista_gastoN1, name='lista_gastoN1'),
+    path('editar_gastoN1/', views.editar_gastoN1, name='editar_gastoN1'),
+    path('eliminar_gastoN1/<int:doc_id>/', views.eliminar_gastoN1, name='eliminar_gastoN1'),
+    path('lista_gastoN2/', views.lista_gastoN2, name='lista_gastoN2'),
+    path('editar_gastoN2/', views.editar_gastoN2, name='editar_gastoN2'),
+    path('eliminar_gastoN2/<int:doc_id>/', views.eliminar_gastoN2, name='eliminar_gastoN2'),
+    path('lista_gastoN3/', views.lista_gastoN3, name='lista_gastoN3'),
+    path('editar_gastoN3/', views.editar_gastoN3, name='editar_gastoN3'),
+    path('eliminar_gastoN3/<int:doc_id>/', views.eliminar_gastoN3, name='eliminar_gastoN3'),
 ]

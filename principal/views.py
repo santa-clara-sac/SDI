@@ -6,6 +6,7 @@ from partidas_planos.models import User
 from .forms import UserForm, UserEditForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login as auth_login
+from centro_costos.models import NuevoGasto
 
 def login(request):
     if request.user.is_authenticated:
@@ -32,6 +33,7 @@ def home(request):
 @login_required
 def lista_usuarios(request):
     usuarios = User.objects.all()
+    ccs = NuevoGasto.objects.filter(flag=True)
 
     if request.method == 'POST':
         form = UserForm(request.POST)
@@ -47,6 +49,7 @@ def lista_usuarios(request):
     return render(request, 'administrador/home.html', {
         'usuarios': usuarios,
         'form': form,
+        'ccs': ccs
     })
 
 
@@ -63,6 +66,31 @@ def editar_usuario(request):
         else:
             messages.error(request, "Hubo un error al actualizar el usuario.")
 
+    return redirect('lista_usuarios')
+
+from centro_costos.forms import NuevoGastoForm
+
+@login_required
+def editar_CC(request):
+    if request.method == 'POST':
+        cc = get_object_or_404(NuevoGasto, id=request.POST.get('id'))
+        form = NuevoGastoForm(request.POST, instance=cc)
+
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            messages.success(request, "Actualizado correctamente.")
+        else:
+            messages.error(request, "Hubo un error al actualizar.")
+
+    return redirect('lista_usuarios')
+
+@login_required
+def eliminar_CC(request, id):
+    cc = get_object_or_404(NuevoGasto, id=id)
+    cc.flag = False
+    cc.nombre = ''
+    cc.save()  # Guardar los cambios en la base de datos
     return redirect('lista_usuarios')
 
 @login_required

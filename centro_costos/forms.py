@@ -1,5 +1,5 @@
 from django import forms
-from .models import Actividad, Gasto, CantaCallao, GastoGeneral, GastoTA, GastoCC, GastoBR
+from .models import Actividad, Gasto, CantaCallao, NuevoGasto, GastoN1, GastoN2, GastoN3
 
 class ActividadForm(forms.ModelForm):
     class Meta:
@@ -55,9 +55,23 @@ class CantaCallaoForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
         
-class GastoGeneralForm(forms.ModelForm):
+class NuevoGastoForm(forms.ModelForm):
     class Meta:
-        model = GastoGeneral
+        model = NuevoGasto
+        fields = ['nombre']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+    }
+
+##################################################################################################
+##################################################################################################
+##################################################################################################
+##################################################################################################
+##################################################################################################
+
+class GastoN1Form(forms.ModelForm):
+    class Meta:
+        model = GastoN1
         fields = '__all__'
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
@@ -68,11 +82,9 @@ class GastoGeneralForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
-
-###############################################################################################
-class GastoTAForm(forms.ModelForm):
+class GastoN2Form(forms.ModelForm):
     class Meta:
-        model = GastoTA
+        model = GastoN2
         fields = '__all__'
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
@@ -83,9 +95,9 @@ class GastoTAForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
-class GastoCCForm(forms.ModelForm):
+class GastoN3Form(forms.ModelForm):
     class Meta:
-        model = GastoCC
+        model = GastoN3
         fields = '__all__'
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
@@ -95,19 +107,3 @@ class GastoCCForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
-
-
-class GastoBRForm(forms.ModelForm):
-    class Meta:
-        model = GastoBR
-        fields = '__all__'
-        widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date'}),
-        }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-
-

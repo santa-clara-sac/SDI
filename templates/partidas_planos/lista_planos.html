@@ -2,21 +2,14 @@
 
 {% block title %} Lista de planos y otros {% endblock %}
 
-{% block link %}
-<li class="nav-item">
-    <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link text-white me-2" href="{% url 'documentacion' %}">Documentación</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link text-white me-2" href="{% url 'centro_costos:centro_costos_home' %}">Costos</a>
-</li>
-{% endblock %}
-
 {% block body %}
 
 <style>
+    .link-hover:hover {
+    background-color: #ffffff33; /* fondo blanco semitransparente */
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    }
     .form-control {
         border-radius: 0.5rem;
         height: 38px;

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao, GastoGeneral, NuevoGasto
+from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao, NuevoGasto, GastoN1, GastoN2, GastoN3
 
 @admin.register(CentroDeCostos)
 class CentroDeCostosAdmin(admin.ModelAdmin):
@@ -23,20 +23,43 @@ class GastoAdmin(admin.ModelAdmin):
     list_filter = ('actividad', 'tipo_gasto', 'fecha')
     search_fields = ('nombre', 'detalle', 'documento')
 
-@admin.register(CantaCallao)
-class CantaCallaoAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'fecha', 'referencia', 'monto1', 'monto2')
-    search_fields = ('codigo', 'detalle', 'referencia')
-    list_filter = ('fecha',)
+# @admin.register(CantaCallao)
+# class CantaCallaoAdmin(admin.ModelAdmin):
+#     list_display = ('codigo', 'fecha', 'referencia', 'monto1', 'monto2')
+#     search_fields = ('codigo', 'detalle', 'referencia')
+#     list_filter = ('fecha',)
 
-@admin.register(GastoGeneral)
-class GastoGeneralAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'fecha', 'actividad', 'tipo_gasto', 'monto_soles', 'monto_dolares')
-    search_fields = ('codigo', 'detalle', 'actividad', 'tipo_gasto')
-    list_filter = ('fecha', 'actividad', 'tipo_gasto')
+# @admin.register(GastoGeneral)
+# class GastoGeneralAdmin(admin.ModelAdmin):
+#     list_display = ('codigo', 'fecha', 'actividad', 'tipo_gasto', 'monto_soles', 'monto_dolares')
+#     search_fields = ('codigo', 'detalle', 'actividad', 'tipo_gasto')
+#     list_filter = ('fecha', 'actividad', 'tipo_gasto')
 
 @admin.register(NuevoGasto)
 class NuevoGastoAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'flag')
     list_filter = ('flag',)
     search_fields = ('nombre',)
+
+#######################################################################################
+#######################################################################################
+#######################################################################################
+#######################################################################################
+
+@admin.register(GastoN1)
+class GastoN1Admin(admin.ModelAdmin):
+    list_display = ('codigo', 'fecha', 'actividad', 'tipo_gasto', 'monto_soles', 'monto_dolares')
+    search_fields = ('codigo', 'detalle', 'actividad', 'tipo_gasto')
+    list_filter = ('fecha', 'actividad', 'tipo_gasto')
+
+@admin.register(GastoN2)
+class GastoN1Admin(admin.ModelAdmin):
+    list_display = ('codigo', 'fecha', 'actividad', 'tipo_gasto', 'monto_soles', 'monto_dolares')
+    search_fields = ('codigo', 'detalle', 'actividad', 'tipo_gasto')
+    list_filter = ('fecha', 'actividad', 'tipo_gasto')
+
+@admin.register(GastoN3)
+class GastoN1Admin(admin.ModelAdmin):
+    list_display = ('codigo', 'fecha', 'actividad', 'tipo_gasto', 'monto_soles', 'monto_dolares')
+    search_fields = ('codigo', 'detalle', 'actividad', 'tipo_gasto')
+    list_filter = ('fecha', 'actividad', 'tipo_gasto')

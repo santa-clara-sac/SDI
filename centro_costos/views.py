@@ -6,14 +6,33 @@ from partidas_planos.models import User
 from django.contrib.auth.hashers import make_password
 from django.db.models.functions import Substr
 
-from .forms import ActividadForm, GastoForm, CantaCallaoForm, GastoGeneralForm, GastoTAForm, GastoCCForm, GastoBRForm
-from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao, GastoGeneral, GastoTA, GastoCC, GastoBR, NuevoGasto
+from .forms import ActividadForm, GastoForm, CantaCallaoForm, NuevoGastoForm
+from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao, NuevoGasto
 
 def centro_costos_home(request):
     ngs = NuevoGasto.objects.filter(flag=True)
+    print(ngs)
+    form = NuevoGastoForm()
     return render(request, 'centro_costos/home.html', {
         'ngs': ngs,
+        'form': form,
     })
+
+def agregar_nuevo_gasto(request):
+    if request.method == 'POST':
+        form = NuevoGastoForm(request.POST)
+        if form.is_valid():
+            try:
+                nuevo_gasto = NuevoGasto.objects.filter(flag=False).first()  # Buscamos el primer flag=False
+                if nuevo_gasto:
+                    # Actualizamos los campos con los datos del formulario
+                    nuevo_gasto.nombre = form.cleaned_data['nombre']
+                    nuevo_gasto.flag = True
+                    nuevo_gasto.save()
+            except NuevoGasto.DoesNotExist:
+                pass  # Si no existe ninguno con flag=False, no hacemos nada
+    return redirect('centro_costos:centro_costos_home')
+
 
 @login_required
 def lista_actividades(request):
@@ -191,173 +210,141 @@ def eliminar_canta_callao(request, doc_id):
 
 ######################################################################################################
 # LISTA GENERAL
+
+
+
+
+
+
+
+
+from .models import GastoN1, GastoN2,GastoN3
+from .forms import GastoN1Form,GastoN2Form, GastoN3Form
+
 @login_required
-def lista_gasto_general(request):
-    form = GastoGeneralForm()
+def lista_gastoN1(request):
+    form = GastoN1Form()
 
     if request.method == 'POST':
-        form = GastoGeneralForm(request.POST, request.FILES)
+        form = GastoN1Form(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('centro_costos:lista_gasto_general')  # O el nombre de tu vista actual
+            return redirect('centro_costos:lista_gastoN1')  # O el nombre de tu vista actual
 
-    gasto_general = GastoGeneral.objects.all()  # Si quieres listarlas en la plantilla
-
-    return render(request, 'centro_costos/lista_gasto_general.html', {
+    gastoN1 = GastoN1.objects.all()  # Si quieres listarlas en la plantilla
+    nombreN1 = NuevoGasto.objects.first()
+    return render(request, 'centro_costos/lista_gastoN1.html', {
         'form': form,
-        'gasto_general': gasto_general,
+        'gasto_general': gastoN1,
+        'nombreN1': nombreN1
     })
 
-def editar_gasto_general(request):
+def editar_gastoN1(request):
     if request.method == 'POST':
         gasto_general_id = request.POST.get('id')
-        gasto_general = get_object_or_404(GastoGeneral, id=gasto_general_id)
+        gasto_general = get_object_or_404(GastoN1, id=gasto_general_id)
 
-        form = GastoGeneralForm(request.POST, request.FILES, instance=gasto_general)
+        form = GastoN1Form(request.POST, request.FILES, instance=gasto_general)
         print(form)
         print(form.is_valid())
         if form.is_valid():
             form.save()
-            return redirect('centro_costos:lista_gasto_general')
+            return redirect('centro_costos:lista_gastoN1')
         else:
             print(form.errors)  # Muy útil para debug
-            return redirect('centro_costos:lista_gasto_general')  # o puedes mostrar un error
+            return redirect('centro_costos:lista_gastoN1')  # o puedes mostrar un error
 
-    return redirect('centro_costos:lista_gasto_general')
+    return redirect('centro_costos:lista_gastoN1')
 
 
-def eliminar_gasto_general(request, doc_id):
-    doc = get_object_or_404(GastoGeneral, id=doc_id)
+def eliminar_gastoN1(request, doc_id):
+    doc = get_object_or_404(GastoN1, id=doc_id)
     doc.delete()
-    return redirect('centro_costos:lista_gasto_general')
+    return redirect('centro_costos:lista_gastoN1')
 
 
-######################################################################################################
-######################################################################################################
-######################################################################################################
-######################################################################################################
-######################################################################################################
-
-# LISTA GENERAL TUPAC AMARU
 @login_required
-def lista_gastoTA(request):
-    form = GastoTAForm()
+def lista_gastoN2(request):
+    form = GastoN2Form()
 
     if request.method == 'POST':
-        form = GastoTAForm(request.POST, request.FILES)
+        form = GastoN2Form(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('centro_costos:lista_gastoTA')  # O el nombre de tu vista actual
+            return redirect('centro_costos:lista_gastoN2')  # O el nombre de tu vista actual
 
-    gastoTA = GastoTA.objects.all()  # Si quieres listarlas en la plantilla
+    gastoN2 = GastoN2.objects.all()
+    nuevo_gastos = NuevoGasto.objects.all()
+    nombreN2 = nuevo_gastos[1] if nuevo_gastos.count() > 1 else None
 
-    return render(request, 'centro_costos/lista_gastoTA.html', {
+    return render(request, 'centro_costos/lista_gastoN2.html', {
         'form': form,
-        'gasto_general': gastoTA,
+        'gasto_general': gastoN2,
+        'nombreN2': nombreN2
     })
 
-def editar_gastoTA(request):
+def editar_gastoN2(request):
     if request.method == 'POST':
         gasto_general_id = request.POST.get('id')
-        gasto_general = get_object_or_404(GastoTA, id=gasto_general_id)
+        gasto_general = get_object_or_404(GastoN2, id=gasto_general_id)
 
-        form = GastoTAForm(request.POST, request.FILES, instance=gasto_general)
+        form = GastoN2Form(request.POST, request.FILES, instance=gasto_general)
         print(form)
         print(form.is_valid())
         if form.is_valid():
             form.save()
-            return redirect('centro_costos:lista_gastoTA')
+            return redirect('centro_costos:lista_gastoN2')
         else:
             print(form.errors)  # Muy útil para debug
-            return redirect('centro_costos:lista_gastoTA')  # o puedes mostrar un error
+            return redirect('centro_costos:lista_gastoN2')  # o puedes mostrar un error
 
-    return redirect('centro_costos:lista_gastoTA')
+    return redirect('centro_costos:lista_gastoN2')
 
-
-def eliminar_gastoTA(request, doc_id):
-    doc = get_object_or_404(GastoTA, id=doc_id)
+def eliminar_gastoN2(request, doc_id):
+    doc = get_object_or_404(GastoN2, id=doc_id)
     doc.delete()
-    return redirect('centro_costos:lista_gastoTA')
+    return redirect('centro_costos:lista_gastoN2')
 
-# LISTA GENERAL CANTA CALLAO
+
 @login_required
-def lista_gastoCC(request):
-    form = GastoCCForm()
+def lista_gastoN3(request):
+    form = GastoN3Form()
 
     if request.method == 'POST':
-        form = GastoCCForm(request.POST, request.FILES)
+        form = GastoN3Form(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('centro_costos:lista_gastoCC')  # O el nombre de tu vista actual
+            return redirect('centro_costos:lista_gastoN3')  # O el nombre de tu vista actual
 
-    gastoCC = GastoCC.objects.all()  # Si quieres listarlas en la plantilla
+    gastoN3 = GastoN3.objects.all()  # Si quieres listarlas en la plantilla
+    nuevo_gastos = NuevoGasto.objects.all()
+    nombreN3 = nuevo_gastos[2] if nuevo_gastos.count() > 2 else None
 
-    return render(request, 'centro_costos/lista_gastoCC.html', {
+    return render(request, 'centro_costos/lista_gastoN3.html', {
         'form': form,
-        'gasto_general': gastoCC,
+        'gasto_general': gastoN3,
+        'nombreN3': nombreN3
     })
 
-def editar_gastoCC(request):
+def editar_gastoN3(request):
     if request.method == 'POST':
         gasto_general_id = request.POST.get('id')
-        gasto_general = get_object_or_404(GastoCC, id=gasto_general_id)
+        gasto_general = get_object_or_404(GastoN3, id=gasto_general_id)
 
-        form = GastoCCForm(request.POST, request.FILES, instance=gasto_general)
+        form = GastoN3Form(request.POST, request.FILES, instance=gasto_general)
         print(form)
         print(form.is_valid())
         if form.is_valid():
             form.save()
-            return redirect('centro_costos:lista_gastoCC')
+            return redirect('centro_costos:lista_gastoN3')
         else:
             print(form.errors)  # Muy útil para debug
-            return redirect('centro_costos:lista_gastoCC')  # o puedes mostrar un error
+            return redirect('centro_costos:lista_gastoN3')  # o puedes mostrar un error
 
-    return redirect('centro_costos:lista_gastoCC')
+    return redirect('centro_costos:lista_gastoN3')
 
 
-def eliminar_gastoCC(request, doc_id):
-    doc = get_object_or_404(GastoCC, id=doc_id)
+def eliminar_gastoN3(request, doc_id):
+    doc = get_object_or_404(GastoN3, id=doc_id)
     doc.delete()
-    return redirect('centro_costos:lista_gastoCC')
-
-
-# LISTA GENERAL BIENES RAICES
-@login_required
-def lista_gastoBR(request):
-    form = GastoBRForm()
-
-    if request.method == 'POST':
-        form = GastoBRForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('centro_costos:lista_gastoBR')  # O el nombre de tu vista actual
-
-    gastoBR = GastoBR.objects.all()  # Si quieres listarlas en la plantilla
-
-    return render(request, 'centro_costos/lista_gastoBR.html', {
-        'form': form,
-        'gasto_general': gastoBR,
-    })
-
-def editar_gastoBR(request):
-    if request.method == 'POST':
-        gasto_general_id = request.POST.get('id')
-        gasto_general = get_object_or_404(GastoBR, id=gasto_general_id)
-
-        form = GastoBRForm(request.POST, request.FILES, instance=gasto_general)
-        print(form)
-        print(form.is_valid())
-        if form.is_valid():
-            form.save()
-            return redirect('centro_costos:lista_gastoBR')
-        else:
-            print(form.errors)  # Muy útil para debug
-            return redirect('centro_costos:lista_gastoBR')  # o puedes mostrar un error
-
-    return redirect('centro_costos:lista_gastoBR')
-
-
-def eliminar_gastoBR(request, doc_id):
-    doc = get_object_or_404(GastoBR, id=doc_id)
-    doc.delete()
-    return redirect('centro_costos:lista_gastoBR')
+    return redirect('centro_costos:lista_gastoN3')

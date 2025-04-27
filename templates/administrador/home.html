@@ -5,9 +5,15 @@
 <li class="nav-item">
     <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link text-white me-2" href="{% url 'documentacion' %}">Documentación</a>
-</li>
+<li class="nav-item dropdown">
+    <a style="color: white;" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Documentos
+    </a>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="{% url 'lista_partidas' %}">Partidas</a></li>
+      <li><a class="dropdown-item" href="{% url 'lista_planos' %}">Planos y otros</a></li>
+    </ul>
+  </li>
 <li class="nav-item">
     <a class="nav-link text-white me-2" href="{% url 'centro_costos:centro_costos_home' %}">Costos</a>
 </li>
@@ -17,17 +23,6 @@
 <li class="nav-item">
     <a class="nav-link text-white" href="#">Requerimientos</a>
 </li>
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Dropdown
-    </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-      <a class="dropdown-item" href="#">Action</a>
-      <a class="dropdown-item" href="#">Another action</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#">Something else here</a>
-    </div>
-  </li>
 {% endblock %}
 
 {% block body %}
@@ -51,12 +46,15 @@
 <div class="container mt-4" style="max-width: 95%;">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-11">
+            <div style="font-weight: bold; font-size: 24px; margin-bottom: 1px;">
+                Lista de usuarios
+            </div>
             <div class="card shadow-sm">
                 <div class="card-body">
 
                     <!-- Botón para agregar usuario -->
                     <center>
-                        <button type="button" class="btn text-white mt-4" style="background-color: #3b4252;"
+                        <button type="button" class="btn text-white mt-1" style="background-color: #3b4252;"
                             data-bs-toggle="modal" data-bs-target="#userModal">
                             <i class="bi bi-plus-lg"></i> Agregar nuevo usuario
                         </button>
@@ -185,6 +183,84 @@
             </div>
         </div>
     </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-11">
+            <div style="font-weight: bold; font-size: 24px; margin-bottom: 1px; margin-top: 20px;">
+                Lista Centro de costos (2024 - 20XX)
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <hr>
+                    <!-- Tabla de CentroDeCostos -->
+                    <div class="table-responsive py-2">
+                        <table class="table table-striped" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cc in ccs %}
+                                <tr>
+                                    <td>{{ cc.nombre }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm text-white me-2 btn-CCeditar"
+                                                style="background-color: #4c566a;" data-bs-toggle="modal"
+                                                data-bs-target="#editCCModal" data-id="{{ cc.id }}"
+                                                data-nombre="{{ cc.nombre }}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+
+                                            <!-- <a href="{% url 'eliminar_CC' cc.id %}"
+                                                class="btn btn-sm text-white btnCCEliminar me-2"
+                                                style="background-color: #bf616a;">
+                                                <i class="bi bi-trash"></i>
+                                            </a> -->
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Editar Centro Costo -->
+<div class="modal fade" id="editCCModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #3b4252;">
+                <h5 class="modal-title">Editar nombre</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'editar_CC' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" id="edit_CCid">
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-control" name="nombre" id="edit_CCnombre" required>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btnGuardar3"
+                            style="background-color: #3b4252; color: #edeff4;">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal: Editar Usuario -->
@@ -279,6 +355,14 @@
 
 
 <script>
+    // Editar Centro de Costo
+    document.querySelectorAll('.btn-CCeditar').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('edit_CCid').value = btn.dataset.id;
+            document.getElementById('edit_CCnombre').value = btn.dataset.nombre;
+
+        });
+    });
     // Llenar modal de edición
     document.querySelectorAll('.btn-editar').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -318,7 +402,7 @@
     });
 
     // Toast guardar
-    document.querySelectorAll('.btnGuardar, .btnGuardar2').forEach(btn => {
+    document.querySelectorAll('.btnGuardar, .btnGuardar2, .btnGuardar3').forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             const form = this.closest('form');
@@ -328,7 +412,7 @@
                 icon: 'success',
                 title: 'Guardado correctamente',
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 900,
                 timerProgressBar: true,
             }).then(() => {
                 form.submit();

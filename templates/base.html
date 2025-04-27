@@ -45,8 +45,42 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <!-- Enlaces a la izquierda -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    {% block link %}
-                    {% endblock %}
+                    
+{% if user.is_authenticated %}
+    <li class="nav-item">
+        <a class="nav-link text-white me-2 link-hover" href="{% url 'home' %}">Inicio</a>
+    </li>
+    {% if user.role == 3 %}
+        <li class="nav-item">
+            <a class="nav-link text-white me-2 link-hover" href="{% url 'lista_usuarios' %}">Administración</a>
+        </li>
+    {% endif %}
+    <li class="nav-item dropdown">
+        <a style="color: white;" class="nav-link dropdown-toggle link-hover" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Documentos
+        </a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'lista_partidas' %}">Partidas</a></li>
+            <li><a class="dropdown-item" href="{% url 'lista_planos' %}">Planos y otros</a></li>
+        </ul>
+    </li>
+    
+    {% if user.role == 2 %}
+        <li class="nav-item">
+            <a class="nav-link text-white me-2 link-hover" href="#">Control Expediente</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link text-white me-2 link-hover" href="{% url 'centro_costos:centro_costos_home' %}">Costos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white me-2 link-hover" href="#">Control Expediente</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white me-2 link-hover" href="#">Requerimientos</a>
+        </li>
+    {% endif %}
+{% endif %}
                 </ul>
 
                 <!-- Usuario autenticado / Cierre de sesión -->
