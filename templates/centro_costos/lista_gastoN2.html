@@ -32,7 +32,7 @@
 
 <div style="text-align: center; margin-top: 20px;">
     <div style="font-weight: bold; font-size: 24px; color: #3b4252;">
-        Listado General de {{ nombreN2.nombre }}
+        Listado General de {{ nombreN2.nombre }} (2024-{% now "Y" %})
     </div>
 </div>
 
@@ -233,8 +233,8 @@
                                     <td>{{ gg.referencia }}</td>
                                     <td>{{ gg.actividad }}</td>
                                     <td>{{ gg.tipo_gasto }}</td>
-                                    <td data-monto1>{{ gg.monto_soles }}</td>
-                                    <td data-monto2>{{ gg.monto_dolares }}</td>
+                                    <td data-monto1>{{ gg.monto_soles|default:"" }}</td>
+                                    <td data-monto2>{{ gg.monto_dolares|default:"" }}</td>
                                     <td>
                                         {% if gg.pdf %}
                                         <button type="button"
@@ -342,7 +342,7 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="edit_id_ubicacion" class="form-label">Monto ($)</label>
-                                                    <input type="text" class="form-control" id="edit_id_monto_dolares"
+                                                    <input type="number" class="form-control" id="edit_id_monto_dolares"
                                                         name="monto_dolares">
                                                 </div>
                                                 <div class="col-md-4">

@@ -62,4 +62,7 @@ urlpatterns = [
     path('lista_gastoN10/', views.lista_gastoN10, name='lista_gastoN10'),
     path('editar_gastoN10/', views.editar_gastoN10, name='editar_gastoN10'),
     path('eliminar_gastoN10/<int:doc_id>/', views.eliminar_gastoN10, name='eliminar_gastoN10'),
+
+    path('home_ta/', views.home_ta, name='home_ta'),
+    path('home_cc/', views.home_cc, name='home_cc'),
 ]

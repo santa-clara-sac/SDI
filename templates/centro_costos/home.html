@@ -31,85 +31,45 @@
         Módulo Centro de Costos
     </div>
 
-    <!-- Periodo 2013-2023 -->
-    <div class="mb-4" style="font-weight: bold; font-size: 20px;">
-        Periodo (2013-2023)
-    </div>
-
     <div class="row justify-content-center">
-        <!-- Túpac Amaru -->
-        <div class="col-12 col-md-6 mb-4">
-            <div style="font-weight: bold; font-size: 18px; color: #5e81ac; margin-bottom: 10px;">
-                Túpac Amaru
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-6 col-sm-6 col-md-6 mb-4">
-                    <a href="{% url 'centro_costos:lista_actividades' %}" class="card-link">
-                        <div class="card h-100 shadow-sm">
-                            <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                                <img src="{% static 'images/centro_costos/actividades.png' %}" alt="Actividades"
-                                     style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Actividades</h5>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-6 col-sm-6 col-md-6 mb-4">
-                    <a href="{% url 'centro_costos:lista_gastos' %}" class="card-link">
-                        <div class="card h-100 shadow-sm">
-                            <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                                <img src="{% static 'images/centro_costos/gastos.png' %}" alt="Gastos"
-                                     style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Gastos</h5>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Canta Callao -->
         <div class="col-12 col-md-3 mb-4">
-            <div style="font-weight: bold; font-size: 18px; color: #a3be8c; margin-bottom: 10px;">
-                Canta Callao
+            <div style="font-weight: bold; font-size: 18px; color: #2e3440; margin-bottom: 10px;">
+                Tupac Amaru
             </div>
-            <a href="{% url 'centro_costos:lista_canta_callao' %}" class="card-link">
+            <a href="{% url 'centro_costos:home_ta' %}" class="card-link">
                 <div class="card h-100 shadow-sm">
                     <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
-                        <img src="{% static 'images/centro_costos/gastos2.png' %}" alt="Gastos"
+                        <img src="{% static 'images/centro_costos/gastos3.png' %}" alt="Gastos"
                              style="max-height: 100%; max-width: 100%; object-fit: contain;">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Gastos</h5>
+                        <h5 class="card-title"></h5>
                     </div>
                 </div>
             </a>
         </div>
-    </div>
 
-    <!---------------------------------------------------------------------------------------------------------------------------------------------->
-    <!---------------------------------------------------------------------------------------------------------------------------------------------->
-    <!---------------------------------------------------------------------------------------------------------------------------------------------->
-    <!---------------------------------------------------------------------------------------------------------------------------------------------->
-    <!---------------------------------------------------------------------------------------------------------------------------------------------->
-    <!---------------------------------------------------------------------------------------------------------------------------------------------->
-    <!---------------------------------------------------------------------------------------------------------------------------------------------->
-    
+        <!-- Canta Callao -->
+        <div class="col-12 col-md-3 mb-4">
+            <div style="font-weight: bold; font-size: 18px; color: #2e3440; margin-bottom: 10px;">
+                Canta Callao
+            </div>
+            <a href="{% url 'centro_costos:home_cc' %}" class="card-link">
+                <div class="card h-100 shadow-sm">
+                    <div class="d-flex align-items-center justify-content-center" style="height: 150px;">
+                        <img src="{% static 'images/centro_costos/gastos3.png' %}" alt="Gastos"
+                             style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title"></h5>
+                    </div>
+                </div>
+            </a>
+        </div>
 
-    <div class="mb-4" style="font-weight: bold; font-size: 20px;">
-        Periodo (2024-{% now "Y" %})
-    </div>
-    <div class="row justify-content-center">
-        
-
-        {% for ng in ngs %}
-        <div class="col-6 col-md-3 mb-4">
-            <div class=" mb-3" style="font-weight: bold; font-size: 20px;">
+        {% for ng in ngs|slice:"2:" %}
+        <div class="col-12 col-md-3 mb-4">
+            <div class="" style="font-weight: bold; font-size: 18px; color: #2e3440; margin-bottom: 10px;">
                 {{ ng.nombre }}
             </div>
             <a href="{{ ng.url }}" class="card-link">
@@ -173,6 +133,14 @@
 
     </div>
 
+    <!---------------------------------------------------------------------------------------------------------------------------------------------->
+    <!---------------------------------------------------------------------------------------------------------------------------------------------->
+    <!---------------------------------------------------------------------------------------------------------------------------------------------->
+    <!---------------------------------------------------------------------------------------------------------------------------------------------->
+    <!---------------------------------------------------------------------------------------------------------------------------------------------->
+    <!---------------------------------------------------------------------------------------------------------------------------------------------->
+    <!---------------------------------------------------------------------------------------------------------------------------------------------->
+    
     
 </div>
 

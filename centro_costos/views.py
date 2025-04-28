@@ -9,6 +9,15 @@ from django.db.models.functions import Substr
 from .forms import ActividadForm, GastoForm, CantaCallaoForm, NuevoGastoForm
 from .models import CentroDeCostos, TipoDeGasto, Actividad, Gasto, CantaCallao, NuevoGasto
 
+def home_ta(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    return render(request, 'centro_costos/home_ta.html')
+def home_cc(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    return render(request, 'centro_costos/home_cc.html')
+
 def centro_costos_home(request):
     ngs = NuevoGasto.objects.filter(flag=True)
     print(ngs)
@@ -99,6 +108,7 @@ def eliminar_actividad(request, doc_id):
     return redirect('centro_costos:lista_actividades')
 
 #########################################################################################
+from django.core.cache import cache
 
 @login_required
 def lista_gastos(request):

@@ -184,10 +184,10 @@
         </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center d-none">
         <div class="col-12 col-lg-11">
             <div style="font-weight: bold; font-size: 24px; margin-bottom: 1px; margin-top: 20px;">
-                Lista Centro de costos (2024 - 20XX)
+                Lista Centro de costos (2024 - {% now "Y" %})
             </div>
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -213,11 +213,11 @@
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
 
-                                            <!-- <a href="{% url 'eliminar_CC' cc.id %}"
+                                            <a href="{% url 'eliminar_CC' cc.id %}"
                                                 class="btn btn-sm text-white btnCCEliminar me-2"
                                                 style="background-color: #bf616a;">
                                                 <i class="bi bi-trash"></i>
-                                            </a> -->
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

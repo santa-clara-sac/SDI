@@ -66,29 +66,14 @@ WSGI_APPLICATION = 'principal.wsgi.application'
 # }
 
 # PATH FILES
-#MEDIA_ROOT = r'\\Pc-03\d\Partidas y Planos 2024 - 2025\SDI'
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mssql',
-#         'NAME': 'SDI_dev5',
-#         'USER': 'Admin',
-#         'PASSWORD': 'root',
-#         'HOST': r'PC-03\SQLEXPRESS',
-#         'PORT': '',  # por defecto es 1433
-#         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',  # asegúrate de tener este instalado
-#             'extra_params': 'TrustServerCertificate=yes;',  # útil para evitar errores SSL
-#         },
-#     }
-# }
-
+MEDIA_ROOT = r'\\Pc-03\d\Partidas y Planos 2024 - 2025\SDI'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'SDI_dev',
-        'USER': 'sa',
-        'PASSWORD': 'sa',
-        'HOST': r' 192.168.100.108',
+        'USER': 'Admin',
+        'PASSWORD': 'root',
+        'HOST': r'PC-03\SQLEXPRESS',
         'PORT': '',  # por defecto es 1433
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # asegúrate de tener este instalado
@@ -96,6 +81,21 @@ DATABASES = {
         },
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'SDI_dev',
+#         'USER': 'sa',
+#         'PASSWORD': 'sa',
+#         'HOST': r' 192.168.100.108',
+#         'PORT': '',  # por defecto es 1433
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',  # asegúrate de tener este instalado
+#             'extra_params': 'TrustServerCertificate=yes;',  # útil para evitar errores SSL
+#         },
+#     }
+# }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

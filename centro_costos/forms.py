@@ -83,6 +83,10 @@ class GastoN1Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -96,6 +100,10 @@ class GastoN2Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -109,6 +117,10 @@ class GastoN3Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -122,6 +134,10 @@ class GastoN4Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -135,6 +151,10 @@ class GastoN5Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -148,6 +168,10 @@ class GastoN6Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -161,6 +185,10 @@ class GastoN7Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -174,6 +202,10 @@ class GastoN8Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -187,6 +219,10 @@ class GastoN9Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -200,5 +236,9 @@ class GastoN10Form(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.initial.get('monto_dolares') is None:
+            self.initial['monto_dolares'] = ''
+        if self.instance and getattr(self.instance, 'monto_dolares', None) is None:
+            self.fields['monto_dolares'].initial = ''
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
