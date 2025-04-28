@@ -1,9 +1,5 @@
 # Proyecto SDI
-
-## Despliegue en desarrollo
-
 ### Cambiar la política de ejecución temporalmente
-
 ```sh
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
@@ -15,7 +11,6 @@ pip install -r requirements.txt
 ```
 
 ## Migraciones
-
 ```sh
 python manage.py makemigrations partidas_planos
 python manage.py migrate partidas_planos
@@ -24,29 +19,6 @@ python manage.py migrate centro_costos
 python manage.py migrate
 ```
 
-## Aditional
-
-#### COLOR PRINCIPAL
-##### POLAR NIGHT
-#2e3440
-#3b4252
-#434c5e
-#4c566a
-###### SNOW STORM
-#d8dee9
-#e5e9f0
-#eceff4
-##### FROST
-#8fbcbb
-#88c0d0
-#81a1c1
-#5e81ac
-##### AURORA
-#bf616a
-#d08770
-#ebcb8b
-#a3be8c
-#b48ead
 
 ```sh
 find . -type f \( -name "*.css" -o -name "*.html" -o -name "*.js" \) -exec sed -i 's/#02737e/#3b4252/g' {} +
@@ -56,32 +28,6 @@ find . -type f \( -name "*.css" -o -name "*.html" -o -name "*.js" \) -exec sed -
 
 ```sh
 sed -E "s/(['])([^']+\.pdf)(['])/\1documentos\/partidas\/\2\3/" con_pdf.sql > con_pdf_modificado.sql
-```
-
-# IMG BACKGROUND
-
-```css
-body {
-  background-image: url("{% static 'images/bg.png' %}");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 100vh;
-  margin: 0;
-  position: relative;
-}
-
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(216, 222, 233, 0.495);
-  /* Cambia el 0.4 para más o menos claridad */
-  z-index: 0;
-}
 ```
 
 ### Eliminar DB
@@ -116,3 +62,8 @@ INSERT INTO [centro_costos_cantacallao] (codigo, fecha, concepto, detalle, refer
 - Monto Dolares (monto del gasto)
 - Actividad (proyecto, obra, servicio o actividad específica donde se realizó el gasto [PinturaFachada, CajaDeLuzEnel, ReparacionDeTecho])
 - Tipo Gasto (Representa para qué fin contable se usó el dinero [ManoDeObra, Materiales, etc])
+
+- Debe -> ingresa
+- Haber -> sale
+Saldo = D - H
+{% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none;

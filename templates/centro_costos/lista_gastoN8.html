@@ -32,7 +32,7 @@
 
 <div style="text-align: center; margin-top: 20px;">
     <div style="font-weight: bold; font-size: 24px; color: #3b4252;">
-        Listado General de {{ nombreN3.nombre }}
+        Listado General de {{ nombreN8.nombre }}
     </div>
 </div>
 
@@ -101,7 +101,7 @@
                         <!-- Botón Limpiar Filtros -->
                         <div class="col">
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
-                            <a href="{% url 'centro_costos:lista_gastoN3' %}" id="clearFilters"
+                            <a href="{% url 'centro_costos:lista_gastoN8' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
                                 style="background-color: {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar Filtros</a>
                         </div>
@@ -149,7 +149,7 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="POST" action="{% url 'centro_costos:lista_gastoN3' %}"
+                                    <form method="POST" action="{% url 'centro_costos:lista_gastoN8' %}"
                                         enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <div class="container">
@@ -266,7 +266,7 @@
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
 
-                                            <a href="{% url 'centro_costos:eliminar_gastoN3' gg.id %}"
+                                            <a href="{% url 'centro_costos:eliminar_gastoN8' gg.id %}"
                                                 class="btn btn-sm text-white btnEliminar"
                                                 style="background-color: #bf616a;" title="Eliminar">
                                                 <i class="bi bi-trash"></i>
@@ -309,7 +309,7 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="POST" action="{% url 'centro_costos:editar_gastoN3' %}"
+                                    <form method="POST" action="{% url 'centro_costos:editar_gastoN8' %}"
                                         enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <input type="hidden" id="edit_id" name="id">

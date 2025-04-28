@@ -60,10 +60,10 @@
                             >
                         </div>
                         
-                        <!-- Partida -->
+                        <!-- Detalle -->
                         <div class="col">
-                            <label class="form-label">Detalle</label>
-                            <input type="text" class="form-control filter-input" data-column="2">
+                            <label class="form-label">Código</label>
+                            <input type="text" class="form-control filter-input" data-column="0">
                         </div>
 
                         <!-- Descripción -->
@@ -75,33 +75,35 @@
                         <!-- Ubicación -->
                         <div class="col">
                             <label class="form-label">Actividad</label>
-                            <input type="text" class="form-control filter-input" data-column="6">
+                            <input type="text" class="form-control filter-input" data-column="4">
                         </div>
 
                         <!-- Costo -->
                         <div class="col">
-                            <label class="form-label">Tipo de gasto</label>
-                            <input type="text" class="form-control filter-input" data-column="7">
+                            <label class="form-label text-nowrap">Tipo de gasto</label>
+                            <input type="text" class="form-control filter-input" data-column="5">
                         </div>
 
                         <!-- Fecha Inicio -->
-                        <!-- <div class="col">
+                        <div class="col">
+                            <label class="form-label">Fecha Inicio</label>
                             <input type="date" class="form-control filter-input" data-column="1" id="startDateFilter"
                                 placeholder="Fecha Inicio">
-                        </div> -->
+                        </div>
 
                         <!-- Fecha Final -->
-                        <!-- <div class="col">
+                        <div class="col">
+                            <label class="form-label">Fecha Final</label>
                             <input type="date" class="form-control filter-input" data-column="1" id="endDateFilter"
                                 placeholder="Fecha Final">
-                        </div> -->
+                        </div>
 
                         <!-- Botón Limpiar Filtros -->
                         <div class="col">
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
-                            <a href="{% url 'lista_partidas' %}" id="clearFilters"
+                            <a href="{% url 'centro_costos:lista_gastoN1' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
-                                style="background-color: #3b4252; line-height: 25px;">Limpiar Filtros</a>
+                                style="background-color: {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar Filtros</a>
                         </div>
 
                         <div class="col">
@@ -112,26 +114,36 @@
                                 Exportar excel
                             </button>
                         </div>
+                    </div>
 
+                    <!-- Totales -->
+                    <div class="row mb-1">
+                        <div class="col">
+                            <label class="form-label">Total Soles (S)</label>
+                            <input type="text" id="totalDebe" class="form-control" disabled>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Total Dólares ($)</label>
+                            <input type="text" id="totalHaber" class="form-control" disabled>
+                        </div>
                     </div>
 
                     <!-- Botón para abrir el modal de agregar -->
                     {% if request.user.role != 1 and request.user.role != 2 %}
                     <center>
-                        <button type="button" class="btn text-white mt-4" style="background-color: #434c5e;"
+                        <button type="button" class="btn text-white mt-4" style="background-color: #bf616a;"
                             data-bs-toggle="modal" data-bs-target="#documentModal">
                             <i class="bi bi-plus-lg"></i> Agregar Nuevo Gasto
                         </button>
                     </center>
                     {% endif %}
 
-
                     <!-- Modal para agregar nueva gasto general -->
                     <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #3b4252;">
+                                <div class="modal-header text-white" style="background-color: #bf616a;">
                                     <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Gasto</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -181,7 +193,7 @@
                                             </div>
                                             <div class="text-center mt-4">
                                                 <button type="submit" class="btn px-5 py-2 btnGuardar"
-                                                    style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+                                                    style="background-color: #bf616a; color: #edeff4;">Guardar</button>
 
                                             </div>
                                         </div>
@@ -201,11 +213,11 @@
                                     <th>Código</th>
                                     <th>Fecha</th>
                                     <th>Detalle</th>
-                                    <th>referencia</th>
-                                    <th>Monto (S)</th>
-                                    <th>Monto ($)</th>
+                                    <th>Referencia</th>
                                     <th>Actividad</th>
                                     <th>Tipo de gasto</th>
+                                    <th>Monto (S)</th>
+                                    <th>Monto ($)</th>
                                     <th>PDF</th>
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>
@@ -219,11 +231,10 @@
                                     <td class="text-nowrap">{{ gg.fecha|date:"d-m-Y" }}</td>
                                     <td>{{ gg.detalle }}</td>
                                     <td>{{ gg.referencia }}</td>
-                                    <td>{{ gg.monto_soles }}</td>
-                                    <td>{{ gg.monto_dolares }}</td>
                                     <td>{{ gg.actividad }}</td>
                                     <td>{{ gg.tipo_gasto }}</td>
-
+                                    <td data-monto1>{{ gg.monto_soles }}</td>
+                                    <td data-monto2>{{ gg.monto_dolares }}</td>
                                     <td>
                                         {% if gg.pdf %}
                                         <button type="button"
@@ -268,8 +279,6 @@
                             </tbody>
                         </table>
                     </div>
-
-
 
                     <!-- Modal para ver PDF -->
                     <div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerModalLabel"
@@ -363,80 +372,79 @@
                     </div>
 
                     <script>
-                        //FILTRO TANGO DE FECHAS
-                        // document.addEventListener("DOMContentLoaded", function () {
-                        //     const startDateInput = document.getElementById("startDateFilter");
-                        //     const endDateInput = document.getElementById("endDateFilter");
-                        //     const table = document.getElementById("documentsTable");
-                        //     const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-
-                        //     function filterByDateRange() {
-                        //         const startDate = startDateInput.value ? new Date(startDateInput.value) : null;
-                        //         const endDate = endDateInput.value ? new Date(endDateInput.value) : null;
-
-                        //         Array.from(rows).forEach(row => {
-                        //             const dateCell = row.cells[1]; // columna de fecha
-                        //             const cellDate = new Date(dateCell.textContent);
-
-                        //             let show = true;
-
-                        //             if (startDate && cellDate < startDate) {
-                        //                 show = false;
-                        //             }
-
-                        //             if (endDate && cellDate > endDate) {
-                        //                 show = false;
-                        //             }
-
-                        //             row.style.display = show ? "" : "none";
-                        //         });
-                        //     }
-
-                        //     startDateInput.addEventListener("change", filterByDateRange);
-                        //     endDateInput.addEventListener("change", filterByDateRange);
-
-                        //     document.getElementById("clearFilters").addEventListener("click", function () {
-                        //         startDateInput.value = "";
-                        //         endDateInput.value = "";
-                        //         Array.from(rows).forEach(row => row.style.display = "");
-                        //     });
-                        // });
+                        // EXPORTAR EXCEL
                         document.getElementById("exportBtn").addEventListener("click", function () {
                             const table = document.getElementById("documentsTable");
                             const rows = [];
 
-                            // Obtener encabezados excluyendo "Acciones"
+                            // Obtener encabezados, excluyendo "PDF" y "Acciones"
                             const headers = [];
-                            table.querySelectorAll("thead th").forEach((th, i) => {
-                                if (th.innerText.trim() !== "Acciones") {
-                                    headers.push(th.innerText.trim());
+                            table.querySelectorAll("thead th").forEach((th) => {
+                                const headerText = th.innerText.trim();
+                                if (headerText !== "Acciones" && headerText !== "PDF") {
+                                    headers.push(headerText);
                                 }
                             });
                             rows.push(headers);
 
-                            // Obtener filas visibles y excluir la columna "Acciones"
+                            let totalSoles = 0;
+                            let totalDolares = 0;
+
+                            // Obtener filas visibles, excluyendo columnas "PDF" y "Acciones"
                             table.querySelectorAll("tbody tr").forEach(tr => {
                                 if (tr.style.display !== "none") {
                                     const row = [];
                                     const cells = tr.querySelectorAll("td");
-                                    for (let i = 0; i < cells.length - 1; i++) { // -1 para excluir "Acciones"
-                                        row.push(cells[i].innerText.trim());
-                                    }
+                                    let skipIndexes = [];
+
+                                    // Determinar qué índices son "PDF" y "Acciones"
+                                    table.querySelectorAll("thead th").forEach((th, index) => {
+                                        const headerText = th.innerText.trim();
+                                        if (headerText === "PDF" || headerText === "Acciones") {
+                                            skipIndexes.push(index);
+                                        }
+                                    });
+
+                                    cells.forEach((cell, index) => {
+                                        if (!skipIndexes.includes(index)) {
+                                            let cellText = cell.innerText.trim();
+                                            row.push(cellText);
+
+                                            // Sumar montos
+                                            if (cell.hasAttribute('data-monto1')) {
+                                                totalSoles += parseFloat(cellText.replace(',', '')) || 0;
+                                            }
+                                            if (cell.hasAttribute('data-monto2')) {
+                                                totalDolares += parseFloat(cellText.replace(',', '')) || 0;
+                                            }
+                                        }
+                                    });
+
                                     rows.push(row);
                                 }
                             });
+
+                            // Agregar fila vacía
+                            rows.push([]);
+
+                            // Agregar fila de totales
+                            const totalRow = Array(headers.length).fill('');
+                            totalRow[headers.indexOf('Monto (S)')] = 'Total: ' + totalSoles.toFixed(2);
+                            totalRow[headers.indexOf('Monto ($)')] = 'Total: ' + totalDolares.toFixed(2);
+                            rows.push(totalRow);
 
                             // Crear hoja de cálculo
                             const worksheet = XLSX.utils.aoa_to_sheet(rows);
                             const workbook = XLSX.utils.book_new();
                             XLSX.utils.book_append_sheet(workbook, worksheet, "Documentos");
 
-                            // Aplicar autofiltro en la hoja
+                            // Aplicar autofiltro
                             const range = XLSX.utils.decode_range(worksheet['!ref']);
                             worksheet['!autofilter'] = { ref: XLSX.utils.encode_range(range) };
 
-                            XLSX.writeFile(workbook, "documentos.xlsx");
+                            XLSX.writeFile(workbook, "documento.xlsx");
                         });
+
 
                         // FILAS RESALTADAS
                         document.addEventListener('DOMContentLoaded', function () {
@@ -457,6 +465,7 @@
                             });
                         });
 
+                        //ORDENAT POR CODIGO
                         document.addEventListener("DOMContentLoaded", function () {
                             const table = document.getElementById("documentsTable");
                             const tbody = table.querySelector("tbody");
@@ -489,9 +498,9 @@
                             tbody.innerHTML = "";
                             rows.forEach(row => tbody.appendChild(row));
                         });
-
+                        
+                        //PDF MODAL
                         document.addEventListener('DOMContentLoaded', function () {
-                            //PDF MODAL
                             const pdfModal = document.getElementById('pdfViewerModal');
                             const iframe = document.getElementById('pdfIframe');
 
@@ -505,44 +514,84 @@
                                 iframe.src = '';
                             });
 
-                            // FORMATO CODIGO
-
                             // FILTRO EN TIEMPO REAL
                             document.querySelectorAll('.filter-input').forEach(input => {
-                                input.addEventListener('input', filtrarTabla); // Detecta tanto texto como selects
+                                input.addEventListener('input', filterTable);
+                                input.addEventListener('change', filterTable); 
                             });
 
-                            function filtrarTabla() {
-                                const filtros = {};
+                            function filterTable() {
+                                const filters = {};
 
-                                // Recolectamos todos los filtros activos
+                                // Recolectar valores no vacíos de inputs que NO son fechas
                                 document.querySelectorAll('.filter-input').forEach(input => {
-                                    const columna = input.dataset.column;
-                                    const valor = input.value.trim().toLowerCase();
-                                    if (valor) {
-                                        filtros[columna] = valor;
+                                    const columnIndex = input.dataset.column;
+                                    const value = input.value.trim().toLowerCase();
+
+                                    if (input.type !== 'date' && value) { 
+                                        filters[columnIndex] = value;
                                     }
                                 });
 
-                                // Recorremos cada fila de la tabla
-                                document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
-                                    let mostrar = true;
+                                document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
+                                    let visible = true;
 
-                                    for (const columna in filtros) {
-                                        const celda = fila.cells[columna];
-                                        if (celda) {
-                                            const textoCelda = celda.textContent.toLowerCase();
-                                            if (!textoCelda.includes(filtros[columna])) {
-                                                mostrar = false;
-                                                break;
-                                            }
+                                    // Filtros de texto
+                                    for (const columnIndex in filters) {
+                                        const cell = row.cells[columnIndex];
+                                        if (!cell || !cell.textContent.toLowerCase().includes(filters[columnIndex])) {
+                                            visible = false;
+                                            break;
                                         }
                                     }
 
-                                    fila.style.display = mostrar ? '' : 'none';
+                                    // Filtros de fecha
+                                    if (visible) {
+                                        const startDate = document.getElementById('startDateFilter').value;
+                                        const endDate = document.getElementById('endDateFilter').value;
+                                        const rowDateText = row.cells[1].textContent.trim(); 
+                                        const rowDateObj = convertToDate(rowDateText);
+
+                                        if (startDate && new Date(startDate) > rowDateObj) {
+                                            visible = false;
+                                        }
+                                        if (endDate && new Date(endDate) < rowDateObj) {
+                                            visible = false;
+                                        }
+                                    }
+
+                                    row.style.display = visible ? '' : 'none';
                                 });
+
+                                // Actualizar totales luego de aplicar filtros
+                                actualizarTotales();
                             }
 
+                            function actualizarTotales() {
+                                let totalDebe = 0;
+                                let totalHaber = 0;
+
+                                document.querySelectorAll('#documentsTable tbody tr').forEach(row => {
+                                    if (row.style.display !== 'none') {
+                                        const montoSoles = parseFloat(row.querySelector('td[data-monto1]')?.textContent.replace(',', '.') || 0);
+                                        const montoDolares = parseFloat(row.querySelector('td[data-monto2]')?.textContent.replace(',', '.') || 0);
+
+                                        totalDebe += isNaN(montoSoles) ? 0 : montoSoles;
+                                        totalHaber += isNaN(montoDolares) ? 0 : montoDolares;
+                                    }
+                                });
+
+                                document.getElementById('totalDebe').value = totalDebe.toFixed(2);
+                                document.getElementById('totalHaber').value = totalHaber.toFixed(2);
+                            }
+                            function convertToDate(dateString) {
+                                if (!dateString) return new Date('1900-01-01');
+                                const [day, month, year] = dateString.split('-');
+                                return new Date(`${year}-${month}-${day}`);
+                            }
+
+                            // Calcular totales inicialmente
+                            actualizarTotales();
 
                             // EDITAR REGISTRO
                             const editButtons = document.querySelectorAll('.btn-editar');

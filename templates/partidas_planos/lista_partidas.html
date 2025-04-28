@@ -2,18 +2,6 @@
 
 {% block title %} Lista de documentos {% endblock %}
 
-{% block link %}
-<li class="nav-item">
-    <a class="nav-link text-white me-2" href="{% url 'home' %}">Inicio</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link text-white me-2" href="{% url 'documentacion' %}">Documentación</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link text-white me-2" href="{% url 'centro_costos:centro_costos_home' %}">Costos</a>
-</li>
-{% endblock %}
-
 {% block body %}
 
 <style>
@@ -60,30 +48,24 @@
                     <h5 class="mb-2">Utiliza los filtros para localizar el documento</h5>
 
                     <div class="row mb-3">
-                        <!-- Año -->
-                        <div class="col">
-                            <label for="yearFilter" class="form-label">Año</label>
-                            <select class="form-select filter-input" data-column="1" id="yearFilter">
-                                <option value="">Seleccionar Año</option>
-                                <option value="2014">2014</option>
-                                <option value="2015">2015</option>
-                                <option value="2016">2016</option>
-                                <option value="2017">2017</option>
-                                <option value="2018">2018</option>
-                                <option value="2019">2019</option>
-                                <option value="2020">2020</option>
-                                <option value="2021">2021</option>
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                            </select>
+                       <!-- Año -->
+                       <div class="col">
+                        <label for="yearFilter" class="form-label">Año</label>
+                        <input 
+                            type="number" 
+                            class="form-control filter-input" 
+                            data-column="1" 
+                            id="yearFilter" 
+                            placeholder="" 
+                            min="2024" 
+                            max="2050"
+                        >
                         </div>
 
                         <!-- Partida -->
                         <div class="col">
-                            <label class="form-label">Partida</label>
-                            <input type="text" class="form-control filter-input" data-column="2">
+                            <label class="form-label">Código</label>
+                            <input type="text" class="form-control filter-input" data-column="0">
                         </div>
 
                         <!-- Descripción -->
@@ -98,30 +80,18 @@
                             <input type="text" class="form-control filter-input" data-column="5">
                         </div>
 
-                        <!-- Costo -->
+                        <!--Centro de Costo -->
                         <div class="col">
-                            <label class="form-label">Costo</label>
-                            <input type="text" class="form-control filter-input" data-column="6">
+                            <label class="form-label">Centro de Costo</label>
+                            <input type="text" class="form-control filter-input" data-column="7">
                         </div>
-
-                        <!-- Fecha Inicio -->
-                        <!-- <div class="col">
-                            <input type="date" class="form-control filter-input" data-column="1" id="startDateFilter"
-                                placeholder="Fecha Inicio">
-                        </div> -->
-
-                        <!-- Fecha Final -->
-                        <!-- <div class="col">
-                            <input type="date" class="form-control filter-input" data-column="1" id="endDateFilter"
-                                placeholder="Fecha Final">
-                        </div> -->
 
                         <!-- Botón Limpiar Filtros -->
                         <div class="col">
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
                             <a href="{% url 'lista_partidas' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
-                                style="background-color: #3b4252; line-height: 25px;">Limpiar Filtros</a>
+                                style="background-color: {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar Filtros</a>
                         </div>
 
                     </div>
@@ -129,7 +99,7 @@
                     <!-- Botón para abrir el modal de agregar -->
                     {% if request.user.role != 1 and request.user.role != 2 %}
                     <center>
-                        <button type="button" class="btn text-white mt-4" style="background-color: #434c5e;"
+                        <button type="button" class="btn text-white mt-4" style="background-color: #bf616a; border: none;"
                             data-bs-toggle="modal" data-bs-target="#documentModal">
                             <i class="bi bi-plus-lg"></i> Agregar Nueva Partida
                         </button>

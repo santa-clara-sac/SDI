@@ -60,8 +60,12 @@ class NuevoGastoForm(forms.ModelForm):
         model = NuevoGasto
         fields = ['nombre']
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
-    }
+            'nombre': forms.TextInput(attrs={
+                'class': 'form-control w-100',
+                'style': 'margin-bottom: 10px;'
+            }),
+        }
+
 
 ##################################################################################################
 ##################################################################################################
@@ -96,6 +100,97 @@ class GastoN2Form(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
 
 class GastoN3Form(forms.ModelForm):
+    class Meta:
+        model = GastoN3
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class GastoN4Form(forms.ModelForm):
+    class Meta:
+        model = GastoN3
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class GastoN5Form(forms.ModelForm):
+    class Meta:
+        model = GastoN3
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class GastoN6Form(forms.ModelForm):
+    class Meta:
+        model = GastoN3
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class GastoN7Form(forms.ModelForm):
+    class Meta:
+        model = GastoN3
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class GastoN8Form(forms.ModelForm):
+    class Meta:
+        model = GastoN3
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class GastoN9Form(forms.ModelForm):
+    class Meta:
+        model = GastoN3
+        fields = '__all__'
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+class GastoN10Form(forms.ModelForm):
     class Meta:
         model = GastoN3
         fields = '__all__'

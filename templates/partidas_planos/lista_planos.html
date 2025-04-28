@@ -24,8 +24,8 @@
     }
 
     .form-control:focus {
-        border-color: #01117f !important;
-        box-shadow: 0 0 0 0.2rem rgba(41, 72, 227, 0.25);
+        border-color: #d8dee9 !important;
+        box-shadow: 0 0 0 0.2rem rgb(226, 242, 242);
     }
 
     .ver-pdf-btn:hover {
@@ -51,24 +51,17 @@
 
                     <div class="row mb-3">
                         <!-- Año -->
-                        <div class="col">
-                            <label for="yearFilter" class="form-label">Año</label>
-                            <select class="form-select filter-input" data-column="0" id="yearFilter">
-                                <option value="">Seleccionar Año</option>
-                                <option value="2013">2013</option>
-                                <option value="2014">2014</option>
-                                <option value="2015">2015</option>
-                                <option value="2016">2016</option>
-                                <option value="2017">2017</option>
-                                <option value="2018">2018</option>
-                                <option value="2019">2019</option>
-                                <option value="2020">2020</option>
-                                <option value="2021">2021</option>
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                            </select>
+                       <div class="col">
+                        <label for="yearFilter" class="form-label">Año</label>
+                        <input 
+                            type="number" 
+                            class="form-control filter-input" 
+                            data-column="0" 
+                            id="yearFilter" 
+                            placeholder="" 
+                            min="2024" 
+                            max="2050"
+                        >
                         </div>
 
                         <!-- plano -->
@@ -91,8 +84,8 @@
 
                         <!-- Costo -->
                         <div class="col">
-                            <label class="form-label">Costo</label>
-                            <input type="text" class="form-control filter-input" data-column="5">
+                            <label class="form-label">Centro de Costo</label>
+                            <input type="text" class="form-control filter-input" data-column="6">
                         </div>
 
                         <!-- Botón Limpiar Filtros -->
@@ -100,7 +93,7 @@
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
                             <a href="{% url 'lista_planos' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
-                                style="background-color: #3b4252; line-height: 25px;">Limpiar Filtros</a>
+                                style="background-color: {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar Filtros</a>
                         </div>
 
                     </div>
@@ -157,7 +150,7 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="id_centro_costos" class="form-label">Centro de
-                                                        Costos</label>
+                                                        Costo</label>
                                                     {{ form.centro_costos }}
                                                 </div>
                                                 <div class="col-md-12">
@@ -190,7 +183,7 @@
                                     <th>Pg.</th>
                                     <th>Ubicación</th>
                                     <th>Costo</th>
-                                    <th>Centro de Costos</th>
+                                    <th>CentroDeCosto</th>
                                     <th>Documento</th>
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>

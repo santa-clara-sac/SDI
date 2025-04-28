@@ -26,10 +26,40 @@ urlpatterns = [
     path('lista_gastoN1/', views.lista_gastoN1, name='lista_gastoN1'),
     path('editar_gastoN1/', views.editar_gastoN1, name='editar_gastoN1'),
     path('eliminar_gastoN1/<int:doc_id>/', views.eliminar_gastoN1, name='eliminar_gastoN1'),
+
     path('lista_gastoN2/', views.lista_gastoN2, name='lista_gastoN2'),
     path('editar_gastoN2/', views.editar_gastoN2, name='editar_gastoN2'),
     path('eliminar_gastoN2/<int:doc_id>/', views.eliminar_gastoN2, name='eliminar_gastoN2'),
+
     path('lista_gastoN3/', views.lista_gastoN3, name='lista_gastoN3'),
     path('editar_gastoN3/', views.editar_gastoN3, name='editar_gastoN3'),
     path('eliminar_gastoN3/<int:doc_id>/', views.eliminar_gastoN3, name='eliminar_gastoN3'),
+
+    path('lista_gastoN4/', views.lista_gastoN4, name='lista_gastoN4'),
+    path('editar_gastoN4/', views.editar_gastoN4, name='editar_gastoN4'),
+    path('eliminar_gastoN4/<int:doc_id>/', views.eliminar_gastoN4, name='eliminar_gastoN4'),
+
+    path('lista_gastoN5/', views.lista_gastoN5, name='lista_gastoN5'),
+    path('editar_gastoN5/', views.editar_gastoN5, name='editar_gastoN5'),
+    path('eliminar_gastoN5/<int:doc_id>/', views.eliminar_gastoN5, name='eliminar_gastoN5'),
+
+    path('lista_gastoN6/', views.lista_gastoN6, name='lista_gastoN6'),
+    path('editar_gastoN6/', views.editar_gastoN6, name='editar_gastoN6'),
+    path('eliminar_gastoN6/<int:doc_id>/', views.eliminar_gastoN6, name='eliminar_gastoN6'),
+
+    path('lista_gastoN7/', views.lista_gastoN7, name='lista_gastoN7'),
+    path('editar_gastoN7/', views.editar_gastoN7, name='editar_gastoN7'),
+    path('eliminar_gastoN7/<int:doc_id>/', views.eliminar_gastoN7, name='eliminar_gastoN7'),
+
+    path('lista_gastoN8/', views.lista_gastoN8, name='lista_gastoN8'),
+    path('editar_gastoN8/', views.editar_gastoN8, name='editar_gastoN8'),
+    path('eliminar_gastoN8/<int:doc_id>/', views.eliminar_gastoN8, name='eliminar_gastoN8'),
+
+    path('lista_gastoN9/', views.lista_gastoN9, name='lista_gastoN9'),
+    path('editar_gastoN9/', views.editar_gastoN9, name='editar_gastoN9'),
+    path('eliminar_gastoN9/<int:doc_id>/', views.eliminar_gastoN9, name='eliminar_gastoN9'),
+
+    path('lista_gastoN10/', views.lista_gastoN10, name='lista_gastoN10'),
+    path('editar_gastoN10/', views.editar_gastoN10, name='editar_gastoN10'),
+    path('eliminar_gastoN10/<int:doc_id>/', views.eliminar_gastoN10, name='eliminar_gastoN10'),
 ]
