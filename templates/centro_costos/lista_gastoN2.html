@@ -68,8 +68,8 @@
 
                         <!-- Descripción -->
                         <div class="col">
-                            <label class="form-label">Referencia</label>
-                            <input type="text" class="form-control filter-input" data-column="3">
+                            <label class="form-label">Detalle</label>
+                            <input type="text" class="form-control filter-input" data-column="2">
                         </div>
 
                         <!-- Ubicación -->
@@ -229,10 +229,10 @@
                                 <tr>
                                     <td>{{ gg.codigo }}</td>
                                     <td class="text-nowrap">{{ gg.fecha|date:"d-m-Y" }}</td>
-                                    <td>{{ gg.detalle }}</td>
-                                    <td>{{ gg.referencia }}</td>
-                                    <td>{{ gg.actividad }}</td>
-                                    <td>{{ gg.tipo_gasto }}</td>
+                                    <td>{{ gg.detalle|default:"" }}</td>
+                                    <td>{{ gg.referencia|default:"" }}</td>
+                                    <td>{{ gg.actividad|default:"" }}</td>
+                                    <td>{{ gg.tipo_gasto|default:"" }}</td>
                                     <td data-monto1>{{ gg.monto_soles|default:"" }}</td>
                                     <td data-monto2>{{ gg.monto_dolares|default:"" }}</td>
                                     <td>
@@ -257,11 +257,11 @@
                                                 data-codigo="{{ gg.codigo }}"
                                                 data-fecha="{{ gg.fecha|date:'Y-m-d' }}"
                                                 data-detalle="{{ gg.detalle }}"
-                                                data-referencia="{{ gg.referencia }}" data-pdf="{{ gg.pdf }}"
+                                                data-referencia="{{ gg.referencia|default_if_none:'' }}" data-pdf="{{ gg.pdf }}"
                                                 data-monto_soles="{{ gg.monto_soles }}"
                                                 data-monto_dolares="{{ gg.monto_dolares }}"
-                                                data-actividad="{{ gg.actividad }}"
-                                                data-tipo_gasto="{{ gg.tipo_gasto }}"
+                                                data-actividad="{{ gg.actividad|default_if_none:'' }}"
+                                                data-tipo_gasto="{{ gg.tipo_gasto|default_if_none:'' }}"
                                                 data-pdf="{{ gg.pdf }}">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
@@ -333,7 +333,7 @@
                                                 <div class="col-md-4">
                                                     <label for="edit_id_referencia"
                                                         class="form-label">Referencia</label>
-                                                    <input type="text" class="form-control" id="edit_id_referencia"
+                                                    <input type="text" class="form-control" id="edit_id_referencia" 
                                                         name="referencia">
                                                 </div>
                                                 <div class="col-md-4">

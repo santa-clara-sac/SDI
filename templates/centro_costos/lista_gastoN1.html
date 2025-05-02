@@ -227,12 +227,12 @@
                             <tbody>
                                 {% for gg in gasto_general %}
                                 <tr>
-                                    <td>{{ gg.codigo }}</td>
+                                    <td class="text-nowrap">{{ gg.codigo }}</td>
                                     <td class="text-nowrap">{{ gg.fecha|date:"d-m-Y" }}</td>
-                                    <td>{{ gg.detalle }}</td>
-                                    <td>{{ gg.referencia }}</td>
-                                    <td>{{ gg.actividad }}</td>
-                                    <td>{{ gg.tipo_gasto }}</td>
+                                    <td>{{ gg.detalle|default:"" }}</td>
+                                    <td>{{ gg.referencia|default:"" }}</td>
+                                    <td>{{ gg.actividad|default:"" }}</td>
+                                    <td>{{ gg.tipo_gasto|default:"" }}</td>
                                     <td data-monto1>{{ gg.monto_soles|default:"" }}</td>
                                     <td data-monto2>{{ gg.monto_dolares|default:"" }}</td>
                                     <td>

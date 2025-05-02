@@ -67,3 +67,4 @@ INSERT INTO [centro_costos_cantacallao] (codigo, fecha, concepto, detalle, refer
 - Haber -> sale
 Saldo = D - H
 {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none;
+
