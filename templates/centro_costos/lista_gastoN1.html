@@ -216,8 +216,8 @@
                                     <th>Referencia</th>
                                     <th>Actividad</th>
                                     <th>Tipo de gasto</th>
-                                    <th>Monto (S)</th>
-                                    <th>Monto ($)</th>
+                                    <th>Monto(S)</th>
+                                    <th>Monto($)</th>
                                     <th>PDF</th>
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>
@@ -467,37 +467,38 @@
 
                         //ORDENAT POR CODIGO
                         document.addEventListener("DOMContentLoaded", function () {
-                            const table = document.getElementById("documentsTable");
-                            const tbody = table.querySelector("tbody");
-                            const rows = Array.from(tbody.querySelectorAll("tr"));
+                        const table = document.getElementById("documentsTable");
+                        const tbody = table.querySelector("tbody");
+                        const rows = Array.from(tbody.querySelectorAll("tr"));
 
-                            // Función para extraer año y número de código tipo "008-23"
-                            function parseCodigo(codigo) {
-                                const [numStr, yearStr] = codigo.split("-");
-                                const numero = parseInt(numStr, 10);
-                                const anio = parseInt(yearStr, 10);
-                                return { anio, numero };
+                        // Nueva función para códigos tipo "TA-001-24"
+                        function parseCodigo(codigo) {
+                            const partes = codigo.split("-");
+                            const numero = parseInt(partes[1], 10); // "001" → 1
+                            const anio = parseInt(partes[2], 10);   // "24" → 24
+                            return { anio, numero };
+                        }
+
+                        rows.sort((a, b) => {
+                            const codigoA = a.children[0].textContent.trim();
+                            const codigoB = b.children[0].textContent.trim();
+
+                            const aParsed = parseCodigo(codigoA);
+                            const bParsed = parseCodigo(codigoB);
+
+                            // Ordenar primero por año, luego por número
+                            if (aParsed.anio !== bParsed.anio) {
+                                return aParsed.anio - bParsed.anio;
+                            } else {
+                                return aParsed.numero - bParsed.numero;
                             }
-
-                            rows.sort((a, b) => {
-                                const codigoA = a.children[0].textContent.trim();
-                                const codigoB = b.children[0].textContent.trim();
-
-                                const aParsed = parseCodigo(codigoA);
-                                const bParsed = parseCodigo(codigoB);
-
-                                // Primero ordenar por año, luego por número
-                                if (aParsed.anio !== bParsed.anio) {
-                                    return aParsed.anio - bParsed.anio;
-                                } else {
-                                    return aParsed.numero - bParsed.numero;
-                                }
-                            });
-
-                            // Vacía el tbody y vuelve a agregar las filas ordenadas
-                            tbody.innerHTML = "";
-                            rows.forEach(row => tbody.appendChild(row));
                         });
+
+                        // Reemplazar el contenido del tbody
+                        tbody.innerHTML = "";
+                        rows.forEach(row => tbody.appendChild(row));
+                    });
+
                         
                         //PDF MODAL
                         document.addEventListener('DOMContentLoaded', function () {

@@ -92,7 +92,7 @@ class Plano(models.Model):
     pg = models.CharField(max_length=50)
     ubicacion = models.CharField(max_length=100)
     costo = models.CharField(max_length=100)
-    centro_costos = models.CharField(max_length=100)
+    centro_costos = models.CharField(max_length=100,blank=True, null=True)
     pdf = models.FileField(upload_to='planos_y_otros', blank=True, null=True, max_length=255)
 
 
