@@ -232,7 +232,7 @@
                                     <td>{{ gg.detalle }}</td>
                                     <td>{{ gg.referencia }}</td>
                                     <td>{{ gg.actividad }}</td>
-                                    <td>{{ gg.tipo_gasto }}</td>
+                                    <td>{{ gg.tipo_gasto|default:"" }}</td>
                                     <td data-monto1>{{ gg.monto_soles|default:"" }}</td>
                                     <td data-monto2>{{ gg.monto_dolares|default:"" }}</td>
                                     <td>
@@ -261,7 +261,7 @@
                                                 data-monto_soles="{{ gg.monto_soles }}"
                                                 data-monto_dolares="{{ gg.monto_dolares }}"
                                                 data-actividad="{{ gg.actividad }}"
-                                                data-tipo_gasto="{{ gg.tipo_gasto }}"
+                                                data-tipo_gasto="{{ gg.tipo_gasto|default_if_none:'' }}"
                                                 data-pdf="{{ gg.pdf }}">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
@@ -337,11 +337,11 @@
                                                         name="referencia">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_monto_soles" class="form-label">Monto (S)</label>
+                                                    <label for="edit_id_monto_soles" class="form-label">Monto(S)</label>
                                                     <input type="number" class="form-control" id="edit_id_monto_soles" name="monto_soles">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_ubicacion" class="form-label">Monto ($)</label>
+                                                    <label for="edit_id_ubicacion" class="form-label">Monto($)</label>
                                                     <input type="number" class="form-control" id="edit_id_monto_dolares"
                                                         name="monto_dolares">
                                                 </div>

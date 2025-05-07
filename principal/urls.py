@@ -18,7 +18,7 @@ urlpatterns = [
     path('eliminar_usuario/<int:id>/', views.eliminar_usuario, name='eliminar_usuario'),
     path('cambiar_password_usuario/', views.cambiar_password_usuario, name='cambiar_password_usuario'),
 
-
     path('', include('partidas_planos.urls')),
     path('', include('centro_costos.urls')),
+    path('', include('control_expediente.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

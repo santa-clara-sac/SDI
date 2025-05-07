@@ -1,0 +1,606 @@
+{% extends "base.html" %}
+
+{% block title %} Lista de Expedientes {% endblock %}
+
+{% block body %}
+
+<style>
+    .form-control {
+        border-radius: 0.5rem;
+        height: 38px;
+    }
+
+    label.form-label {
+        font-weight: 500;
+    }
+
+    .modal-content {
+        border-radius: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: #d8dee9 !important;
+        box-shadow: 0 0 0 0.2rem rgb(226, 242, 242);
+    }
+
+    .ver-pdf-btn:hover {
+        text-decoration: underline !important;
+    }
+
+    .fila-seleccionada {
+        background-color: #d8dee9 !important;
+    }
+</style>
+
+<div style="text-align: center; margin-top: 20px;">
+    <div style="font-weight: bold; font-size: 24px; color: #3b4252;">
+        Listado de Expedientes
+    </div>
+</div>
+
+<div class="container mt-2" style="max-width: 100%;">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-11">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <!-- Sección de búsqueda -->
+                    <h5 class="mb-2">Utiliza los filtros para localizar el documento</h5>
+
+                    <div class="row mb-3">
+                       <!-- Año -->
+                       <div class="col">
+                        <label for="yearFilter" class="form-label">Año</label>
+                        <input 
+                            type="number" 
+                            class="form-control filter-input" 
+                            data-column="1" 
+                            id="yearFilter" 
+                            placeholder="" 
+                            min="2022" 
+                            max="2050"
+                        >
+                        </div>
+
+                        <!-- Partida -->
+                        <div class="col">
+                            <label class="form-label">Partida</label>
+                            <input type="text" class="form-control filter-input" data-column="2">
+                        </div>
+
+                        <div class="col">
+                            <label class="form-label">Código</label>
+                            <input type="text" class="form-control filter-input" data-column="0">
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="col">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control filter-input" data-column="3">
+                        </div>
+
+                        <!-- Ubicación -->
+                        <div class="col">
+                            <label class="form-label">Ubicación</label>
+                            <input type="text" class="form-control filter-input" data-column="5">
+                        </div>
+
+                        <!--Centro de Costo -->
+                        <div class="col">
+                            <label class="form-label">Centro de Costo</label>
+                            <input type="text" class="form-control filter-input" data-column="7">
+                        </div>
+
+                        <!-- Botón Limpiar Filtros -->
+                        <div class="col">
+                            <label class="form-label" style="color: #ffffff;">Limpiar</label>
+                            <a href="{% url 'lista_partidas' %}" id="clearFilters"
+                                class="form-control btn btn-secondary text-center"
+                                style="background-color: {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar Filtros</a>
+                        </div>
+
+                    </div>
+
+                    <!-- Botón para abrir el modal de agregar -->
+                    {% if request.user.role != 1 and request.user.role != 2 %}
+                    <center>
+                        <button type="button" class="btn text-white mt-4" style="background-color: #bf616a; border: none;"
+                            data-bs-toggle="modal" data-bs-target="#documentModal">
+                            <i class="bi bi-plus-lg"></i> Agregar Nuevo Expediente
+                        </button>
+                    </center>
+                    {% endif %}
+
+
+                    <!-- Modal para agregar nueva partida -->
+                    <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header text-white" style="background-color: #3b4252;">
+                                    <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Expediente</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="{% url 'control_expediente:lista_expediente' %}">
+                                        {% csrf_token %}
+                                        <div class="container">
+                                            <div class="row g-3">
+                                                <div class="col-md-4">
+                                                    <label for="id_codigo" class="form-label">N° Expediente</label>
+                                                    {{ form.codigo }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_expediente" class="form-label">Expediente</label>
+                                                    {{ form.expediente }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_sede" class="form-label">Sede</label>
+                                                    {{ form.sede }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_especialidad" class="form-label">Especialidad</label>
+                                                    {{ form.especialidad }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_materia" class="form-label">Materia</label>
+                                                    {{ form.materia }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_juzgado" class="form-label">Juzgado</label>
+                                                    {{ form.juzgado }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_demandante" class="form-label">Demandante</label>
+                                                    {{ form.demandante }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_demandado" class="form-label">Demandado</label>
+                                                    {{ form.demandado }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="id_anio_inicio" class="form-label">Año Inicio</label>
+                                                    {{ form.anio_inicio }}
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label for="id_representante" class="form-label">Representante</label>
+                                                    {{ form.representante }}
+                                                </div>
+                                            </div>
+                                            <div class="text-center mt-4">
+                                                <button type="submit" class="btn px-5 py-2 btnGuardar"
+                                                    style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Tabla -->
+                    <div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
+                        <table class="table table-striped" id="documentsTable">
+                            <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Expediente</th>
+                                    <th>Sede</th>
+                                    <th>Especialidad</th>
+                                    <th>Materia</th>
+                                    <th>Juzgado</th>
+                                    <th>Demandante</th>
+                                    <th>Demandado</th>
+                                    <th>Año inicio</th>
+                                    <th class="d-none">Representa a</th>
+                                    {% if request.user.role != 1 and request.user.role != 2 %}
+                                    <th>Acciones</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cj in caso_judiciales %}
+                                <tr>
+                                    <td>{{ cj.codigo }}</td>
+                                    <td class="text-nowrap">{{ cj.expediente }}</td>
+                                    <td>{{ cj.sede }}</td>
+                                    <td>{{ cj.especialidad }}</td>
+                                    <td>{{ cj.materia }}</td>
+                                    <td>{{ cj.juzgado }}</td>
+                            
+                                    <!-- Demandante resaltado si representante es 'demandante' -->
+                                    <td style="{% if cj.representante == 'demandante' %}background-color: #ebcb8b;{% endif %}">
+                                        {{ cj.demandante }}
+                                    </td>
+
+                                    <!-- Demandado resaltado si representante es 'demandado' -->
+                                    <td style="{% if cj.representante == 'demandado' %}background-color: #ebcb8b;{% endif %}">
+                                        {{ cj.demandado }}
+                                    </td>
+
+                            
+                                    <td>{{ cj.anio_inicio|default:"" }}</td>
+                            
+                                    <!-- Representante -->
+                                    <td class="d-none">
+                                        {% if cj.representante == 'demandante' %}
+                                            Demandante
+                                        {% elif cj.representante == 'demandado' %}
+                                            Demandado
+                                        {% endif %}
+                                    </td>
+                            
+                                    {% if request.user.role != 1 and request.user.role != 2 %}
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm text-white me-2 btn-editar"
+                                                style="background-color: #434c5e;" data-bs-toggle="modal"
+                                                data-bs-target="#editCasoJudicialModal" data-id="{{ cj.id }}"
+                                                data-codigo="{{ cj.codigo }}" data-expediente="{{ cj.expediente }}"
+                                                data-sede="{{ cj.sede }}"
+                                                data-especialidad="{{ cj.especialidad }}" data-materia="{{ cj.materia }}"
+                                                data-juzgado="{{ cj.juzgado }}"
+                                                data-demandante="{{ cj.demandante }}"
+                                                data-demandado="{{ cj.demandado }}"
+                                                data-anioinicio="{{ cj.anio_inicio|default_if_none:'' }}"
+                                                data-representante="{{ cj.representante }}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                            
+                                            <a href="{% url 'control_expediente:eliminar_expediente' cj.id %}"
+                                                class="btn btn-sm text-white btnEliminar"
+                                                style="background-color: #bf616a;" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            
+                        </table>
+                    </div>
+
+
+
+                    <!-- Modal para editar expediente -->
+                    <div class="modal fade" id="editCasoJudicialModal" tabindex="-1" aria-labelledby="editCasoJudicialModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header text-white" style="background-color: #3b4252;">
+                                    <h5 class="modal-title" id="editCasoJudicialModalLabel">Editar Expediente</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="{% url 'control_expediente:editar_expediente' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" id="edit_id" name="id">
+                                        <div class="container">
+                                            <div class="row g-3">
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_codigo" class="form-label">N°</label>
+                                                    <input type="text" class="form-control" id="edit_id_codigo"
+                                                        name="codigo">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_expediente" class="form-label">Expediente</label>
+                                                    <input type="text" class="form-control" id="edit_id_expediente"
+                                                        name="expediente">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_sede" class="form-label">Sede</label>
+                                                    <input type="text" class="form-control" id="edit_id_sede"
+                                                        name="sede">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_especialidad"
+                                                        class="form-label">Especialidad</label>
+                                                    <input type="text" class="form-control" id="edit_id_especialidad"
+                                                        name="especialidad">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_materia" class="form-label">Materia</label>
+                                                    <input type="text" class="form-control" id="edit_id_materia" name="materia">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_juzgado" class="form-label">Juzgado</label>
+                                                    <input type="text" class="form-control" id="edit_id_juzgado"
+                                                        name="juzgado">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_demandante" class="form-label">Demandante</label>
+                                                    <input type="text" class="form-control" id="edit_id_demandante"
+                                                        name="demandante">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_centro_demandado" class="form-label">Demandado</label>
+                                                    <input type="text" class="form-control" id="edit_id_demandado"
+                                                        name="demandado">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_anio_inicio"
+                                                        class="form-label">Año inicio</label>
+                                                    <input type="text" class="form-control" id="edit_id_anio_inicio"
+                                                        name="anio_inicio">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_representante"
+                                                        class="form-label">Representa a</label>
+                                                        <select class="form-control" id="edit_id_representante" name="representante">
+                                                            <option value="">---------</option>
+                                                            <option value="demandante">Demandante</option>
+                                                            <option value="demandado">Demandado</option>
+                                                        </select>
+                                                        
+                                                </div>
+                                            </div>
+                                            <div class="text-center mt-4">
+                                                <button type="submit" class="btn px-5 py-2 btnGuardar2"
+                                                    style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        //FILTRO TANGO DE FECHAS
+                        // document.addEventListener("DOMContentLoaded", function () {
+                        //     const startDateInput = document.getElementById("startDateFilter");
+                        //     const endDateInput = document.getElementById("endDateFilter");
+                        //     const table = document.getElementById("documentsTable");
+                        //     const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+                        //     function filterByDateRange() {
+                        //         const startDate = startDateInput.value ? new Date(startDateInput.value) : null;
+                        //         const endDate = endDateInput.value ? new Date(endDateInput.value) : null;
+
+                        //         Array.from(rows).forEach(row => {
+                        //             const dateCell = row.cells[1]; // columna de fecha
+                        //             const cellDate = new Date(dateCell.textContent);
+
+                        //             let show = true;
+
+                        //             if (startDate && cellDate < startDate) {
+                        //                 show = false;
+                        //             }
+
+                        //             if (endDate && cellDate > endDate) {
+                        //                 show = false;
+                        //             }
+
+                        //             row.style.display = show ? "" : "none";
+                        //         });
+                        //     }
+
+                        //     startDateInput.addEventListener("change", filterByDateRange);
+                        //     endDateInput.addEventListener("change", filterByDateRange);
+
+                        //     document.getElementById("clearFilters").addEventListener("click", function () {
+                        //         startDateInput.value = "";
+                        //         endDateInput.value = "";
+                        //         Array.from(rows).forEach(row => row.style.display = "");
+                        //     });
+                        // });
+
+                        // FILAS RESALTADAS
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const filas = document.querySelectorAll('#documentsTable tbody tr');
+
+                            filas.forEach(fila => {
+                                fila.addEventListener('click', function () {
+                                    // Si ya está seleccionada, la quitamos
+                                    if (this.classList.contains('fila-seleccionada')) {
+                                        this.classList.remove('fila-seleccionada');
+                                    } else {
+                                        // Primero quitamos la clase de todas las filas
+                                        filas.forEach(f => f.classList.remove('fila-seleccionada'));
+                                        // Luego la agregamos a la que se hizo click
+                                        this.classList.add('fila-seleccionada');
+                                    }
+                                });
+                            });
+                        });
+
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const table = document.getElementById("documentsTable");
+                            const tbody = table.querySelector("tbody");
+                            const rows = Array.from(tbody.querySelectorAll("tr"));
+
+                            // Función para extraer año y número de código tipo "008-23"
+                            function parseCodigo(codigo) {
+                                const [numStr, yearStr] = codigo.split("-");
+                                const numero = parseInt(numStr, 10);
+                                const anio = parseInt(yearStr, 10);
+                                return { anio, numero };
+                            }
+
+                            rows.sort((a, b) => {
+                                const codigoA = a.children[0].textContent.trim();
+                                const codigoB = b.children[0].textContent.trim();
+
+                                const aParsed = parseCodigo(codigoA);
+                                const bParsed = parseCodigo(codigoB);
+
+                                // Primero ordenar por año, luego por número
+                                if (aParsed.anio !== bParsed.anio) {
+                                    return aParsed.anio - bParsed.anio;
+                                } else {
+                                    return aParsed.numero - bParsed.numero;
+                                }
+                            });
+
+                            // Vacía el tbody y vuelve a agregar las filas ordenadas
+                            tbody.innerHTML = "";
+                            rows.forEach(row => tbody.appendChild(row));
+                        });
+
+                        document.addEventListener('DOMContentLoaded', function () {
+                            
+
+                            // FILTRO EN TIEMPO REAL
+                            document.querySelectorAll('.filter-input').forEach(input => {
+                                input.addEventListener('input', filtrarTabla); // Detecta tanto texto como selects
+                            });
+
+                            function filtrarTabla() {
+                                const filtros = {};
+
+                                // Recolectamos todos los filtros activos
+                                document.querySelectorAll('.filter-input').forEach(input => {
+                                    const columna = input.dataset.column;
+                                    const valor = input.value.trim().toLowerCase();
+                                    if (valor) {
+                                        filtros[columna] = valor;
+                                    }
+                                });
+
+                                // Recorremos cada fila de la tabla
+                                document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
+                                    let mostrar = true;
+
+                                    for (const columna in filtros) {
+                                        const celda = fila.cells[columna];
+                                        if (celda) {
+                                            const textoCelda = celda.textContent.toLowerCase();
+                                            if (!textoCelda.includes(filtros[columna])) {
+                                                mostrar = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    fila.style.display = mostrar ? '' : 'none';
+                                });
+                            }
+
+
+                            // EDITAR REGISTRO
+                            const editButtons = document.querySelectorAll('.btn-editar');
+                            editButtons.forEach(button => {
+                                button.addEventListener('click', function () {
+                                    const codigo = button.getAttribute('data-codigo');
+                                    const partida = button.getAttribute('data-partida');
+                                    const id = button.getAttribute('data-id');
+                                    console.log("Código:", codigo);
+                                    console.log("Partida:", partida);
+                                    console.log("Id:", id);
+                                    document.getElementById('edit_id').value = button.getAttribute('data-id');
+                                    document.getElementById('edit_id_codigo').value = button.getAttribute('data-codigo');
+                                    document.getElementById('edit_id_expediente').value = button.getAttribute('data-expediente');
+                                    document.getElementById('edit_id_sede').value = button.getAttribute('data-sede');
+                                    document.getElementById('edit_id_especialidad').value = button.getAttribute('data-especialidad');
+                                    document.getElementById('edit_id_materia').value = button.getAttribute('data-materia');
+                                    document.getElementById('edit_id_juzgado').value = button.getAttribute('data-juzgado');
+                                    document.getElementById('edit_id_demandante').value = button.getAttribute('data-demandante');
+                                    document.getElementById('edit_id_demandado').value = button.getAttribute('data-demandado');
+                                    document.getElementById('edit_id_anio_inicio').value = button.getAttribute('data-anioinicio');
+                                    document.getElementById('edit_id_representante').value = button.getAttribute('data-representante');
+                                });
+                            });
+                        });
+
+
+                        //ALERT ELIMINAR
+                        (function () {
+                            const botonesEliminar = document.querySelectorAll('.btnEliminar');
+
+                            botonesEliminar.forEach(boton => {
+                                boton.addEventListener('click', function (e) {
+                                    e.preventDefault(); // Evita que el enlace se siga inmediatamente
+
+                                    Swal.fire({
+                                        title: '¿Estás seguro de eliminar?',
+                                        text: "Esta acción no se puede deshacer.",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#bf616a',
+                                        cancelButtonColor: '#5e81ac',
+                                        confirmButtonText: 'Sí, eliminar',
+                                        cancelButtonText: 'Cancelar'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            // Redirige al href del botón
+                                            window.location.href = this.href;
+                                        }
+                                    });
+                                });
+                            });
+                        })();
+
+                        // BTN GUARDAR
+                        (function () {
+                            const botonesGuardar = document.querySelectorAll('.btnGuardar');
+
+                            botonesGuardar.forEach(boton => {
+                                boton.addEventListener('click', function (e) {
+                                    e.preventDefault(); // Previene el submit inmediato
+
+                                    const form = this.closest('form');
+
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: "top-end",
+                                        showConfirmButton: false,
+                                        timer: 800,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.onmouseenter = Swal.stopTimer;
+                                            toast.onmouseleave = Swal.resumeTimer;
+                                        }
+                                    });
+
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Registro guardado correctamente"
+                                    }).then(() => {
+                                        form.submit(); // Enviar el formulario después del toast
+                                    });
+                                });
+                            });
+                        })();
+
+                        // BTN ACTUALIZAR
+                        (function () {
+                            const botonesGuardar = document.querySelectorAll('.btnGuardar2');
+
+                            botonesGuardar.forEach(boton => {
+                                boton.addEventListener('click', function (e) {
+                                    e.preventDefault(); // Previene el submit inmediato
+
+                                    const form = this.closest('form');
+
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: "top-end",
+                                        showConfirmButton: false,
+                                        timer: 1000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.onmouseenter = Swal.stopTimer;
+                                            toast.onmouseleave = Swal.resumeTimer;
+                                        }
+                                    });
+
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Registro actualizado correctamente"
+                                    }).then(() => {
+                                        form.submit(); // Enviar el formulario después del toast
+                                    });
+                                });
+                            });
+                        })();
+                    </script>
+
+                    {% endblock %}
