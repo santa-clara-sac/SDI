@@ -48,46 +48,38 @@
                     <h5 class="mb-2">Utiliza los filtros para localizar el documento</h5>
 
                     <div class="row mb-3">
-                       <!-- Año -->
-                       <div class="col">
-                        <label for="yearFilter" class="form-label">Año</label>
-                        <input 
-                            type="number" 
-                            class="form-control filter-input" 
-                            data-column="1" 
-                            id="yearFilter" 
-                            placeholder="" 
-                            min="2022" 
-                            max="2050"
-                        >
-                        </div>
 
                         <!-- Partida -->
                         <div class="col">
-                            <label class="form-label">Partida</label>
-                            <input type="text" class="form-control filter-input" data-column="2">
+                            <label class="form-label">Expediente</label>
+                            <input type="text" class="form-control filter-input" data-column="1">
                         </div>
 
-                        <div class="col">
-                            <label class="form-label">Código</label>
-                            <input type="text" class="form-control filter-input" data-column="0">
+                        <div class="col d-none">
+                            <label class="form-label">Sede</label>
+                            <input type="text" class="form-control filter-input" data-column="2">
                         </div>
 
                         <!-- Descripción -->
                         <div class="col">
-                            <label class="form-label">Descripción</label>
+                            <label class="form-label">Especialidad</label>
                             <input type="text" class="form-control filter-input" data-column="3">
                         </div>
 
                         <!-- Ubicación -->
                         <div class="col">
-                            <label class="form-label">Ubicación</label>
-                            <input type="text" class="form-control filter-input" data-column="5">
+                            <label class="form-label">Materia</label>
+                            <input type="text" class="form-control filter-input" data-column="4">
                         </div>
 
                         <!--Centro de Costo -->
                         <div class="col">
-                            <label class="form-label">Centro de Costo</label>
+                            <label class="form-label">Demandante</label>
+                            <input type="text" class="form-control filter-input" data-column="6">
+                        </div>
+
+                        <div class="col">
+                            <label class="form-label">Demandado</label>
                             <input type="text" class="form-control filter-input" data-column="7">
                         </div>
 
@@ -165,7 +157,7 @@
                                                 </div>
 
                                                 <div class="col-md-4">
-                                                    <label for="id_representante" class="form-label">Representante</label>
+                                                    <label for="id_representante" class="form-label">Representanta a</label>
                                                     {{ form.representante }}
                                                 </div>
                                             </div>
@@ -188,6 +180,7 @@
                         <table class="table table-striped" id="documentsTable">
                             <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
+                                    <th></th>
                                     <th>N°</th>
                                     <th>Expediente</th>
                                     <th>Sede</th>
@@ -196,7 +189,7 @@
                                     <th>Juzgado</th>
                                     <th>Demandante</th>
                                     <th>Demandado</th>
-                                    <th>Año inicio</th>
+                                    <th>AñoInicio</th>
                                     <th class="d-none">Representa a</th>
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>
@@ -206,6 +199,15 @@
                             <tbody>
                                 {% for cj in caso_judiciales %}
                                 <tr>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{% url 'control_expediente:ver_seguimiento' cj.id %}"
+                                            class="btn btn-sm text-white"
+                                            style="background-color: #3b4252;" title="Ver Seguimiento y Gastos">
+                                            <i class="bi bi-file-earmark-text" style="font-size: 1.0rem;"></i>
+                                            </a>
+                                        </div>
+                                    </td>
                                     <td>{{ cj.codigo }}</td>
                                     <td class="text-nowrap">{{ cj.expediente }}</td>
                                     <td>{{ cj.sede }}</td>
@@ -214,15 +216,14 @@
                                     <td>{{ cj.juzgado }}</td>
                             
                                     <!-- Demandante resaltado si representante es 'demandante' -->
-                                    <td style="{% if cj.representante == 'demandante' %}background-color: #ebcb8b;{% endif %}">
+                                    <td style="{% if cj.representante == 'demandante' %}background-color: #dbbec1;{% endif %}">
                                         {{ cj.demandante }}
                                     </td>
 
                                     <!-- Demandado resaltado si representante es 'demandado' -->
-                                    <td style="{% if cj.representante == 'demandado' %}background-color: #ebcb8b;{% endif %}">
+                                    <td style="{% if cj.representante == 'demandado' %}background-color: #dbbec1;{% endif %}">
                                         {{ cj.demandado }}
                                     </td>
-
                             
                                     <td>{{ cj.anio_inicio|default:"" }}</td>
                             

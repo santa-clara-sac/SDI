@@ -45,3 +45,15 @@ def eliminar_expediente(request, doc_id):
     doc = get_object_or_404(CasoJudicial, id=doc_id)
     doc.delete()
     return redirect('control_expediente:lista_expediente')
+
+#####################################################################################################
+
+def ver_seguimiento(request, caso_id):
+    caso = get_object_or_404(CasoJudicial, id=caso_id)
+    seguimientos = caso.seguimientos.all().prefetch_related('gastos')
+
+    context = {
+        'caso': caso,
+        'seguimientos': seguimientos,
+    }
+    return render(request, 'control_expediente/seguimientos_y_gastos.html', context)

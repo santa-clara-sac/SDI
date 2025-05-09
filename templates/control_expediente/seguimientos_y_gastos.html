@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %} Lista de Expedientes {% endblock %}
+
+{% block body %}
+
+<style>
+    .form-control {
+        border-radius: 0.5rem;
+        height: 38px;
+    }
+
+    label.form-label {
+        font-weight: 500;
+    }
+
+    .modal-content {
+        border-radius: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: #d8dee9 !important;
+        box-shadow: 0 0 0 0.2rem rgb(226, 242, 242);
+    }
+
+    .ver-pdf-btn:hover {
+        text-decoration: underline !important;
+    }
+
+    .fila-seleccionada {
+        background-color: #d8dee9 !important;
+    }
+</style>
+
+<h3>Seguimientos del caso: {{ caso }}</h3>
+
+{% for seguimiento in seguimientos %}
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
+        <strong>Resolución:</strong> {{ seguimiento.resolucion }} <br>
+        <strong>Seguimiento:</strong> {{ seguimiento.seguimiento }} ({{ seguimiento.fecha_seguimiento }})<br>
+        <strong>Pendiente:</strong> {{ seguimiento.pendiente }} ({{ seguimiento.fecha_pendiente }})<br>
+        <strong>Responsable:</strong> {{ seguimiento.responsable }}<br>
+        <strong>Estado:</strong> {{ seguimiento.estado }}<br>
+        <strong>Fecha Registro:</strong> {{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}<br>
+
+        <h5>Gastos:</h5>
+        <ul>
+            {% for gasto in seguimiento.gastos.all %}
+                <li>{{ gasto.fecha }} - {{ gasto.detalle }} - S/. {{ gasto.gastos_soles }} / $ {{ gasto.gastos_dolares }}</li>
+            {% empty %}
+                <li>Sin gastos registrados.</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% empty %}
+    <p>No hay seguimientos registrados para este caso.</p>
+{% endfor %}
+
+{% endblock %}

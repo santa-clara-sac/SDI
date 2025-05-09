@@ -68,3 +68,14 @@ INSERT INTO [centro_costos_cantacallao] (codigo, fecha, concepto, detalle, refer
 Saldo = D - H
 {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none;
 
+---------------------------------------------------------------------------------------------------------------------------------
+
+N°: Número correlativo del registro en la tabla. Es un identificador secuencial, en este caso es el número 83.
+Expediente: Código único que identifica el proceso judicial. Incluye información como el año, número de expediente, tipo de juzgado, y otras referencias internas del sistema judicial.
+Sede: Ubicación geográfica o jurisdicción del juzgado que lleva el caso
+Especialidad: Categoría jurídica a la que corresponde el caso dentro del sistema judicial.
+Materia: Tipo específico de asunto dentro de la especialidad jurídica. En este caso aparece como ODSD, que puede ser un código interno (por ejemplo, Obligaciones Derivadas de Servicios Domiciliarios, si fuese el caso, pero depende del sistema judicial correspondiente).
+Juzgado: Nombre y dirección del juzgado que tramita el expediente.
+Demandante: Persona o entidad que inician la demanda judicial.
+Demandado: Persona o entidad contra quienes se interpone la demanda.
+AñoInicio: Año en que se inició el proceso judicial.
