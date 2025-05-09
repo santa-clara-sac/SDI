@@ -52,35 +52,35 @@
                         <!-- Partida -->
                         <div class="col">
                             <label class="form-label">Expediente</label>
-                            <input type="text" class="form-control filter-input" data-column="1">
+                            <input type="text" class="form-control filter-input" data-column="2">
                         </div>
 
                         <div class="col d-none">
                             <label class="form-label">Sede</label>
-                            <input type="text" class="form-control filter-input" data-column="2">
+                            <input type="text" class="form-control filter-input" data-column="4">
                         </div>
 
                         <!-- Descripción -->
                         <div class="col">
                             <label class="form-label">Especialidad</label>
-                            <input type="text" class="form-control filter-input" data-column="3">
+                            <input type="text" class="form-control filter-input" data-column="5">
                         </div>
 
                         <!-- Ubicación -->
                         <div class="col">
                             <label class="form-label">Materia</label>
-                            <input type="text" class="form-control filter-input" data-column="4">
+                            <input type="text" class="form-control filter-input" data-column="6">
                         </div>
 
                         <!--Centro de Costo -->
                         <div class="col">
                             <label class="form-label">Demandante</label>
-                            <input type="text" class="form-control filter-input" data-column="6">
+                            <input type="text" class="form-control filter-input" data-column="8">
                         </div>
 
                         <div class="col">
                             <label class="form-label">Demandado</label>
-                            <input type="text" class="form-control filter-input" data-column="7">
+                            <input type="text" class="form-control filter-input" data-column="9">
                         </div>
 
                         <!-- Botón Limpiar Filtros -->
@@ -183,13 +183,13 @@
                                     <th></th>
                                     <th>N°</th>
                                     <th>Expediente</th>
+                                    <th class="text-nowrap" >Año Inicio</th>
                                     <th>Sede</th>
                                     <th>Especialidad</th>
                                     <th>Materia</th>
                                     <th>Juzgado</th>
                                     <th>Demandante</th>
                                     <th>Demandado</th>
-                                    <th>AñoInicio</th>
                                     <th class="d-none">Representa a</th>
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>
@@ -210,6 +210,7 @@
                                     </td>
                                     <td>{{ cj.codigo }}</td>
                                     <td class="text-nowrap">{{ cj.expediente }}</td>
+                                    <td>{{ cj.anio_inicio|default:"" }}</td>
                                     <td>{{ cj.sede }}</td>
                                     <td>{{ cj.especialidad }}</td>
                                     <td>{{ cj.materia }}</td>
@@ -224,9 +225,7 @@
                                     <td style="{% if cj.representante == 'demandado' %}background-color: #dbbec1;{% endif %}">
                                         {{ cj.demandado }}
                                     </td>
-                            
-                                    <td>{{ cj.anio_inicio|default:"" }}</td>
-                            
+                                                        
                                     <!-- Representante -->
                                     <td class="d-none">
                                         {% if cj.representante == 'demandante' %}
@@ -355,44 +354,6 @@
                     </div>
 
                     <script>
-                        //FILTRO TANGO DE FECHAS
-                        // document.addEventListener("DOMContentLoaded", function () {
-                        //     const startDateInput = document.getElementById("startDateFilter");
-                        //     const endDateInput = document.getElementById("endDateFilter");
-                        //     const table = document.getElementById("documentsTable");
-                        //     const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-
-                        //     function filterByDateRange() {
-                        //         const startDate = startDateInput.value ? new Date(startDateInput.value) : null;
-                        //         const endDate = endDateInput.value ? new Date(endDateInput.value) : null;
-
-                        //         Array.from(rows).forEach(row => {
-                        //             const dateCell = row.cells[1]; // columna de fecha
-                        //             const cellDate = new Date(dateCell.textContent);
-
-                        //             let show = true;
-
-                        //             if (startDate && cellDate < startDate) {
-                        //                 show = false;
-                        //             }
-
-                        //             if (endDate && cellDate > endDate) {
-                        //                 show = false;
-                        //             }
-
-                        //             row.style.display = show ? "" : "none";
-                        //         });
-                        //     }
-
-                        //     startDateInput.addEventListener("change", filterByDateRange);
-                        //     endDateInput.addEventListener("change", filterByDateRange);
-
-                        //     document.getElementById("clearFilters").addEventListener("click", function () {
-                        //         startDateInput.value = "";
-                        //         endDateInput.value = "";
-                        //         Array.from(rows).forEach(row => row.style.display = "");
-                        //     });
-                        // });
 
                         // FILAS RESALTADAS
                         document.addEventListener('DOMContentLoaded', function () {
@@ -455,35 +416,34 @@
                             });
 
                             function filtrarTabla() {
-                                const filtros = {};
+                            const filtros = {};
 
-                                // Recolectamos todos los filtros activos
-                                document.querySelectorAll('.filter-input').forEach(input => {
-                                    const columna = input.dataset.column;
-                                    const valor = input.value.trim().toLowerCase();
-                                    if (valor) {
-                                        filtros[columna] = valor;
-                                    }
-                                });
+                            document.querySelectorAll('.filter-input').forEach(input => {
+                                const columna = input.dataset.column;
+                                const valor = input.value.trim().toLowerCase();
+                                if (valor) {
+                                    filtros[columna] = valor;
+                                }
+                            });
 
-                                // Recorremos cada fila de la tabla
-                                document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
-                                    let mostrar = true;
+                            document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
+                                let mostrar = true;
 
-                                    for (const columna in filtros) {
-                                        const celda = fila.cells[columna];
-                                        if (celda) {
-                                            const textoCelda = celda.textContent.toLowerCase();
-                                            if (!textoCelda.includes(filtros[columna])) {
-                                                mostrar = false;
-                                                break;
-                                            }
+                                for (const columna in filtros) {
+                                    const celda = fila.cells[parseInt(columna)];
+                                    if (celda) {
+                                        const textoCelda = celda.textContent.toLowerCase();
+                                        if (!textoCelda.includes(filtros[columna])) {
+                                            mostrar = false;
+                                            break;
                                         }
                                     }
+                                }
 
-                                    fila.style.display = mostrar ? '' : 'none';
-                                });
-                            }
+                                fila.style.display = mostrar ? '' : 'none';
+                            });
+                        }
+
 
 
                             // EDITAR REGISTRO
