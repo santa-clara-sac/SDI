@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
-{% block title %} Lista de Expedientes {% endblock %}
-
+{% block title %} Lista general de gastos {% endblock %}
 {% block body %}
 
 <style>
@@ -32,28 +30,104 @@
     }
 </style>
 
-<h3>Seguimientos del caso: {{ caso }}</h3>
+<center>
+    <h3>Seguimientos del caso: {{ caso }}</h3>
+</center>
 
-{% for seguimiento in seguimientos %}
-    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
-        <strong>Resolución:</strong> {{ seguimiento.resolucion }} <br>
-        <strong>Seguimiento:</strong> {{ seguimiento.seguimiento }} ({{ seguimiento.fecha_seguimiento }})<br>
-        <strong>Pendiente:</strong> {{ seguimiento.pendiente }} ({{ seguimiento.fecha_pendiente }})<br>
-        <strong>Responsable:</strong> {{ seguimiento.responsable }}<br>
-        <strong>Estado:</strong> {{ seguimiento.estado }}<br>
-        <strong>Fecha Registro:</strong> {{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}<br>
+<!-- Tabla Única para todos los seguimientos -->
+<div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
+    <table class="table table-striped" id="seguimientosTable">
+        <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+            <tr>
+                <th>Resolución</th>
+                <th>Seguimiento</th>
+                <th>Pendiente</th>
+                <th>Responsable</th>
+                <th>Estado</th>
+                <th>Fecha Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for seguimiento in seguimientos %}
+            <tr>
+                <td class="text-nowrap" style="background-color: #e5e9f0;">{{ seguimiento.resolucion }}</td>
+                <td class="text-nowrap" style="background-color: #e5e9f0;">{{ seguimiento.seguimiento }}</td>
+                <td style="background-color: #e5e9f0;">{{ seguimiento.pendiente }}</td>
+                <td style="background-color: #e5e9f0;">{{ seguimiento.responsable }}</td>
+                <td style="background-color: #e5e9f0;">{{ seguimiento.estado }}</td>
+                <td style="background-color: #e5e9f0;">{{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}</td>
 
-        <h5>Gastos:</h5>
-        <ul>
-            {% for gasto in seguimiento.gastos.all %}
-                <li>{{ gasto.fecha }} - {{ gasto.detalle }} - S/. {{ gasto.gastos_soles }} / $ {{ gasto.gastos_dolares }}</li>
-            {% empty %}
-                <li>Sin gastos registrados.</li>
+                {% if request.user.role != 1 and request.user.role != 2 %}
+                <td>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-sm btn-outline-primary toggle-gastos-btn" data-target="gastos-{{ forloop.counter }}">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </td>
+                {% endif %}
+            </tr>
+
+            <!-- Sección de gastos (opcional desplegable) -->
+            <tr id="gastos-{{ forloop.counter }}" class="gastos-lista" style="display: none;">
+                <td colspan="7">
+                    <div>
+                        <h5>Gastos:</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Detalle</th>
+                                    <th>Gasto Soles</th>
+                                    <th>Gasto Dólares</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for gasto in seguimiento.gastos.all %}
+                                <tr>
+                                    <td>{{ gasto.fecha }}</td>
+                                    <td>{{ gasto.detalle }}</td>
+                                    <td>{{ gasto.gastos_soles }}</td>
+                                    <td>{{ gasto.gastos_dolares }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="5">Sin gastos registrados.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
             {% endfor %}
-        </ul>
-    </div>
-{% empty %}
-    <p>No hay seguimientos registrados para este caso.</p>
-{% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.toggle-gastos-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const targetId = btn.getAttribute('data-target');
+                const gastosRow = document.getElementById(targetId);
+                const icon = btn.querySelector('i');
+
+                if (gastosRow.style.display === 'none' || gastosRow.style.display === '') {
+                    gastosRow.style.display = 'table-row';
+                    icon.classList.remove('bi-eye');
+                    icon.classList.add('bi-eye-slash');
+                } else {
+                    gastosRow.style.display = 'none';
+                    icon.classList.remove('bi-eye-slash');
+                    icon.classList.add('bi-eye');
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}

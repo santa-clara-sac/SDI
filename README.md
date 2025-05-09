@@ -39,6 +39,8 @@ DROP DATABASE SDI_dev;
 
 ### EXCEL BuscarV
 
+Win + R -> shell:startup
+
 ```
 =SI.ERROR(BUSCARV(A4,Table1[#Todo], 9, FALSO), "")
 ```
