@@ -37,7 +37,7 @@ class Seguimiento(models.Model):
     pendiente = models.TextField(blank=True)
     responsable = models.CharField(max_length=255)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='en_proceso')
-    fecha_registro = models.DateTimeField(default=timezone.now)
+    fecha_registro = models.DateTimeField(auto_now_add=True) 
 
     def __str__(self):
         return f"Seguimiento - {self.caso.expediente} - {self.fecha_seguimiento}"

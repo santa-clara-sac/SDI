@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import CasoJudicialForm
-from .models import CasoJudicial
+from .models import CasoJudicial, Seguimiento
 
 # @login_required
 # def lista_expediente(request):
@@ -48,12 +48,109 @@ def eliminar_expediente(request, doc_id):
 
 #####################################################################################################
 
+from .forms import SeguimientoForm  # Asegúrate de tener este formulario
+
+# views.py
+from .forms import SeguimientoForm, GastoForm
+from .models import CasoJudicial, Seguimiento, Gasto
+
 def ver_seguimiento(request, caso_id):
     caso = get_object_or_404(CasoJudicial, id=caso_id)
+
+    if request.method == 'POST':
+        if 'seguimiento_id' in request.POST:
+            seguimiento = get_object_or_404(Seguimiento, id=request.POST.get('seguimiento_id'))
+            gasto_form = GastoForm(request.POST, request.FILES)
+            if gasto_form.is_valid():
+                nuevo_gasto = gasto_form.save(commit=False)
+                nuevo_gasto.seguimiento = seguimiento
+                nuevo_gasto.save()
+                return redirect('control_expediente:ver_seguimiento', caso_id=caso.id)
+            else:
+                print("Errores del gasto:", gasto_form.errors)
+        else:
+            seguimiento_form = SeguimientoForm(request.POST, request.FILES)
+            if seguimiento_form.is_valid():
+                nuevo_seguimiento = seguimiento_form.save(commit=False)
+                nuevo_seguimiento.caso = caso
+                nuevo_seguimiento.save()
+                return redirect('control_expediente:ver_seguimiento', caso_id=caso.id)
+            else:
+                print("Errores del seguimiento:", seguimiento_form.errors)
+    else:
+        seguimiento_form = SeguimientoForm()
+        gasto_form = GastoForm()
+
     seguimientos = caso.seguimientos.all().prefetch_related('gastos')
 
     context = {
         'caso': caso,
         'seguimientos': seguimientos,
+        'form': seguimiento_form,
+        'form2': gasto_form,
     }
     return render(request, 'control_expediente/seguimientos_y_gastos.html', context)
+
+
+def editar_seguimiento(request):
+    if request.method == 'POST':
+        seguimiento_id = request.POST.get('id')
+        seguimiento = get_object_or_404(Seguimiento, id=seguimiento_id)
+
+        form = SeguimientoForm(request.POST, request.FILES, instance=seguimiento)
+        
+        if form.is_valid():
+            form.save()
+            return redirect('control_expediente:ver_seguimiento', caso_id=seguimiento.caso.id)
+        else:
+            print("Errores al editar seguimiento:", form.errors)
+            return redirect('control_expediente:ver_seguimiento', caso_id=seguimiento.caso.id)
+
+    return redirect('control_expediente:ver_seguimiento', caso_id=0)
+
+def eliminar_seguimiento(request, seguimiento_id):
+    seguimiento = get_object_or_404(Seguimiento, id=seguimiento_id)
+    caso_id = seguimiento.caso.id  # Guardamos antes de eliminar
+    seguimiento.delete()
+    return redirect('control_expediente:ver_seguimiento', caso_id=caso_id)
+
+
+def editar_gasto(request):
+    if request.method == 'POST':
+        gasto_id = request.POST.get('id')
+        gasto = get_object_or_404(Gasto, id=gasto_id)
+
+        gasto.fecha = request.POST.get('fecha')
+        gasto.detalle = request.POST.get('detalle')
+        gasto.gastos_soles = request.POST.get('gastos_soles') or 0
+        gasto.gastos_dolares = request.POST.get('gastos_dolares') or 0
+
+        if 'pdf' in request.FILES:
+            gasto.pdf = request.FILES['pdf']
+
+        gasto.save()
+
+        return redirect('control_expediente:ver_seguimiento', caso_id=gasto.seguimiento.caso.id)
+    
+from django.views.decorators.csrf import csrf_protect
+
+@csrf_protect
+def eliminar_gasto(request):
+    gasto_id = request.POST.get('gasto_id')
+    gasto = get_object_or_404(Gasto, id=gasto_id)
+    caso_id = gasto.seguimiento.caso.id
+    gasto.delete()
+    return redirect('control_expediente:ver_seguimiento', caso_id=caso_id)
+
+###############################################################################################
+
+@login_required
+def listar_gastos_por_seguimiento(request, seguimiento_id):
+    seguimiento = get_object_or_404(Seguimiento, id=seguimiento_id)
+    gastos = seguimiento.gastos.all()  # Usa el related_name='gastos'
+    
+    context = {
+        'seguimiento': seguimiento,
+        'gastos': gastos
+    }
+    return render(request, 'control_expediente/listar_gastos.html', context)

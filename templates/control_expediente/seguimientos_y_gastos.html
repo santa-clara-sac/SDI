@@ -31,102 +31,484 @@
 </style>
 
 <center>
-    <h3>Seguimientos del caso: {{ caso }}</h3>
+    <h3 style="padding-top: 15px;">Seguimientos del caso: {{ caso }}</h3>
+    <h5 style="padding-top: 15px;">gastos generales</h5>
 </center>
 
-<!-- Tabla Única para todos los seguimientos -->
-<div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
-    <table class="table table-striped" id="seguimientosTable">
-        <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
-            <tr>
-                <th>Resolución</th>
-                <th>Seguimiento</th>
-                <th>Pendiente</th>
-                <th>Responsable</th>
-                <th>Estado</th>
-                <th>Fecha Registro</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for seguimiento in seguimientos %}
-            <tr>
-                <td class="text-nowrap" style="background-color: #e5e9f0;">{{ seguimiento.resolucion }}</td>
-                <td class="text-nowrap" style="background-color: #e5e9f0;">{{ seguimiento.seguimiento }}</td>
-                <td style="background-color: #e5e9f0;">{{ seguimiento.pendiente }}</td>
-                <td style="background-color: #e5e9f0;">{{ seguimiento.responsable }}</td>
-                <td style="background-color: #e5e9f0;">{{ seguimiento.estado }}</td>
-                <td style="background-color: #e5e9f0;">{{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}</td>
 
-                {% if request.user.role != 1 and request.user.role != 2 %}
-                <td>
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-sm btn-outline-primary toggle-gastos-btn" data-target="gastos-{{ forloop.counter }}">
-                            <i class="bi bi-eye"></i>
+<div class="container" style="max-width: 100%;">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-11">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <!-- Botón para abrir el modal de agregar -->
+                    {% if request.user.role != 1 and request.user.role != 2 %}
+                    <center>
+                        <button type="button" class="btn text-white mt-4"
+                            style="background-color: #bf616a; border: none;" data-bs-toggle="modal"
+                            data-bs-target="#documentModal">
+                            <i class="bi bi-plus-lg"></i>Nuevo Seguimiento
                         </button>
-                    </div>
-                </td>
-                {% endif %}
-            </tr>
+                    </center>
+                    {% endif %}
 
-            <!-- Sección de gastos (opcional desplegable) -->
-            <tr id="gastos-{{ forloop.counter }}" class="gastos-lista" style="display: none;">
-                <td colspan="7">
-                    <div>
-                        <h5>Gastos:</h5>
-                        <table class="table table-bordered">
-                            <thead>
+                    <hr>
+
+                    <!-- Tabla Única para todos los seguimientos -->
+                    <div class="table-container" style="max-height: 80vh; overflow-y: auto; overflow-x: auto;">
+                        <table class="table table-striped" id="seguimientosTable">
+                            <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
-                                    <th>Fecha</th>
-                                    <th>Detalle</th>
-                                    <th>Gasto Soles</th>
-                                    <th>Gasto Dólares</th>
+                                    <th>Resolución</th>
+                                    <th>Seguimiento</th>
+                                    <th>Pendiente</th>
+                                    <th>Responsable</th>
+                                    <th>Estado</th>
+                                    <th>Fecha ultima revisión</th>
+                                    <th>Fecha Registro</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for gasto in seguimiento.gastos.all %}
-                                <tr>
-                                    <td>{{ gasto.fecha }}</td>
-                                    <td>{{ gasto.detalle }}</td>
-                                    <td>{{ gasto.gastos_soles }}</td>
-                                    <td>{{ gasto.gastos_dolares }}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+                                {% for seguimiento in seguimientos %}
+                                <tr class="toggle-gastos-btn" data-target="gastos-{{ forloop.counter }}">
+                                    <td class="text-nowrap">{{ seguimiento.resolucion }}</td>
+                                    <td class="text-nowrap">{{ seguimiento.seguimiento }}</td>
+                                    <td>{{ seguimiento.pendiente }}</td>
+                                    <td>{{ seguimiento.responsable }}</td>
+                                    <td>{{ seguimiento.estado }}</td>
+                                    <td>{{ seguimiento.fecha_seguimiento|date:"d/m/Y" }}</td>
+                                    <td>{{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}</td>
+
+                                    {% if request.user.role != 1 and request.user.role != 2 %}
+                                    <td class="acciones">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm text-white me-2 btn-editar"
+                                                style="background-color: #434c5e;" data-bs-toggle="modal"
+                                                data-bs-target="#editSeguimientoModal" data-id="{{ seguimiento.id }}"
+                                                data-resolucion="{{ seguimiento.resolucion }}"
+                                                data-seguimiento="{{ seguimiento.seguimiento }}"
+                                                data-pendiente="{{ seguimiento.pendiente }}"
+                                                data-responsable="{{ seguimiento.responsable }}"
+                                                data-estado="{{ seguimiento.estado }}"
+                                                data-fecha_seguimiento="{{ seguimiento.fecha_seguimiento|date:'Y-m-d' }}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+
+                                            <a href="{% url 'control_expediente:eliminar_seguimiento' seguimiento.id %}"
+                                                class="btn btn-sm text-white btnEliminar"
+                                                style="background-color: #bf616a;" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+
+                                        </div>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+
+                                <!-- Sección de gastos (opcional desplegable) -->
+                                <tr id="gastos-{{ forloop.counter }}" class="gastos-lista" style="display: none;">
+                                    <td colspan="9">
+                                        <div>
+                                            <h5>Gastos:</h5>
+                                            <!-- Botón para abrir el modal de agregar -->
+                                            {% if request.user.role != 1 and request.user.role != 2 %}
+                                            <button type="button" class="abrir-modal-gasto"
+                                                style="border: none; color: #3b4252 !important;" data-bs-toggle="modal"
+                                                data-bs-target="#documentModalGasto"
+                                                data-seguimiento-id="{{ seguimiento.id }}">
+                                                Agregar Nuevo gasto
+                                            </button>
+
+                                            {% endif %}
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Fecha</th>
+                                                        <th>Detalle</th>
+                                                        <th>Gasto Soles</th>
+                                                        <th>Gasto Dólares</th>
+                                                        <th>Pdf</th>
+                                                        <th>Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for gasto in seguimiento.gastos.all %}
+                                                    <tr>
+                                                        <td>{{ gasto.fecha|date:"d-m-Y" }}</td>
+                                                        <td>{{ gasto.detalle }}</td>
+                                                        <td>{{ gasto.gastos_soles }}</td>
+                                                        <td>{{ gasto.gastos_dolares }}</td>
+                                                        <td>
+                                                            {% if gasto.pdf %}
+                                                            <button type="button"
+                                                                style="background: none; border: none; color: #bf616a; text-decoration: none; cursor: pointer;"
+                                                                data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
+                                                                data-pdf-url="{{ gasto.pdf.url }}" class="ver-pdf-btn">
+                                                                Ver PDF
+                                                            </button>
+                                                            {% else %}
+                                                            No disponible
+                                                            {% endif %}
+                                                        </td>
+                                                        {% if request.user.role != 1 and request.user.role != 2 %}
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button"
+                                                                    class="btn btn-sm me-2 btn-editar-gasto"
+                                                                    style="color: #434c5e;" data-bs-toggle="modal"
+                                                                    data-bs-target="#editGastoModal"
+                                                                    data-id_gasto="{{ gasto.id }}"
+                                                                    data-detalle="{{ gasto.detalle }}"
+                                                                    data-gastos_soles="{{ gasto.gastos_soles }}"
+                                                                    data-gastos_dolares="{{ gasto.gastos_dolares }}"
+                                                                    data-pdf="{{ gasto.pdf }}"
+                                                                    data-fecha="{{ gasto.fecha|date:'Y-m-d' }}">
+                                                                    <i class="bi bi-pencil-square"
+                                                                        style="font-size: 1.25rem;"></i>
+                                                                </button>
+
+                                                                <form method="POST"
+                                                                    action="{% url 'control_expediente:eliminar_gasto' %}"
+                                                                    style="display: inline;">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" name="gasto_id"
+                                                                        value="{{ gasto.id }}">
+                                                                    <button type="submit" class="btn btn-sm"
+                                                                        style="color: #bf616a;" title="Eliminar">
+                                                                        <i class="bi bi-trash"
+                                                                            style="font-size: 1.25rem;"></i>
+                                                                    </button>
+                                                                </form>
+
+                                                            </div>
+                                                        </td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="5">Sin gastos registrados.</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </td>
                                 </tr>
-                                {% empty %}
-                                <tr><td colspan="5">Sin gastos registrados.</td></tr>
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar gasto -->
+<div class="modal fade" id="editGastoModal" tabindex="-1" aria-labelledby="editGastoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #bf616a;">
+                <h5 class="modal-title" id="editGastoModalLabel">Editar Gasto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'control_expediente:editar_gasto' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit_id_gasto" name="id">
+                    <div class="container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha</label>
+                                <input type="date" class="form-control" id="edit_id_fecha" name="fecha">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Detalle</label>
+                                <input type="text" class="form-control" id="edit_id_detalle" name="detalle">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Gasto Soles</label>
+                                <input type="number" class="form-control" id="edit_gastos_soles" name="gastos_soles">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_gastos_dolares" class="form-label">Gasto dólares</label>
+                                <input type="number" class="form-control" id="edit_gastos_dolares"
+                                    name="gastos_dolares">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_pdf" class="form-label">Archivo PDF</label>
+                                <input type="file" class="form-control" id="edit_id_pdf" name="pdf">
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn px-5 py-2 btnGuardar2"
+                                style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ver PDF -->
+<div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content" style="background-color: #3b4252">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color: #eceff4;">Visualizar documento PDF</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
+                    style="background-color: #bf616a;"></button>
+            </div>
+            <div class="modal-body" style="height: 80vh;">
+                <iframe id="pdfIframe" src="" width="100%" height="100%" style="border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para agregar nueva gasto -->
+<div class="modal fade" id="documentModalGasto" tabindex="-1" aria-labelledby="documentModalgastoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #3b4252;">
+                <h5 class="modal-title" id="documentModalGastoLabel">Agregar Nuevo Gasto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'control_expediente:ver_seguimiento' caso.id %}"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="seguimiento_id" id="input-seguimiento-id" value="">
+
+                    <div class="container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha</label>
+                                {{ form2.fecha }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Detalle</label>
+                                {{ form2.detalle }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Sustento</label>
+                                {{ form2.sustento }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Gasto Soles</label>
+                                {{ form2.gastos_soles }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Gasto Dólares</label>
+                                {{ form2.gastos_dolares }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Archivo PDF</label>
+                                {{ form2.pdf }}
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn px-5 py-2 btnGuardar"
+                                style="background-color: #3b4252; color: #edeff4;">
+                                Guardar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para agregar nueva seguimiento -->
+<div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #3b4252;">
+                <h5 class="modal-title" id="documentModalLabel">Agregar Nueva Seguimiento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'control_expediente:ver_seguimiento' caso.id %}">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="id_codigo" class="form-label">Resolucion</label>
+                                {{ form.resolucion }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_partida" class="form-label">Seguimiento</label>
+                                {{ form.seguimiento }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_fecha" class="form-label">Pendiente</label>
+                                {{ form.pendiente }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_descripcion" class="form-label">Responsable</label>
+                                {{ form.responsable }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha de última revisión</label>
+                                {{ form.fecha_seguimiento }}
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id_pg" class="form-label">Estado</label>
+                                {{ form.estado }}
+                            </div>
+
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn px-5 py-2 btnGuardar"
+                                style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para editar seguimiento -->
+<div class="modal fade" id="editSeguimientoModal" tabindex="-1" aria-labelledby="editSeguimientoModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #bf616a;">
+                <h5 class="modal-title" id="editSeguimientoModalLabel">Editar Seguimiento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'control_expediente:editar_seguimiento' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit_id" name="id">
+                    <div class="container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="edit_id_codigo" class="form-label">Resolución</label>
+                                <input type="text" class="form-control" id="edit_id_resolucion" name="resolucion">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Seguimiento</label>
+                                <input type="text" class="form-control" id="edit_id_seguimiento" name="seguimiento">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha última revisión</label>
+                                <input type="date" class="form-control" id="edit_id_fecha_seguimiento"
+                                    name="fecha_seguimiento">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_pendiente" class="form-label">Pendiente</label>
+                                <input type="text" class="form-control" id="edit_id_pendiente" name="pendiente">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_responsable" class="form-label">Responsable</label>
+                                <input type="text" class="form-control" id="edit_id_responsable" name="responsable">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_estado" class="form-label">Estado</label>
+                                <select class="form-control" id="edit_id_estado" name="estado">
+                                    <option value="En proceso">En Proceso</option>
+                                    <option value="Finalizado">Finalizado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn px-5 py-2 btnGuardar2"
+                                style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.toggle-gastos-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const targetId = btn.getAttribute('data-target');
+
+        //Agrega JavaScript para pasar el ID dinámicamente
+        const modal = document.getElementById('documentModalGasto');
+        const inputSeguimientoId = document.getElementById('input-seguimiento-id');
+
+        document.querySelectorAll('.abrir-modal-gasto').forEach(button => {
+            button.addEventListener('click', function () {
+                const seguimientoId = this.getAttribute('data-seguimiento-id');
+                console.log(seguimientoId);
+
+                inputSeguimientoId.value = seguimientoId;
+            });
+        });
+
+        //PDF MODAL
+        const pdfModal = document.getElementById('pdfViewerModal');
+        const iframe = document.getElementById('pdfIframe');
+
+        pdfModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const pdfUrl = button.getAttribute('data-pdf-url');
+            iframe.src = pdfUrl;
+        });
+
+        pdfModal.addEventListener('hidden.bs.modal', function () {
+            iframe.src = '';
+        });
+
+        // EDITAR REGISTRO
+        const editButtons = document.querySelectorAll('.btn-editar, .btn-editar-gasto');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                document.getElementById('edit_id').value = button.getAttribute('data-id');
+                document.getElementById('edit_id_resolucion').value = button.getAttribute('data-resolucion');
+                document.getElementById('edit_id_seguimiento').value = button.getAttribute('data-seguimiento');
+                document.getElementById('edit_id_pendiente').value = button.getAttribute('data-pendiente');
+                document.getElementById('edit_id_responsable').value = button.getAttribute('data-responsable');
+                document.getElementById('edit_id_estado').value = button.getAttribute('data-estado');
+                document.getElementById('edit_id_fecha_seguimiento').value = button.getAttribute('data-fecha_seguimiento');
+
+                // Gasto
+                document.getElementById('edit_id_gasto').value = button.getAttribute('data-id_gasto');
+                document.getElementById('edit_id_fecha').value = button.getAttribute('data-fecha');
+                document.getElementById('edit_id_detalle').value = button.getAttribute('data-detalle');
+                document.getElementById('edit_gastos_soles').value = button.getAttribute('data-gastos_soles');
+                document.getElementById('edit_gastos_dolares').value = button.getAttribute('data-gastos_dolares');
+                document.getElementById('edit_id_pdf').value = button.getAttribute('data-pdf');
+            });
+        });
+
+
+
+        document.querySelectorAll('.toggle-gastos-btn').forEach(row => {
+            row.addEventListener('click', function (e) {
+                // Verifica si el clic fue dentro de la celda de acciones
+                if (e.target.closest('td.acciones')) {
+                    return; // Ignora el clic
+                }
+
+                const targetId = row.getAttribute('data-target');
                 const gastosRow = document.getElementById(targetId);
-                const icon = btn.querySelector('i');
 
                 if (gastosRow.style.display === 'none' || gastosRow.style.display === '') {
                     gastosRow.style.display = 'table-row';
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
                 } else {
                     gastosRow.style.display = 'none';
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
                 }
             });
         });
+
     });
 </script>
 
