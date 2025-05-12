@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CasoJudicial, Seguimiento, Gasto
+from .models import CasoJudicial, Seguimiento, Gasto, Presentacion, GastoPresentacion
 
 
 class GastoInline(admin.TabularInline):
@@ -33,3 +33,16 @@ class GastoAdmin(admin.ModelAdmin):
     list_display = ('seguimiento', 'fecha', 'detalle', 'gastos_soles', 'gastos_dolares')
     list_filter = ('fecha',)
     search_fields = ('detalle', 'sustento')
+
+
+@admin.register(Presentacion)
+class PresentacionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'caso', 'fecha', 'presentado', 'escrito')
+    list_filter = ('fecha', 'presentado')
+    search_fields = ('caso__expediente', 'presentado', 'escrito')
+
+@admin.register(GastoPresentacion)
+class GastoPresentacionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'presentacion', 'fecha', 'detalle')  # Correcto: usamos 'presentacion'
+    list_filter = ('fecha',)
+    search_fields = ('detalle', 'presentacion__caso__expediente')  # Corregido aquí también

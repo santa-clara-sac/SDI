@@ -1,5 +1,5 @@
 from django import forms
-from .models import CasoJudicial, Seguimiento, Gasto
+from .models import CasoJudicial, Seguimiento, Gasto, Presentacion, GastoPresentacion
 from django.utils.timezone import now
 
 
@@ -41,6 +41,37 @@ class GastoForm(forms.ModelForm):
             'fecha': forms.DateInput(attrs={'type': 'date'}),
         }
 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+########################################################################################################
+
+class PresentacionForm(forms.ModelForm):
+    class Meta:
+        model = Presentacion
+        exclude = ['caso']  # Excluye campos automáticos
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Agregar clases CSS
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class GastoPresentacionForm(forms.ModelForm):
+    class Meta:
+        model = GastoPresentacion
+        exclude = ['fecha_registro', 'seguimiento']  # seguimiento lo asignaremos en la vista
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -48,18 +48,69 @@ def eliminar_expediente(request, doc_id):
 
 #####################################################################################################
 
-from .forms import SeguimientoForm  # Asegúrate de tener este formulario
+from .forms import SeguimientoForm, GastoForm, GastoPresentacionForm, PresentacionForm
+from .models import CasoJudicial, Seguimiento, Gasto, Presentacion
 
-# views.py
-from .forms import SeguimientoForm, GastoForm
-from .models import CasoJudicial, Seguimiento, Gasto
+# def ver_seguimiento(request, caso_id):
+#     caso = get_object_or_404(CasoJudicial, id=caso_id)
+
+#     if request.method == 'POST':
+#         if 'seguimiento_id' in request.POST:
+#             seguimiento = get_object_or_404(Seguimiento, id=request.POST.get('seguimiento_id'))
+#             gasto_form = GastoForm(request.POST, request.FILES)
+#             if gasto_form.is_valid():
+#                 nuevo_gasto = gasto_form.save(commit=False)
+#                 nuevo_gasto.seguimiento = seguimiento
+#                 nuevo_gasto.save()
+#                 return redirect('control_expediente:ver_seguimiento', caso_id=caso.id)
+#             else:
+#                 print("Errores del gasto:", gasto_form.errors)
+#         else:
+#             seguimiento_form = SeguimientoForm(request.POST, request.FILES)
+#             if seguimiento_form.is_valid():
+#                 nuevo_seguimiento = seguimiento_form.save(commit=False)
+#                 nuevo_seguimiento.caso = caso
+#                 nuevo_seguimiento.save()
+#                 return redirect('control_expediente:ver_seguimiento', caso_id=caso.id)
+#             else:
+#                 print("Errores del seguimiento:", seguimiento_form.errors)
+#     else:
+#         seguimiento_form = SeguimientoForm()
+#         gasto_form = GastoForm()
+
+#     seguimientos = caso.seguimientos.all().prefetch_related('gastos')
+
+#     context = {
+#         'caso': caso,
+#         'seguimientos': seguimientos,
+#         'form': seguimiento_form,
+#         'form2': gasto_form,
+#     }
+#     return render(request, 'control_expediente/seguimientos_y_gastos.html', context)
+
+from django.db.models import Prefetch
+
+# Prefetch para cargar gastos_presentaciones con sus presentaciones
+presentaciones_prefetch = Prefetch(
+    'presentaciones__gastos_presentaciones'
+)
 
 def ver_seguimiento(request, caso_id):
     caso = get_object_or_404(CasoJudicial, id=caso_id)
 
+    # Inicialización por defecto para evitar UnboundLocalError
+    seguimiento_form = SeguimientoForm()
+    gasto_form = GastoForm()
+    presentacion_form = PresentacionForm()
+    gasto_presentacion_form = GastoPresentacionForm()
+
     if request.method == 'POST':
-        if 'seguimiento_id' in request.POST:
-            seguimiento = get_object_or_404(Seguimiento, id=request.POST.get('seguimiento_id'))
+        tipo_formulario = request.POST.get('tipo_formulario')
+        seguimiento_id = request.POST.get('seguimiento_id')
+
+        # Para el formulario 'gasto'
+        if tipo_formulario == 'gasto' and seguimiento_id:
+            seguimiento = get_object_or_404(Seguimiento, id=seguimiento_id)
             gasto_form = GastoForm(request.POST, request.FILES)
             if gasto_form.is_valid():
                 nuevo_gasto = gasto_form.save(commit=False)
@@ -68,6 +119,31 @@ def ver_seguimiento(request, caso_id):
                 return redirect('control_expediente:ver_seguimiento', caso_id=caso.id)
             else:
                 print("Errores del gasto:", gasto_form.errors)
+
+        # Para el formulario 'gasto_presentacion'
+        elif tipo_formulario == 'gasto_presentacion' and seguimiento_id:
+            seguimiento = get_object_or_404(Seguimiento, id=seguimiento_id)
+            gasto_presentacion_form = GastoPresentacionForm(request.POST, request.FILES)
+            if gasto_presentacion_form.is_valid():
+                nuevo_gp = gasto_presentacion_form.save(commit=False)
+                nuevo_gp.seguimiento = seguimiento
+                nuevo_gp.save()
+                return redirect('control_expediente:ver_seguimiento', caso_id=caso.id)
+            else:
+                print("Errores del gasto de presentación:", gasto_presentacion_form.errors)
+
+        # Para el formulario de 'presentacion'
+        elif tipo_formulario == 'presentacion':
+            presentacion_form = PresentacionForm(request.POST)
+            if presentacion_form.is_valid():
+                nueva_presentacion = presentacion_form.save(commit=False)
+                nueva_presentacion.caso = caso  # Asignar el 'caso' a la presentación
+                nueva_presentacion.save()
+                return redirect('control_expediente:ver_seguimiento', caso_id=caso.id)
+            else:
+                print("Errores de la presentación:", presentacion_form.errors)
+
+        # Si no es ninguno de los anteriores, se guarda un nuevo 'seguimiento'
         else:
             seguimiento_form = SeguimientoForm(request.POST, request.FILES)
             if seguimiento_form.is_valid():
@@ -77,19 +153,26 @@ def ver_seguimiento(request, caso_id):
                 return redirect('control_expediente:ver_seguimiento', caso_id=caso.id)
             else:
                 print("Errores del seguimiento:", seguimiento_form.errors)
-    else:
-        seguimiento_form = SeguimientoForm()
-        gasto_form = GastoForm()
 
-    seguimientos = caso.seguimientos.all().prefetch_related('gastos')
+    # Consultas para mostrar los datos en la plantilla
+    
+    seguimientos = caso.seguimientos.all().prefetch_related('gastos')  # solo 'gastos' directos
+    presentaciones = caso.presentaciones.prefetch_related(presentaciones_prefetch)
 
     context = {
         'caso': caso,
         'seguimientos': seguimientos,
+        'presentaciones': presentaciones,
         'form': seguimiento_form,
         'form2': gasto_form,
+        'form3': presentacion_form,
+        'form4': gasto_presentacion_form,
     }
+
     return render(request, 'control_expediente/seguimientos_y_gastos.html', context)
+
+
+
 
 
 def editar_seguimiento(request):
@@ -144,13 +227,38 @@ def eliminar_gasto(request):
 
 ###############################################################################################
 
-@login_required
-def listar_gastos_por_seguimiento(request, seguimiento_id):
-    seguimiento = get_object_or_404(Seguimiento, id=seguimiento_id)
-    gastos = seguimiento.gastos.all()  # Usa el related_name='gastos'
+# @login_required
+# def listar_gastos_por_seguimiento(request, seguimiento_id):
+#     seguimiento = get_object_or_404(Seguimiento, id=seguimiento_id)
+#     gastos = seguimiento.gastos.all()  # Usa el related_name='gastos'
     
-    context = {
-        'seguimiento': seguimiento,
-        'gastos': gastos
-    }
-    return render(request, 'control_expediente/listar_gastos.html', context)
+#     context = {
+#         'seguimiento': seguimiento,
+#         'gastos': gastos
+#     }
+#     return render(request, 'control_expediente/listar_gastos.html', context)
+
+
+
+def editar_presentacion(request):
+    if request.method == 'POST':
+        seguimiento_id = request.POST.get('id')
+        seguimiento = get_object_or_404(Presentacion, id=seguimiento_id)
+
+        form = PresentacionForm(request.POST, request.FILES, instance=seguimiento)
+        
+        if form.is_valid():
+            form.save()
+            return redirect('control_expediente:ver_seguimiento', caso_id=seguimiento.caso.id)
+        else:
+            print("Errores al editar seguimiento:", form.errors)
+            return redirect('control_expediente:ver_seguimiento', caso_id=seguimiento.caso.id)
+
+    return redirect('control_expediente:ver_seguimiento', caso_id=0)
+
+
+def eliminar_presentacion(request, presentacion_id):
+    presentacion = get_object_or_404(Presentacion, id=presentacion_id)
+    caso_id = presentacion.caso.id  # Guardamos antes de eliminar
+    presentacion.delete()
+    return redirect('control_expediente:ver_seguimiento', caso_id=caso_id)

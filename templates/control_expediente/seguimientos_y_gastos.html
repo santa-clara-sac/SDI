@@ -32,7 +32,7 @@
 
 <center>
     <h3 style="padding-top: 15px;">Seguimientos del caso: {{ caso }}</h3>
-    <h5 style="padding-top: 15px;">gastos generales</h5>
+    <!-- <h5 style="padding-top: 15px;">gastos generales</h5> -->
 </center>
 
 
@@ -50,11 +50,17 @@
                             data-bs-target="#documentModal">
                             <i class="bi bi-plus-lg"></i>Nuevo Seguimiento
                         </button>
+
+                        <button type="button" class="btn text-white mt-4"
+                            style="background-color: #bf616a; border: none;" data-bs-toggle="modal"
+                            data-bs-target="#documentModalPresentacion">
+                            <i class="bi bi-plus-lg"></i>Nueva Presentación
+                        </button>
                     </center>
                     {% endif %}
 
                     <hr>
-
+                    <h4>Seguimiento</h4>
                     <!-- Tabla Única para todos los seguimientos -->
                     <div class="table-container" style="max-height: 80vh; overflow-y: auto; overflow-x: auto;">
                         <table class="table table-striped" id="seguimientosTable">
@@ -200,6 +206,127 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Tabla de Presentaciones -->
+                     <h4>Presentación</h4>
+<div class="table-container" style="max-height: 80vh; overflow-y: auto; overflow-x: auto;">
+    <table class="table table-striped" id="seguimientosTable">
+        <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+            <tr>
+                <th>Fecha</th>
+                <th>Presentado</th>
+                <th>Escrito</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for presentacion in caso.presentaciones.all %}
+            <tr class="toggle-gastos-btn" data-target="gastos-presentacion-{{ forloop.counter }}">
+                <td class="text-nowrap">{{ presentacion.fecha|date:"d-m-Y" }}</td>
+                <td>{{ presentacion.presentado }}</td>
+                <td>{{ presentacion.escrito }}</td>
+                <td class="acciones">
+                    {% if request.user.role != 1 and request.user.role != 2 %}
+                    <button type="button" class="btn btn-sm text-white me-2 btn-editar-presentacion"
+                        style="background-color: #434c5e;" data-bs-toggle="modal"
+                        data-bs-target="#editPresentacionModal"
+                        data-idp="{{ presentacion.id }}"
+                        data-fecha="{{ presentacion.fecha|date:'Y-m-d' }}"
+                        data-presentado="{{ presentacion.presentado }}"
+                        data-escrito="{{ presentacion.escrito }}">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+
+                    <a href="{% url 'control_expediente:eliminar_presentacion' presentacion.id %}"
+                        class="btn btn-sm text-white btnEliminar" style="background-color: #bf616a;" title="Eliminar">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+
+            <!-- Sección de gastos de presentación -->
+            <tr id="gastos-presentacion-{{ forloop.counter }}" class="gastos-lista" style="display: none;">
+                <td colspan="12">
+                    <div>
+                        {% if request.user.role != 1 and request.user.role != 2 %}
+                        <button type="button" class="abrir-modal-gasto-presentacion"
+                            style="border: none; color: #3b4252 !important;" data-bs-toggle="modal"
+                            data-bs-target="#documentModalGastoPresentacion"
+                            data-presentacion-id="{{ presentacion.id }}">
+                            Agregar nuevo gasto
+                        </button>
+                        {% endif %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Detalle</th>
+                                    <th>Gasto Soles</th>
+                                    <th>Gasto Dólares</th>
+                                    <th>PDF</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for gastop in presentacion.gastos_presentaciones.all %}
+                                <tr>
+                                    <td>{{ gastop.fecha|date:"d-m-Y" }}</td>
+                                    <td>{{ gastop.detalle }}</td>
+                                    <td>{{ gastop.gastos_soles }}</td>
+                                    <td>{{ gastop.gastos_dolares }}</td>
+                                    <td>
+                                        {% if gasto.pdf %}
+                                        <button type="button"
+                                            style="background: none; border: none; color: #bf616a; cursor: pointer;"
+                                            data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
+                                            data-pdf-url="{{ gasto.pdf.url }}">
+                                            Ver PDF
+                                        </button>
+                                        {% else %}
+                                        No disponible
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if request.user.role != 1 and request.user.role != 2 %}
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm text-primary" data-bs-toggle="modal"
+                                                data-bs-target="#editGastoPresentacionModal"
+                                                data-id_gasto="{{ gastop.id }}"
+                                                data-detalle="{{ gastop.detalle }}"
+                                                data-gastos_soles="{{ gastop.gastos_soles }}"
+                                                data-gastos_dolares="{{ gastop.gastos_dolares }}"
+                                                data-fecha="{{ gastop.fecha|date:'Y-m-d' }}">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+
+                                            <form method="POST" action=#">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="gasto_id" value="{{ gastop.id }}">
+                                                <button class="btn btn-sm text-danger" type="submit" title="Eliminar">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6">No hay gastos registrados.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
                 </div>
             </div>
         </div>
@@ -270,6 +397,51 @@
     </div>
 </div>
 
+
+<!-- Modal para agregar nueva  Presentacion -->
+<div class="modal fade" id="documentModalPresentacion" tabindex="-1" aria-labelledby="documentModalGastoPresentacionLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #3b4252;">
+                <h5 class="modal-title" id="documentModalGastoPresentacionLabel">Agregar Nueva Presentacion</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'control_expediente:ver_seguimiento' caso.id %}"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo_formulario" value="presentacion">
+                    <div class="container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha</label>
+                                {{ form3.fecha }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Presentado</label>
+                                {{ form3.presentado }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Escrito</label>
+                                {{ form3.escrito }}
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn px-5 py-2 btnGuardar"
+                                style="background-color: #3b4252; color: #edeff4;">
+                                Guardar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal para agregar nueva gasto -->
 <div class="modal fade" id="documentModalGasto" tabindex="-1" aria-labelledby="documentModalgastoLabel"
     aria-hidden="true">
@@ -326,6 +498,68 @@
         </div>
     </div>
 </div>
+
+
+
+
+<!-- Modal para agregar nueva gasto en Presentacion-->
+<div class="modal fade" id="documentModalGastoPresentacion" tabindex="-1" aria-labelledby="documentModalgastoPresentacionLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #3b4252;">
+                <h5 class="modal-title" id="documentModalGastoPresentacionLabel">Agregar Nuevo Gasto</h5>
+                <button  type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'control_expediente:ver_seguimiento' caso.id %}"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo_formulario" value="gasto_presentacion">
+                    <input type="hidden" name="seguimiento_id" id="input-seguimiento-id" value="">
+
+                    <div class="container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha</label>
+                                {{ form4.fecha }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Detalle</label>
+                                {{ form4.detalle }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Sustento</label>
+                                {{ form4.sustento }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Gasto Soles</label>
+                                {{ form4.gastos_soles }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Gasto Dólares</label>
+                                {{ form4.gastos_dolares }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Archivo PDF</label>
+                                {{ form4.pdf }}
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn px-5 py-2 btnGuardar"
+                                style="background-color: #3b4252; color: #edeff4;">
+                                Guardar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <!-- Modal para agregar nueva seguimiento -->
@@ -437,7 +671,51 @@
     </div>
 </div>
 
+
+<!-- Modal para editar presentación -->
+<div class="modal fade" id="editPresentacionModal" tabindex="-1" aria-labelledby="editPresentacionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #bf616a;">
+                <h5 class="modal-title" id="editPresentacionModalLabel">Editar Presentación</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'control_expediente:editar_presentacion' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit_id_presentacion" name="id">
+                    <div class="container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha</label>
+                                <input type="date" class="form-control" id="edit_fecha"
+                                    name="fecha">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Presentado</label>
+                                <input type="text" class="form-control" id="edit_presentado" name="presentado">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Escrito</label>
+                                <input type="text" class="form-control" id="edit_escrito" name="escrito">
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn px-5 py-2 btnGuardar2"
+                                style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
+
     document.addEventListener('DOMContentLoaded', function () {
 
         //Agrega JavaScript para pasar el ID dinámicamente
@@ -468,7 +746,7 @@
         });
 
         // EDITAR REGISTRO
-        const editButtons = document.querySelectorAll('.btn-editar, .btn-editar-gasto');
+        const editButtons = document.querySelectorAll('.btn-editar, .btn-editar-gasto, .btn-editar-presentacion');
         editButtons.forEach(button => {
             button.addEventListener('click', function () {
                 document.getElementById('edit_id').value = button.getAttribute('data-id');
@@ -486,6 +764,17 @@
                 document.getElementById('edit_gastos_soles').value = button.getAttribute('data-gastos_soles');
                 document.getElementById('edit_gastos_dolares').value = button.getAttribute('data-gastos_dolares');
                 document.getElementById('edit_id_pdf').value = button.getAttribute('data-pdf');
+
+                // Presentacion
+                document.getElementById('edit_fecha').value = button.getAttribute('data-fecha');
+                document.getElementById('edit_presentado').value = button.getAttribute('data-presentado');
+                document.getElementById('edit_escrito').value = button.getAttribute('data-escrito');
+                document.getElementById('edit_id_presentacion').value = button.getAttribute('data-idp');
+
+                console.log('Id:', document.getElementById('edit_id_presentacion').value);
+                console.log('Fecha:', document.getElementById('edit_fecha').value);
+                console.log('Presentado:', document.getElementById('edit_presentado').value);
+                console.log('Escrito:', document.getElementById('edit_escrito').value);
             });
         });
 

@@ -57,30 +57,30 @@
 
                         <div class="col d-none">
                             <label class="form-label">Sede</label>
-                            <input type="text" class="form-control filter-input" data-column="4">
+                            <input type="text" class="form-control filter-input" data-column="7">
                         </div>
 
                         <!-- Descripción -->
                         <div class="col">
                             <label class="form-label">Especialidad</label>
-                            <input type="text" class="form-control filter-input" data-column="5">
+                            <input type="text" class="form-control filter-input" data-column="8">
                         </div>
 
                         <!-- Ubicación -->
                         <div class="col">
                             <label class="form-label">Materia</label>
-                            <input type="text" class="form-control filter-input" data-column="6">
+                            <input type="text" class="form-control filter-input" data-column="3">
                         </div>
 
                         <!--Centro de Costo -->
                         <div class="col">
                             <label class="form-label">Demandante</label>
-                            <input type="text" class="form-control filter-input" data-column="8">
+                            <input type="text" class="form-control filter-input" data-column="5">
                         </div>
 
                         <div class="col">
                             <label class="form-label">Demandado</label>
-                            <input type="text" class="form-control filter-input" data-column="9">
+                            <input type="text" class="form-control filter-input" data-column="6">
                         </div>
 
                         <!-- Botón Limpiar Filtros -->
@@ -183,13 +183,13 @@
                                     <th></th>
                                     <th>N°</th>
                                     <th>Expediente</th>
-                                    <th class="text-nowrap" >Año Inicio</th>
-                                    <th>Sede</th>
-                                    <th>Especialidad</th>
                                     <th>Materia</th>
                                     <th>Juzgado</th>
                                     <th>Demandante</th>
                                     <th>Demandado</th>
+                                    <th>Sede</th>
+                                    <th>Especialidad</th>
+                                    <th class="text-nowrap" >Año Inicio</th>
                                     <th class="d-none">Representa a</th>
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>
@@ -210,21 +210,19 @@
                                     </td>
                                     <td>{{ cj.codigo }}</td>
                                     <td class="text-nowrap">{{ cj.expediente }}</td>
-                                    <td>{{ cj.anio_inicio|default:"" }}</td>
-                                    <td>{{ cj.sede }}</td>
-                                    <td>{{ cj.especialidad }}</td>
                                     <td>{{ cj.materia }}</td>
                                     <td>{{ cj.juzgado }}</td>
-                            
                                     <!-- Demandante resaltado si representante es 'demandante' -->
                                     <td style="{% if cj.representante == 'demandante' %}background-color: #dbbec1;{% endif %}">
                                         {{ cj.demandante }}
                                     </td>
-
                                     <!-- Demandado resaltado si representante es 'demandado' -->
                                     <td style="{% if cj.representante == 'demandado' %}background-color: #dbbec1;{% endif %}">
                                         {{ cj.demandado }}
                                     </td>
+                                    <td>{{ cj.sede }}</td>
+                                    <td>{{ cj.especialidad }}</td>
+                                    <td>{{ cj.anio_inicio|default:"" }}</td>
                                                         
                                     <!-- Representante -->
                                     <td class="d-none">

@@ -56,3 +56,29 @@ class Gasto(models.Model):
 
     def __str__(self):
         return f"Gasto - {self.seguimiento.caso.expediente} - {self.fecha}"
+
+################################################################################################################
+
+class Presentacion(models.Model):
+    caso = models.ForeignKey(CasoJudicial, on_delete=models.CASCADE, related_name='presentaciones')
+    fecha = models.DateField()
+    presentado = models.TextField()
+    escrito = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Seguimiento - {self.caso.expediente} - {self.fecha}"
+
+
+
+class GastoPresentacion(models.Model):
+    presentacion = models.ForeignKey(Presentacion, on_delete=models.CASCADE, related_name='gastos_presentaciones')
+    fecha = models.DateField()
+    detalle = models.TextField()
+    sustento = models.TextField(blank=True)
+    pdf = models.FileField(upload_to='gastos_expediente/', blank=True, null=True)
+    gastos_soles = models.DecimalField(max_digits=10, decimal_places=2)
+    gastos_dolares = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_registro = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Gasto - {self.presentacion.caso.expediente} - {self.fecha}"  # Corregido aquí

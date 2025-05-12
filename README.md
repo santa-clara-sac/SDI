@@ -81,3 +81,6 @@ Juzgado: Nombre y dirección del juzgado que tramita el expediente.
 Demandante: Persona o entidad que inician la demanda judicial.
 Demandado: Persona o entidad contra quienes se interpone la demanda.
 AñoInicio: Año en que se inició el proceso judicial.
+
+
+1ra hoja -> todos los movimientos
