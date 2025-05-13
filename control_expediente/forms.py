@@ -31,6 +31,8 @@ class SeguimientoForm(forms.ModelForm):
         # Agregar clases CSS
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+        self.fields['responsable'].required = False
+        self.fields['seguimiento'].required = False
 
 
 class GastoForm(forms.ModelForm):
@@ -46,6 +48,9 @@ class GastoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+        # Marcar explícitamente como no requerido
+        self.fields['sustento'].required = False
+        self.fields['gastos_dolares'].required = False
 
 ########################################################################################################
 

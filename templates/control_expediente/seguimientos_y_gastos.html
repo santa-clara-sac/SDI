@@ -54,7 +54,7 @@
                         <button type="button" class="btn text-white mt-4"
                             style="background-color: #bf616a; border: none;" data-bs-toggle="modal"
                             data-bs-target="#documentModalPresentacion">
-                            <i class="bi bi-plus-lg"></i>Nueva Presentación
+                            <i class="bi bi-plus-lg"></i>Nuevo Presente
                         </button>
                     </center>
                     {% endif %}
@@ -207,14 +207,14 @@
                     </div>
 
                     <!-- Tabla de Presentaciones -->
-                    <h4>Presentación</h4>
+                    <h4>Atención Presente</h4>
                     <div class="table-container" style="max-height: 80vh; overflow-y: auto; overflow-x: auto;">
                         <table class="table table-striped" id="seguimientosTable">
                             <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
                                     <th>Fecha</th>
                                     <th>Presentado</th>
-                                    <th>Escrito</th>
+                                    <th>Especialista</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -244,7 +244,7 @@
                                     </td>
                                 </tr>
 
-                                <!-- Sección de gastos de presentación -->
+                                <!-- Sección de gastos de presente -->
                                 <tr id="gastos-presentacion-{{ forloop.counter }}" class="gastos-lista"
                                     style="display: none;">
                                     <td colspan="12">
@@ -478,7 +478,7 @@
                                 {{ form3.presentado }}
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Escrito</label>
+                                <label class="form-label">Especialista</label>
                                 {{ form3.escrito }}
                             </div>
                         </div>
@@ -727,13 +727,13 @@
 </div>
 
 
-<!-- Modal para editar presentación -->
+<!-- Modal para editar presente -->
 <div class="modal fade" id="editPresentacionModal" tabindex="-1" aria-labelledby="editPresentacionModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header text-white" style="background-color: #bf616a;">
-                <h5 class="modal-title" id="editPresentacionModalLabel">Editar Presentación</h5>
+                <h5 class="modal-title" id="editPresentacionModalLabel">Editar Presente</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -752,7 +752,7 @@
                                 <input type="text" class="form-control" id="edit_presentado" name="presentado">
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Escrito</label>
+                                <label class="form-label">Especialista</label>
                                 <input type="text" class="form-control" id="edit_escrito" name="escrito">
                             </div>
                         </div>
