@@ -384,6 +384,57 @@
     </div>
 </div>
 
+
+
+<!-- Modal para editar gasto Presentacion -->
+<div class="modal fade" id="editGastoModal" tabindex="-1" aria-labelledby="editGastoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #bf616a;">
+                <h5 class="modal-title" id="editGastoModalLabel">Editar Gasto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'control_expediente:editar_gasto' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit_id_gasto" name="id">
+                    <div class="container">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha</label>
+                                <input type="date" class="form-control" id="edit_id_fecha" name="fecha">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Detalle</label>
+                                <input type="text" class="form-control" id="edit_id_detalle" name="detalle">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Gasto Soles</label>
+                                <input type="number" class="form-control" id="edit_gastos_soles" name="gastos_soles">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_gastos_dolares" class="form-label">Gasto dólares</label>
+                                <input type="number" class="form-control" id="edit_gastos_dolares"
+                                    name="gastos_dolares">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_pdf" class="form-label">Archivo PDF</label>
+                                <input type="file" class="form-control" id="edit_id_pdf" name="pdf">
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn px-5 py-2 btnGuardar2"
+                                style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Modal para ver PDF -->
 <div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
