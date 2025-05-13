@@ -68,7 +68,7 @@ class PresentacionForm(forms.ModelForm):
 class GastoPresentacionForm(forms.ModelForm):
     class Meta:
         model = GastoPresentacion
-        exclude = ['fecha_registro', 'seguimiento']  # seguimiento lo asignaremos en la vista
+        exclude = ['presentacion', 'fecha_registro', 'seguimiento']  # seguimiento lo asignaremos en la vista
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
         }

@@ -122,11 +122,13 @@ def ver_seguimiento(request, caso_id):
 
         # Para el formulario 'gasto_presentacion'
         elif tipo_formulario == 'gasto_presentacion' and seguimiento_id:
-            seguimiento = get_object_or_404(Seguimiento, id=seguimiento_id)
+            print(seguimiento_id)
+            print(seguimiento_id)
+            seguimiento = get_object_or_404(Presentacion, id=seguimiento_id)
             gasto_presentacion_form = GastoPresentacionForm(request.POST, request.FILES)
             if gasto_presentacion_form.is_valid():
                 nuevo_gp = gasto_presentacion_form.save(commit=False)
-                nuevo_gp.seguimiento = seguimiento
+                nuevo_gp.presentacion = seguimiento
                 nuevo_gp.save()
                 return redirect('control_expediente:ver_seguimiento', caso_id=caso.id)
             else:
@@ -215,8 +217,8 @@ def editar_gasto(request):
 
         return redirect('control_expediente:ver_seguimiento', caso_id=gasto.seguimiento.caso.id)
     
-from django.views.decorators.csrf import csrf_protect
 
+from django.views.decorators.csrf import csrf_protect
 @csrf_protect
 def eliminar_gasto(request):
     gasto_id = request.POST.get('gasto_id')
