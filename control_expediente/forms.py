@@ -33,6 +33,7 @@ class SeguimientoForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
         self.fields['responsable'].required = False
         self.fields['seguimiento'].required = False
+        self.fields['pdf'].required = False
 
 
 class GastoForm(forms.ModelForm):

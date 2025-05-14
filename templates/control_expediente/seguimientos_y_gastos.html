@@ -51,11 +51,11 @@
                             <i class="bi bi-plus-lg"></i>Nuevo Seguimiento
                         </button>
 
-                        <button type="button" class="btn text-white mt-4"
+                        <!-- <button type="button" class="btn text-white mt-4"
                             style="background-color: #bf616a; border: none;" data-bs-toggle="modal"
                             data-bs-target="#documentModalPresentacion">
                             <i class="bi bi-plus-lg"></i>Nuevo Presente
-                        </button>
+                        </button> -->
                     </center>
                     {% endif %}
 
@@ -72,7 +72,7 @@
                                     <th>Responsable</th>
                                     <th>Estado</th>
                                     <th>Fecha ultima revisión</th>
-                                    <th>Fecha Registro</th>
+                                    <th class="d-none">Fecha Registro</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -85,7 +85,7 @@
                                     <td>{{ seguimiento.responsable }}</td>
                                     <td>{{ seguimiento.estado }}</td>
                                     <td>{{ seguimiento.fecha_seguimiento|date:"d/m/Y" }}</td>
-                                    <td>{{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}</td>
+                                    <td class="d-none">{{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}</td>
 
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <td class="acciones">
@@ -207,8 +207,8 @@
                     </div>
 
                     <!-- Tabla de Presentaciones -->
-                    <h4>Atención Presente</h4>
-                    <div class="table-container" style="max-height: 80vh; overflow-y: auto; overflow-x: auto;">
+                    <h4 class="d-none">Atención Presente</h4>
+                    <div class="table-container d-none" style="max-height: 80vh; overflow-y: auto; overflow-x: auto;">
                         <table class="table table-striped" id="seguimientosTable">
                             <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
@@ -622,7 +622,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header text-white" style="background-color: #3b4252;">
-                <h5 class="modal-title" id="documentModalLabel">Agregar Nueva Seguimiento</h5>
+                <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Seguimiento</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>

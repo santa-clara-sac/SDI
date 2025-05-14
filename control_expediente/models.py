@@ -37,6 +37,7 @@ class Seguimiento(models.Model):
     pendiente = models.TextField(blank=True)
     responsable = models.CharField(max_length=255, blank=True, null=True)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='en_proceso')
+    pdf = models.FileField(upload_to='seguimiento/', blank=True, null=True)
     fecha_registro = models.DateTimeField(auto_now_add=True) 
 
     def __str__(self):
