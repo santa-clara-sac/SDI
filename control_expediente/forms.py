@@ -25,8 +25,8 @@ class SeguimientoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         # Opcional: establecer fecha_seguimiento por defecto
-        if not self.fields['fecha_seguimiento'].initial:
-            self.fields['fecha_seguimiento'].initial = now().date()
+        # if not self.fields['fecha_seguimiento'].initial:
+        #     self.fields['fecha_seguimiento'].initial = now().date()
         
         # Agregar clases CSS
         for field in self.fields.values():

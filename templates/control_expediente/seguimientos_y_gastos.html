@@ -71,7 +71,8 @@
                                     <th>Pendiente</th>
                                     <th>Responsable</th>
                                     <th>Estado</th>
-                                    <th>Fecha ultima revisión</th>
+                                    <th>Última revisión</th>
+                                    <th>PDF</th>
                                     <th class="d-none">Fecha Registro</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -84,7 +85,19 @@
                                     <td>{{ seguimiento.pendiente }}</td>
                                     <td>{{ seguimiento.responsable }}</td>
                                     <td>{{ seguimiento.estado }}</td>
-                                    <td>{{ seguimiento.fecha_seguimiento|date:"d/m/Y" }}</td>
+                                    <td>{{ seguimiento.fecha_seguimiento|date:"d-m-Y" }}</td>
+                                    <td class="pdf">
+                                                            {% if seguimiento.pdf %}
+                                                            <button type="button"
+                                                                style="background: none; border: none; color: #bf616a; text-decoration: none; cursor: pointer;"
+                                                                data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
+                                                                data-pdf-url="{{ seguimiento.pdf.url }}" class="ver-pdf-btn">
+                                                                Ver PDF
+                                                            </button>
+                                                            {% else %}
+                                                            No disponible
+                                                            {% endif %}
+                                                        </td>
                                     <td class="d-none">{{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}</td>
 
                                     {% if request.user.role != 1 and request.user.role != 2 %}
@@ -131,6 +144,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Fecha</th>
+                                                        <th>Código</th>
                                                         <th>Detalle</th>
                                                         <th>Gasto Soles</th>
                                                         <th>Gasto Dólares</th>
@@ -142,6 +156,7 @@
                                                     {% for gasto in seguimiento.gastos.all %}
                                                     <tr>
                                                         <td>{{ gasto.fecha|date:"d-m-Y" }}</td>
+                                                        <td>{{ gasto.codigo_pago }}</td>
                                                         <td>{{ gasto.detalle }}</td>
                                                         <td>{{ gasto.gastos_soles }}</td>
                                                         <td>{{ gasto.gastos_dolares }}</td>
@@ -165,6 +180,7 @@
                                                                     style="color: #434c5e;" data-bs-toggle="modal"
                                                                     data-bs-target="#editGastoModal"
                                                                     data-id_gasto="{{ gasto.id }}"
+                                                                    data-codigo_pago="{{ gasto.codigo_pago }}"
                                                                     data-detalle="{{ gasto.detalle }}"
                                                                     data-gastos_soles="{{ gasto.gastos_soles }}"
                                                                     data-gastos_dolares="{{ gasto.gastos_dolares }}"
@@ -356,12 +372,16 @@
                                 <input type="date" class="form-control" id="edit_id_fecha" name="fecha">
                             </div>
                             <div class="col-md-4">
+                                <label class="form-label">Código</label>
+                                <input type="text" class="form-control" id="edit_id_codigo_pago" name="codigo_pago">
+                            </div>
+                            <div class="col-md-4">
                                 <label class="form-label">Detalle</label>
                                 <input type="text" class="form-control" id="edit_id_detalle" name="detalle">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Gasto Soles</label>
-                                <input type="number" class="form-control" id="edit_gastos_soles" name="gastos_soles">
+                                <input type="text" class="form-control" id="edit_gastos_soles" name="gastos_soles">
                             </div>
                             <div class="col-md-4">
                                 <label for="edit_gastos_dolares" class="form-label">Gasto dólares</label>
@@ -409,6 +429,12 @@
                                 <label class="form-label">Detalle</label>
                                 <input type="text" class="form-control" id="edit_id_detalle" name="detalle">
                             </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Código</label>
+                                <input type="text" class="form-control" id="edit_id_codigo_pago" name="codigo_pago">
+                            </div>
+
                             <div class="col-md-4">
                                 <label class="form-label">Gasto Soles</label>
                                 <input type="number" class="form-control" id="edit_gastos_soles" name="gastos_soles">
@@ -520,6 +546,10 @@
                                 {{ form2.fecha }}
                             </div>
                             <div class="col-md-4">
+                                <label class="form-label">Código pago</label>
+                                {{ form2.codigo_pago }}
+                            </div>
+                            <div class="col-md-4">
                                 <label class="form-label">Detalle</label>
                                 {{ form2.detalle }}
                             </div>
@@ -627,7 +657,7 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'control_expediente:ver_seguimiento' caso.id %}">
+                <form method="POST" action="{% url 'control_expediente:ver_seguimiento' caso.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="container">
                         <div class="row g-3">
@@ -655,6 +685,10 @@
                                 <label for="id_pg" class="form-label">Estado</label>
                                 {{ form.estado }}
                             </div>
+                            <div class="col-md-12">
+                                <label for="id_pdf" class="form-label">PDF</label>
+                                {{ form.pdf }}
+                            </div>
 
                         </div>
                         <div class="text-center mt-4">
@@ -681,7 +715,7 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'control_expediente:editar_seguimiento' %}">
+                <form method="POST" action="{% url 'control_expediente:editar_seguimiento' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" id="edit_id" name="id">
                     <div class="container">
@@ -714,6 +748,10 @@
                                     <option value="Finalizado">Finalizado</option>
                                 </select>
                             </div>
+                            <div class="col-md-12">
+                                                    <label for="edit_id_pdf" class="form-label">Archivo PDF</label>
+                                                    <input type="file" class="form-control" id="edit_id_pdf" name="pdf">
+                                                </div>
                         </div>
                         <div class="text-center mt-4">
                             <button type="submit" class="btn px-5 py-2 btnGuardar2"
@@ -810,6 +848,7 @@
         const editButtons = document.querySelectorAll('.btn-editar, .btn-editar-gasto, .btn-editar-presentacion');
         editButtons.forEach(button => {
             button.addEventListener('click', function () {
+                // Seguimiento
                 document.getElementById('edit_id').value = button.getAttribute('data-id');
                 document.getElementById('edit_id_resolucion').value = button.getAttribute('data-resolucion');
                 document.getElementById('edit_id_seguimiento').value = button.getAttribute('data-seguimiento');
@@ -819,6 +858,7 @@
                 document.getElementById('edit_id_fecha_seguimiento').value = button.getAttribute('data-fecha_seguimiento');
 
                 // Gasto
+                document.getElementById('edit_id_codigo_pago').value = button.getAttribute('data-codigo_pago');
                 document.getElementById('edit_id_gasto').value = button.getAttribute('data-id_gasto');
                 document.getElementById('edit_id_fecha').value = button.getAttribute('data-fecha');
                 document.getElementById('edit_id_detalle').value = button.getAttribute('data-detalle');
@@ -844,22 +884,22 @@
 
 
         document.querySelectorAll('.toggle-gastos-btn').forEach(row => {
-            row.addEventListener('click', function (e) {
-                // Verifica si el clic fue dentro de la celda de acciones
-                if (e.target.closest('td.acciones')) {
-                    return; // Ignora el clic
-                }
+    row.addEventListener('click', function (e) {
+        // Verifica si el clic fue dentro de la celda de acciones o en botón Ver PDF
+        if (e.target.closest('td.acciones') || e.target.closest('.ver-pdf-btn')) {
+            return; // Ignora el clic
+        }
 
-                const targetId = row.getAttribute('data-target');
-                const gastosRow = document.getElementById(targetId);
+        const targetId = row.getAttribute('data-target');
+        const gastosRow = document.getElementById(targetId);
 
-                if (gastosRow.style.display === 'none' || gastosRow.style.display === '') {
-                    gastosRow.style.display = 'table-row';
-                } else {
-                    gastosRow.style.display = 'none';
-                }
-            });
-        });
+        if (gastosRow.style.display === 'none' || gastosRow.style.display === '') {
+            gastosRow.style.display = 'table-row';
+        } else {
+            gastosRow.style.display = 'none';
+        }
+    });
+});
 
     });
 </script>

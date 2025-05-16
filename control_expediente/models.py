@@ -51,6 +51,7 @@ class Gasto(models.Model):
     detalle = models.TextField()
     sustento = models.TextField(blank=True)
     pdf = models.FileField(upload_to='gastos_expediente/', blank=True, null=True)
+    codigo_pago = models.CharField(max_length=255, blank=True, null=True)
     gastos_soles = models.DecimalField(max_digits=10, decimal_places=2)
     gastos_dolares = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     fecha_registro = models.DateTimeField(default=timezone.now)

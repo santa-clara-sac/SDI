@@ -147,6 +147,7 @@ def ver_seguimiento(request, caso_id):
 
         # Si no es ninguno de los anteriores, se guarda un nuevo 'seguimiento'
         else:
+            print("Agregar nuevo seguimiento")
             seguimiento_form = SeguimientoForm(request.POST, request.FILES)
             if seguimiento_form.is_valid():
                 nuevo_seguimiento = seguimiento_form.save(commit=False)
@@ -193,6 +194,7 @@ def editar_seguimiento(request):
 
     return redirect('control_expediente:ver_seguimiento', caso_id=0)
 
+
 def eliminar_seguimiento(request, seguimiento_id):
     seguimiento = get_object_or_404(Seguimiento, id=seguimiento_id)
     caso_id = seguimiento.caso.id  # Guardamos antes de eliminar
@@ -207,6 +209,7 @@ def editar_gasto(request):
 
         gasto.fecha = request.POST.get('fecha')
         gasto.detalle = request.POST.get('detalle')
+        gasto.codigo_pago = request.POST.get('codigo_pago')
         gasto.gastos_soles = request.POST.get('gastos_soles') or 0
         gasto.gastos_dolares = request.POST.get('gastos_dolares') or 0
 

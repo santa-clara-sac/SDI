@@ -160,10 +160,6 @@
                                                     <label for="id_representante" class="form-label">Representanta a</label>
                                                     {{ form.representante }}
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <label for="id_pdf" class="form-label">Pdf</label>
-                                                    {{ form.pdf }}
-                                                </div>
                                             </div>
                                             <div class="text-center mt-4">
                                                 <button type="submit" class="btn px-5 py-2 btnGuardar"
@@ -194,7 +190,6 @@
                                     <th>Sede</th>
                                     <th>Especialidad</th>
                                     <th class="text-nowrap" >Año Inicio</th>
-                                    <th class="text-nowrap" >Pdf</th>
                                     <th class="d-none">Representa a</th>
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>
@@ -228,18 +223,6 @@
                                     <td>{{ cj.sede }}</td>
                                     <td>{{ cj.especialidad }}</td>
                                     <td>{{ cj.anio_inicio|default:"" }}</td>
-                                    <td>
-                                                            {% if cj.pdf %}
-                                                            <button type="button"
-                                                                style="background: none; border: none; color: #bf616a; text-decoration: none; cursor: pointer;"
-                                                                data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
-                                                                data-pdf-url="{{ cj.pdf.url }}" class="ver-pdf-btn">
-                                                                Ver PDF
-                                                            </button>
-                                                            {% else %}
-                                                            No disponible
-                                                            {% endif %}
-                                                        </td>
                                                         
                                     <!-- Representante -->
                                     <td class="d-none">
