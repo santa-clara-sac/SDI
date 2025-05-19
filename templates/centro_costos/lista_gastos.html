@@ -50,7 +50,7 @@
     <div style="font-weight: bold; font-size: 24px;">
         Listado de Gastos Tupac Amaru (2021-2023)
     </div>
-    
+
 </div>
 </div>
 
@@ -67,11 +67,7 @@
                         <!-- Año -->
                         <div class="col">
                             <label for="yearFilter" class="form-label">Año</label>
-                            <select 
-                                class="form-select filter-input" 
-                                data-column="1" 
-                                id="yearFilter"
-                            >
+                            <select class="form-select filter-input" data-column="1" id="yearFilter">
                                 <option value="">Seleccionar año</option>
                                 <option value="2021">2021</option>
                                 <option value="2022">2022</option>
@@ -97,16 +93,16 @@
                             <input type="text" class="form-control filter-input" data-column="5">
                         </div>
 
-                                               <!-- Actividad -->
-                                               <div class="col">
-                                                <label for="actividadFilter" class="form-label">Actividad</label>
-                                                <select class="form-select filter-input" data-column="2" id="actividadFilter">
-                                                    <option value="">Seleccionar Actividad</option>
-                                                    {% for actividad in actividades %}
-                                                        <option value="{{ actividad.nombre|lower }}">{{ actividad.nombre }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
+                        <!-- Actividad -->
+                        <div class="col">
+                            <label for="actividadFilter" class="form-label">Actividad</label>
+                            <select class="form-select filter-input" data-column="2" id="actividadFilter">
+                                <option value="">Seleccionar Actividad</option>
+                                {% for actividad in actividades %}
+                                <option value="{{ actividad.nombre|lower }}">{{ actividad.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <!-- Botón Limpiar Filtros -->
                         <div class="col">
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
@@ -285,7 +281,7 @@
                                         </button>
 
                                         <a href="{% url 'centro_costos:eliminar_gasto' gasto.id %}"
-                                            class="btn btn-sm text-white btnEliminar" style="background-color: #bf616a;"
+                                            class="btn btn-sm text-white btnEliminar" style="background-color: #9a1413;"
                                             title="Eliminar">
                                             <i class="bi bi-trash"></i>
                                         </a>
@@ -399,70 +395,70 @@
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
                 <script>
                     document.getElementById("exportBtn").addEventListener("click", function () {
-                    const table = document.getElementById("documentsTable");
-                    const rows = [];
+                        const table = document.getElementById("documentsTable");
+                        const rows = [];
 
-                    // Obtener encabezados excluyendo "Acciones"
-                    const headers = [];
-                    table.querySelectorAll("thead th").forEach((th, i) => {
-                        if (th.innerText.trim() !== "Acciones") {
-                            headers.push(th.innerText.trim());
-                        }
-                    });
-
-                    headers.push("Saldo"); // Añadimos una columna extra para el saldo
-                    rows.push(headers);
-
-                    let totalDebe = 0;
-                    let totalHaber = 0;
-
-                    // Obtener filas visibles y excluir la columna "Acciones"
-                    table.querySelectorAll("tbody tr").forEach(tr => {
-                        if (tr.style.display !== "none") {
-                            const cells = tr.querySelectorAll("td");
-                            const row = [];
-
-                            // Capturar valores hasta la columna Haber (asumimos penúltima columna)
-                            for (let i = 0; i < cells.length - 1; i++) {
-                                let text = cells[i].innerText.trim();
-                                row.push(text);
-
-                                // Acumulamos debe y haber si corresponde
-                                if (cells[i].hasAttribute('data-debe')) {
-                                    totalDebe += parseFloat(text) || 0;
-                                } else if (cells[i].hasAttribute('data-haber')) {
-                                    totalHaber += parseFloat(text) || 0;
-                                }
+                        // Obtener encabezados excluyendo "Acciones"
+                        const headers = [];
+                        table.querySelectorAll("thead th").forEach((th, i) => {
+                            if (th.innerText.trim() !== "Acciones") {
+                                headers.push(th.innerText.trim());
                             }
+                        });
 
-                            // Calcular saldo por fila
-                            const debe = parseFloat(cells[cells.length - 3].innerText) || 0;
-                            const haber = parseFloat(cells[cells.length - 2].innerText) || 0;
-                            const saldo = debe - haber;
-                            row.push(saldo.toFixed(2));
+                        headers.push("Saldo"); // Añadimos una columna extra para el saldo
+                        rows.push(headers);
 
-                            rows.push(row);
-                        }
+                        let totalDebe = 0;
+                        let totalHaber = 0;
+
+                        // Obtener filas visibles y excluir la columna "Acciones"
+                        table.querySelectorAll("tbody tr").forEach(tr => {
+                            if (tr.style.display !== "none") {
+                                const cells = tr.querySelectorAll("td");
+                                const row = [];
+
+                                // Capturar valores hasta la columna Haber (asumimos penúltima columna)
+                                for (let i = 0; i < cells.length - 1; i++) {
+                                    let text = cells[i].innerText.trim();
+                                    row.push(text);
+
+                                    // Acumulamos debe y haber si corresponde
+                                    if (cells[i].hasAttribute('data-debe')) {
+                                        totalDebe += parseFloat(text) || 0;
+                                    } else if (cells[i].hasAttribute('data-haber')) {
+                                        totalHaber += parseFloat(text) || 0;
+                                    }
+                                }
+
+                                // Calcular saldo por fila
+                                const debe = parseFloat(cells[cells.length - 3].innerText) || 0;
+                                const haber = parseFloat(cells[cells.length - 2].innerText) || 0;
+                                const saldo = debe - haber;
+                                row.push(saldo.toFixed(2));
+
+                                rows.push(row);
+                            }
+                        });
+
+                        // Fila de totales
+                        const totalRow = Array(headers.length).fill("");
+                        totalRow[headers.indexOf("Debe")] = totalDebe.toFixed(2);
+                        totalRow[headers.indexOf("Haber")] = totalHaber.toFixed(2);
+                        totalRow[headers.indexOf("Saldo")] = (totalDebe - totalHaber).toFixed(2);
+                        rows.push(totalRow);
+
+                        // Crear hoja de cálculo
+                        const worksheet = XLSX.utils.aoa_to_sheet(rows);
+                        const workbook = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(workbook, worksheet, "Documentos");
+
+                        // Aplicar autofiltro
+                        const range = XLSX.utils.decode_range(worksheet['!ref']);
+                        worksheet['!autofilter'] = { ref: XLSX.utils.encode_range(range) };
+
+                        XLSX.writeFile(workbook, "documentos.xlsx");
                     });
-
-                    // Fila de totales
-                    const totalRow = Array(headers.length).fill("");
-                    totalRow[headers.indexOf("Debe")] = totalDebe.toFixed(2);
-                    totalRow[headers.indexOf("Haber")] = totalHaber.toFixed(2);
-                    totalRow[headers.indexOf("Saldo")] = (totalDebe - totalHaber).toFixed(2);
-                    rows.push(totalRow);
-
-                    // Crear hoja de cálculo
-                    const worksheet = XLSX.utils.aoa_to_sheet(rows);
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, "Documentos");
-
-                    // Aplicar autofiltro
-                    const range = XLSX.utils.decode_range(worksheet['!ref']);
-                    worksheet['!autofilter'] = { ref: XLSX.utils.encode_range(range) };
-
-                    XLSX.writeFile(workbook, "documentos.xlsx");
-                });
 
                     document.addEventListener('DOMContentLoaded', function () {
                         actualizarTotales();
@@ -657,7 +653,7 @@
                                     toast: true,
                                     position: "top-end",
                                     showConfirmButton: false,
-                                    timer: 2000,
+                                    timer: 1000,
                                     timerProgressBar: true,
                                     didOpen: (toast) => {
                                         toast.onmouseenter = Swal.stopTimer;

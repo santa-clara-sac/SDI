@@ -3,6 +3,17 @@
 
 {% block body %}
 
+<style>
+    .card-title {
+        min-height: 3rem;
+        /* Fuerza una altura igual para todos los títulos */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+</style>
+
 <link rel="stylesheet" href="{% static 'css/principal.css' %}">
 {% if request.user.is_authenticated %}
 <div
@@ -13,9 +24,9 @@
 </div>
 <div class="container text-center" style="padding-top: 120px;">
     {% else %}
-    <div class="container text-center" style="padding-top: 150px;">
+    <div class="row justify-content-center align-items-stretch" style="padding-top: 150px;">
         {% endif %}
-        <div class="row justify-content-center">
+        <div class="row justify-content-center align-items-stretch">
 
             <!-- ADMINISTRADOR -->
             {% if request.user.role == 3 %}
@@ -43,7 +54,7 @@
                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Partidas, Planos y otros</h5>
+                            <h5 class="card-title text-wrap">Partidas y Planos </h5>
                         </div>
                     </div>
                 </a>
@@ -109,7 +120,7 @@
                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Hoja de Requerimientos</h5>
+                            <h5 class="card-title text-wrap">Hoja de<br>Requerimientos</h5>
                         </div>
                     </div>
                 </a>

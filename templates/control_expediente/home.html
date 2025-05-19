@@ -88,7 +88,7 @@
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
                             <a href="{% url 'lista_partidas' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
-                                style="background-color: {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar
+                                style="background-color: {% if request.user.role == 3 %}#9a1413{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar
                                 Filtros</a>
                         </div>
 
@@ -98,7 +98,7 @@
                     {% if request.user.role != 1 and request.user.role != 2 %}
                     <center>
                         <button type="button" class="btn text-white mt-4"
-                            style="background-color: #bf616a; border: none;" data-bs-toggle="modal"
+                            style="background-color: #9a1413; border: none;" data-bs-toggle="modal"
                             data-bs-target="#documentModal">
                             <i class="bi bi-plus-lg"></i> Agregar Nuevo Expediente
                         </button>
@@ -111,7 +111,7 @@
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #3b4252;">
+                                <div class="modal-header text-white" style="background-color: #9a1413;">
                                     <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Expediente</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -167,7 +167,7 @@
                                             </div>
                                             <div class="text-center mt-4">
                                                 <button type="submit" class="btn px-5 py-2 btnGuardar"
-                                                    style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+                                                    style="background-color: #000; color: white;">Guardar</button>
 
                                             </div>
                                         </div>
@@ -181,8 +181,8 @@
 
                     <!-- Tabla -->
                     <div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
-                        <table class="table table-striped" id="documentsTable">
-                            <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
+                        <table class="table table-hover" id="documentsTable">
+                            <thead class="table" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
                                     <th></th>
                                     <th>Item</th>
@@ -218,12 +218,12 @@
                                     <td>{{ cj.juzgado }}</td>
                                     <!-- Demandante resaltado si representante es 'demandante' -->
                                     <td
-                                        style="{% if cj.representante == 'demandante' %}background-color: #dbbec1;{% endif %}">
+                                        style="{% if cj.representante == 'demandante' %}background-color: #C8C8C8;{% endif %}">
                                         {{ cj.demandante }}
                                     </td>
                                     <!-- Demandado resaltado si representante es 'demandado' -->
                                     <td
-                                        style="{% if cj.representante == 'demandado' %}background-color: #dbbec1;{% endif %}">
+                                        style="{% if cj.representante == 'demandado' %}background-color: #C8C8C8;{% endif %}">
                                         {{ cj.demandado }}
                                     </td>
                                     <td>{{ cj.sede }}</td>
@@ -257,7 +257,7 @@
 
                                             <a href="{% url 'control_expediente:eliminar_expediente' cj.id %}"
                                                 class="btn btn-sm text-white btnEliminar"
-                                                style="background-color: #bf616a;" title="Eliminar">
+                                                style="background-color: #9a1413;" title="Eliminar">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
@@ -277,7 +277,7 @@
                         aria-labelledby="editCasoJudicialModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #3b4252;">
+                                <div class="modal-header text-white" style="background-color: #9a1413;">
                                     <h5 class="modal-title" id="editCasoJudicialModalLabel">Editar Expediente</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -352,7 +352,7 @@
                                             </div>
                                             <div class="text-center mt-4">
                                                 <button type="submit" class="btn px-5 py-2 btnGuardar2"
-                                                    style="background-color: #3b4252; color: #edeff4;">Guardar</button>
+                                                    style="background-color: #000; color: #fff;">Guardar</button>
                                             </div>
                                         </div>
                                     </form>
@@ -493,8 +493,8 @@
                                         text: "Esta acción no se puede deshacer.",
                                         icon: 'warning',
                                         showCancelButton: true,
-                                        confirmButtonColor: '#bf616a',
-                                        cancelButtonColor: '#5e81ac',
+                                        confirmButtonColor: '#9a1413',
+                                        cancelButtonColor: '#6F6F6F',
                                         confirmButtonText: 'Sí, eliminar',
                                         cancelButtonText: 'Cancelar'
                                     }).then((result) => {

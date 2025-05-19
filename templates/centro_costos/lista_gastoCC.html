@@ -238,7 +238,7 @@
                                     <td>
                                         {% if gg.pdf %}
                                         <button type="button"
-                                            style="background: none; border: none; color: #bf616a; text-decoration: none; cursor: pointer;"
+                                            style="background: none; border: none; color: #9a1413; text-decoration: none; cursor: pointer;"
                                             data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
                                             data-pdf-url="{{ gg.pdf.url }}" class="ver-pdf-btn">
                                             Ver PDF
@@ -268,7 +268,7 @@
 
                                             <a href="{% url 'centro_costos:eliminar_gastoCC' gg.id %}"
                                                 class="btn btn-sm text-white btnEliminar"
-                                                style="background-color: #bf616a;" title="Eliminar">
+                                                style="background-color: #9a1413;" title="Eliminar">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
@@ -290,7 +290,7 @@
                                 <div class="modal-header">
                                     <h5 class="modal-title" style="color: #eceff4;">Visualizar documento PDF</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
-                                        style="background-color: #bf616a;"></button>
+                                        style="background-color: #9a1413;"></button>
                                 </div>
                                 <div class="modal-body" style="height: 80vh;">
                                     <iframe id="pdfIframe" src="" width="100%" height="100%"
@@ -557,7 +557,7 @@
                                         text: "Esta acción no se puede deshacer.",
                                         icon: 'warning',
                                         showCancelButton: true,
-                                        confirmButtonColor: '#bf616a',
+                                        confirmButtonColor: '#9a1413',
                                         cancelButtonColor: '#5e81ac',
                                         confirmButtonText: 'Sí, eliminar',
                                         cancelButtonText: 'Cancelar'
