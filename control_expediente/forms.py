@@ -16,24 +16,27 @@ class CasoJudicialForm(forms.ModelForm):
 class SeguimientoForm(forms.ModelForm):
     class Meta:
         model = Seguimiento
-        exclude = ['caso', 'fecha_registro']  # Excluye campos automáticos
+        exclude = ['caso', 'fecha_registro']
         widgets = {
             'fecha_seguimiento': forms.DateInput(attrs={'type': 'date'}),
+            'inter': forms.CheckboxInput(attrs={
+                'class': 'form-check-input switch-color',
+                'role': 'switch',
+                'id': 'id_inter'
+            }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
-        # Opcional: establecer fecha_seguimiento por defecto
-        # if not self.fields['fecha_seguimiento'].initial:
-        #     self.fields['fecha_seguimiento'].initial = now().date()
-        
-        # Agregar clases CSS
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
+
+        for name, field in self.fields.items():
+            if name != 'inter':  # evitar poner form-control al switch
+                field.widget.attrs['class'] = 'form-control'
+
         self.fields['responsable'].required = False
         self.fields['seguimiento'].required = False
         self.fields['pdf'].required = False
+
 
 
 class GastoForm(forms.ModelForm):

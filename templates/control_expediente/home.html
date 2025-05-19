@@ -88,7 +88,8 @@
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
                             <a href="{% url 'lista_partidas' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
-                                style="background-color: {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar Filtros</a>
+                                style="background-color: {% if request.user.role == 3 %}#bf616a{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar
+                                Filtros</a>
                         </div>
 
                     </div>
@@ -96,8 +97,9 @@
                     <!-- Botón para abrir el modal de agregar -->
                     {% if request.user.role != 1 and request.user.role != 2 %}
                     <center>
-                        <button type="button" class="btn text-white mt-4" style="background-color: #bf616a; border: none;"
-                            data-bs-toggle="modal" data-bs-target="#documentModal">
+                        <button type="button" class="btn text-white mt-4"
+                            style="background-color: #bf616a; border: none;" data-bs-toggle="modal"
+                            data-bs-target="#documentModal">
                             <i class="bi bi-plus-lg"></i> Agregar Nuevo Expediente
                         </button>
                     </center>
@@ -115,12 +117,13 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form method="POST" action="{% url 'control_expediente:lista_expediente' %}" enctype="multipart/form-data">
+                                    <form method="POST" action="{% url 'control_expediente:lista_expediente' %}"
+                                        enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <div class="container">
                                             <div class="row g-3">
                                                 <div class="col-md-4">
-                                                    <label for="id_codigo" class="form-label">N° Expediente</label>
+                                                    <label for="id_codigo" class="form-label">Item</label>
                                                     {{ form.codigo }}
                                                 </div>
                                                 <div class="col-md-4">
@@ -157,7 +160,8 @@
                                                 </div>
 
                                                 <div class="col-md-4">
-                                                    <label for="id_representante" class="form-label">Representanta a</label>
+                                                    <label for="id_representante" class="form-label">Representanta
+                                                        a</label>
                                                     {{ form.representante }}
                                                 </div>
                                             </div>
@@ -181,7 +185,7 @@
                             <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
                                     <th></th>
-                                    <th>N°</th>
+                                    <th>Item</th>
                                     <th>Expediente</th>
                                     <th>Materia</th>
                                     <th>Juzgado</th>
@@ -189,7 +193,7 @@
                                     <th>Demandado</th>
                                     <th>Sede</th>
                                     <th>Especialidad</th>
-                                    <th class="text-nowrap" >Año Inicio</th>
+                                    <th class="text-nowrap">Año Inicio</th>
                                     <th class="d-none">Representa a</th>
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <th>Acciones</th>
@@ -202,9 +206,9 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             <a href="{% url 'control_expediente:ver_seguimiento' cj.id %}"
-                                            class="btn btn-sm text-white"
-                                            style="background-color: #3b4252;" title="Ver Seguimiento y Gastos">
-                                            <i class="bi bi-file-earmark-text" style="font-size: 1.0rem;"></i>
+                                                class="btn btn-sm text-white" style="background-color: #3b4252;"
+                                                title="Ver Seguimiento y Gastos">
+                                                <i class="bi bi-file-earmark-text" style="font-size: 1.0rem;"></i>
                                             </a>
                                         </div>
                                     </td>
@@ -213,26 +217,28 @@
                                     <td>{{ cj.materia }}</td>
                                     <td>{{ cj.juzgado }}</td>
                                     <!-- Demandante resaltado si representante es 'demandante' -->
-                                    <td style="{% if cj.representante == 'demandante' %}background-color: #dbbec1;{% endif %}">
+                                    <td
+                                        style="{% if cj.representante == 'demandante' %}background-color: #dbbec1;{% endif %}">
                                         {{ cj.demandante }}
                                     </td>
                                     <!-- Demandado resaltado si representante es 'demandado' -->
-                                    <td style="{% if cj.representante == 'demandado' %}background-color: #dbbec1;{% endif %}">
+                                    <td
+                                        style="{% if cj.representante == 'demandado' %}background-color: #dbbec1;{% endif %}">
                                         {{ cj.demandado }}
                                     </td>
                                     <td>{{ cj.sede }}</td>
                                     <td>{{ cj.especialidad }}</td>
                                     <td>{{ cj.anio_inicio|default:"" }}</td>
-                                                        
+
                                     <!-- Representante -->
                                     <td class="d-none">
                                         {% if cj.representante == 'demandante' %}
-                                            Demandante
+                                        Demandante
                                         {% elif cj.representante == 'demandado' %}
-                                            Demandado
+                                        Demandado
                                         {% endif %}
                                     </td>
-                            
+
                                     {% if request.user.role != 1 and request.user.role != 2 %}
                                     <td>
                                         <div class="btn-group" role="group">
@@ -240,16 +246,15 @@
                                                 style="background-color: #434c5e;" data-bs-toggle="modal"
                                                 data-bs-target="#editCasoJudicialModal" data-id="{{ cj.id }}"
                                                 data-codigo="{{ cj.codigo }}" data-expediente="{{ cj.expediente }}"
-                                                data-sede="{{ cj.sede }}"
-                                                data-especialidad="{{ cj.especialidad }}" data-materia="{{ cj.materia }}"
-                                                data-juzgado="{{ cj.juzgado }}"
+                                                data-sede="{{ cj.sede }}" data-especialidad="{{ cj.especialidad }}"
+                                                data-materia="{{ cj.materia }}" data-juzgado="{{ cj.juzgado }}"
                                                 data-demandante="{{ cj.demandante }}"
                                                 data-demandado="{{ cj.demandado }}"
                                                 data-anioinicio="{{ cj.anio_inicio|default_if_none:'' }}"
                                                 data-representante="{{ cj.representante }}">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
-                            
+
                                             <a href="{% url 'control_expediente:eliminar_expediente' cj.id %}"
                                                 class="btn btn-sm text-white btnEliminar"
                                                 style="background-color: #bf616a;" title="Eliminar">
@@ -261,15 +266,15 @@
                                 </tr>
                                 {% endfor %}
                             </tbody>
-                            
+
                         </table>
                     </div>
 
 
 
                     <!-- Modal para editar expediente -->
-                    <div class="modal fade" id="editCasoJudicialModal" tabindex="-1" aria-labelledby="editCasoJudicialModalLabel"
-                        aria-hidden="true">
+                    <div class="modal fade" id="editCasoJudicialModal" tabindex="-1"
+                        aria-labelledby="editCasoJudicialModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
                                 <div class="modal-header text-white" style="background-color: #3b4252;">
@@ -284,12 +289,13 @@
                                         <div class="container">
                                             <div class="row g-3">
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_codigo" class="form-label">N°</label>
+                                                    <label for="edit_id_codigo" class="form-label">Item</label>
                                                     <input type="text" class="form-control" id="edit_id_codigo"
                                                         name="codigo">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_expediente" class="form-label">Expediente</label>
+                                                    <label for="edit_id_expediente"
+                                                        class="form-label">Expediente</label>
                                                     <input type="text" class="form-control" id="edit_id_expediente"
                                                         name="expediente">
                                                 </div>
@@ -306,7 +312,8 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="edit_id_materia" class="form-label">Materia</label>
-                                                    <input type="text" class="form-control" id="edit_id_materia" name="materia">
+                                                    <input type="text" class="form-control" id="edit_id_materia"
+                                                        name="materia">
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="edit_id_juzgado" class="form-label">Juzgado</label>
@@ -314,30 +321,33 @@
                                                         name="juzgado">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_demandante" class="form-label">Demandante</label>
+                                                    <label for="edit_id_demandante"
+                                                        class="form-label">Demandante</label>
                                                     <input type="text" class="form-control" id="edit_id_demandante"
                                                         name="demandante">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_centro_demandado" class="form-label">Demandado</label>
+                                                    <label for="edit_id_centro_demandado"
+                                                        class="form-label">Demandado</label>
                                                     <input type="text" class="form-control" id="edit_id_demandado"
                                                         name="demandado">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_anio_inicio"
-                                                        class="form-label">Año inicio</label>
+                                                    <label for="edit_id_anio_inicio" class="form-label">Año
+                                                        inicio</label>
                                                     <input type="text" class="form-control" id="edit_id_anio_inicio"
                                                         name="anio_inicio">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_representante"
-                                                        class="form-label">Representa a</label>
-                                                        <select class="form-control" id="edit_id_representante" name="representante">
-                                                            <option value="">---------</option>
-                                                            <option value="demandante">Demandante</option>
-                                                            <option value="demandado">Demandado</option>
-                                                        </select>
-                                                        
+                                                    <label for="edit_id_representante" class="form-label">Representa
+                                                        a</label>
+                                                    <select class="form-control" id="edit_id_representante"
+                                                        name="representante">
+                                                        <option value="">---------</option>
+                                                        <option value="demandante">Demandante</option>
+                                                        <option value="demandado">Demandado</option>
+                                                    </select>
+
                                                 </div>
                                             </div>
                                             <div class="text-center mt-4">
@@ -406,7 +416,7 @@
                         });
 
                         document.addEventListener('DOMContentLoaded', function () {
-                            
+
 
                             // FILTRO EN TIEMPO REAL
                             document.querySelectorAll('.filter-input').forEach(input => {
@@ -414,33 +424,33 @@
                             });
 
                             function filtrarTabla() {
-                            const filtros = {};
+                                const filtros = {};
 
-                            document.querySelectorAll('.filter-input').forEach(input => {
-                                const columna = input.dataset.column;
-                                const valor = input.value.trim().toLowerCase();
-                                if (valor) {
-                                    filtros[columna] = valor;
-                                }
-                            });
+                                document.querySelectorAll('.filter-input').forEach(input => {
+                                    const columna = input.dataset.column;
+                                    const valor = input.value.trim().toLowerCase();
+                                    if (valor) {
+                                        filtros[columna] = valor;
+                                    }
+                                });
 
-                            document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
-                                let mostrar = true;
+                                document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
+                                    let mostrar = true;
 
-                                for (const columna in filtros) {
-                                    const celda = fila.cells[parseInt(columna)];
-                                    if (celda) {
-                                        const textoCelda = celda.textContent.toLowerCase();
-                                        if (!textoCelda.includes(filtros[columna])) {
-                                            mostrar = false;
-                                            break;
+                                    for (const columna in filtros) {
+                                        const celda = fila.cells[parseInt(columna)];
+                                        if (celda) {
+                                            const textoCelda = celda.textContent.toLowerCase();
+                                            if (!textoCelda.includes(filtros[columna])) {
+                                                mostrar = false;
+                                                break;
+                                            }
                                         }
                                     }
-                                }
 
-                                fila.style.display = mostrar ? '' : 'none';
-                            });
-                        }
+                                    fila.style.display = mostrar ? '' : 'none';
+                                });
+                            }
 
 
 

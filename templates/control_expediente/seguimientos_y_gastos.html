@@ -28,6 +28,21 @@
     .fila-seleccionada {
         background-color: #d8dee9 !important;
     }
+
+    .switch-color:checked {
+        background-color: #dc3545;
+        /* rojo Bootstrap */
+        border-color: #dc3545;
+    }
+
+    .switch-color:focus {
+        box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    }
+
+    .fila-inter {
+        background-color: #fff3cd !important;
+        /* tono amarillo suave */
+    }
 </style>
 
 <center>
@@ -63,15 +78,15 @@
                     <h4>Seguimiento</h4>
                     <!-- Tabla Única para todos los seguimientos -->
                     <div class="table-container" style="max-height: 80vh; overflow-y: auto; overflow-x: auto;">
-                        <table class="table table-striped" id="seguimientosTable">
+                        <table class="table table-hover" id="seguimientosTable">
                             <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
-                                    <th>Resolución</th>
+                                    <th class="text-nowrap" style="width: 5%;">Resolución</th>
+                                    <th>Fecha</th>
                                     <th>Seguimiento</th>
                                     <th>Pendiente</th>
                                     <th>Responsable</th>
                                     <th>Estado</th>
-                                    <th>Última revisión</th>
                                     <th>PDF</th>
                                     <th class="d-none">Fecha Registro</th>
                                     <th>Acciones</th>
@@ -79,28 +94,30 @@
                             </thead>
                             <tbody>
                                 {% for seguimiento in seguimientos %}
-                                <tr class="toggle-gastos-btn" data-target="gastos-{{ forloop.counter }}">
+                                <tr class="toggle-gastos-btn {% if seguimiento.inter %}fila-inter{% endif %}"
+                                    data-target="gastos-{{ forloop.counter }}" {% if seguimiento.inter %}
+                                    data-inter="true" {% endif %}>
                                     <td class="text-nowrap">{{ seguimiento.resolucion }}</td>
+                                    <td>{{ seguimiento.fecha_seguimiento|date:"d-m-Y" }}</td>
                                     <td class="text-nowrap">{{ seguimiento.seguimiento }}</td>
                                     <td>{{ seguimiento.pendiente }}</td>
                                     <td>{{ seguimiento.responsable }}</td>
                                     <td>{{ seguimiento.estado }}</td>
-                                    <td>{{ seguimiento.fecha_seguimiento|date:"d-m-Y" }}</td>
                                     <td class="pdf">
-                                                            {% if seguimiento.pdf %}
-                                                            <button type="button"
-                                                                style="background: none; border: none; color: #bf616a; text-decoration: none; cursor: pointer;"
-                                                                data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
-                                                                data-pdf-url="{{ seguimiento.pdf.url }}" class="ver-pdf-btn">
-                                                                Ver PDF
-                                                            </button>
-                                                            {% else %}
-                                                            No disponible
-                                                            {% endif %}
-                                                        </td>
+                                        {% if seguimiento.pdf %}
+                                        <button type="button"
+                                            style="background: none; border: none; color: #bf616a; text-decoration: none; cursor: pointer;"
+                                            data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
+                                            data-pdf-url="{{ seguimiento.pdf.url }}" class="ver-pdf-btn">
+                                            Ver PDF
+                                        </button>
+                                        {% else %}
+                                        No disponible
+                                        {% endif %}
+                                    </td>
                                     <td class="d-none">{{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}</td>
 
-                                    {% if request.user.role != 1 and request.user.role != 2 %}
+                                    {% if request.user.role != 1 %}
                                     <td class="acciones">
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm text-white me-2 btn-editar"
@@ -131,12 +148,12 @@
                                         <div>
                                             <h5>Gastos:</h5>
                                             <!-- Botón para abrir el modal de agregar -->
-                                            {% if request.user.role != 1 and request.user.role != 2 %}
+                                            {% if request.user.role != 1 %}
                                             <button type="button" class="abrir-modal-gasto"
-                                                style="border: none; color: #3b4252 !important;" data-bs-toggle="modal"
-                                                data-bs-target="#documentModalGasto"
+                                                style="border: none; color: white !important; background-color: #bf616a;"
+                                                data-bs-toggle="modal" data-bs-target="#documentModalGasto"
                                                 data-seguimiento-id="{{ seguimiento.id }}">
-                                                Agregar Nuevo gastooo
+                                                Agregar Nuevo gasto
                                             </button>
 
                                             {% endif %}
@@ -172,7 +189,7 @@
                                                             No disponible
                                                             {% endif %}
                                                         </td>
-                                                        {% if request.user.role != 1 and request.user.role != 2 %}
+                                                        {% if request.user.role != 1 %}
                                                         <td>
                                                             <div class="btn-group" role="group">
                                                                 <button type="button"
@@ -219,6 +236,14 @@
                                 </tr>
                                 {% endfor %}
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6"><strong>Totales Generales:</strong></td>
+                                    <td><strong>{{ total_soles }} (S)</strong></td>
+                                    <td><strong>{{ total_dolares }} ($)</strong></td>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
 
@@ -657,7 +682,8 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'control_expediente:ver_seguimiento' caso.id %}" enctype="multipart/form-data">
+                <form method="POST" action="{% url 'control_expediente:ver_seguimiento' caso.id %}"
+                    enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="container">
                         <div class="row g-3">
@@ -678,7 +704,7 @@
                                 {{ form.responsable }}
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Fecha de última revisión</label>
+                                <label class="form-label">Fecha</label>
                                 {{ form.fecha_seguimiento }}
                             </div>
                             <div class="col-md-4">
@@ -689,6 +715,16 @@
                                 <label for="id_pdf" class="form-label">PDF</label>
                                 {{ form.pdf }}
                             </div>
+                            <div class="col-md-4">
+                                <label class="form-label d-block">¿Inter?</label>
+                                <div class="form-check form-switch">
+                                    {{ form.inter }}
+                                    <label class="form-check-label" for="id_inter">Sí</label>
+                                </div>
+                            </div>
+
+
+
 
                         </div>
                         <div class="text-center mt-4">
@@ -715,7 +751,8 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'control_expediente:editar_seguimiento' %}" enctype="multipart/form-data">
+                <form method="POST" action="{% url 'control_expediente:editar_seguimiento' %}"
+                    enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" id="edit_id" name="id">
                     <div class="container">
@@ -729,7 +766,7 @@
                                 <input type="text" class="form-control" id="edit_id_seguimiento" name="seguimiento">
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Fecha última revisión</label>
+                                <label class="form-label">Fecha</label>
                                 <input type="date" class="form-control" id="edit_id_fecha_seguimiento"
                                     name="fecha_seguimiento">
                             </div>
@@ -749,9 +786,9 @@
                                 </select>
                             </div>
                             <div class="col-md-12">
-                                                    <label for="edit_id_pdf" class="form-label">Archivo PDF</label>
-                                                    <input type="file" class="form-control" id="edit_id_pdf" name="pdf">
-                                                </div>
+                                <label for="edit_id_pdf" class="form-label">Archivo PDF</label>
+                                <input type="file" class="form-control" id="edit_id_pdf" name="pdf">
+                            </div>
                         </div>
                         <div class="text-center mt-4">
                             <button type="submit" class="btn px-5 py-2 btnGuardar2"
@@ -884,22 +921,28 @@
 
 
         document.querySelectorAll('.toggle-gastos-btn').forEach(row => {
-    row.addEventListener('click', function (e) {
-        // Verifica si el clic fue dentro de la celda de acciones o en botón Ver PDF
-        if (e.target.closest('td.acciones') || e.target.closest('.ver-pdf-btn')) {
-            return; // Ignora el clic
-        }
+            row.addEventListener('click', function (e) {
+                // Ignora si es una fila con inter=True
+                if (row.dataset.inter === 'true') {
+                    return;
+                }
 
-        const targetId = row.getAttribute('data-target');
-        const gastosRow = document.getElementById(targetId);
+                // Ignora clics en acciones o ver PDF
+                if (e.target.closest('td.acciones') || e.target.closest('.ver-pdf-btn')) {
+                    return;
+                }
 
-        if (gastosRow.style.display === 'none' || gastosRow.style.display === '') {
-            gastosRow.style.display = 'table-row';
-        } else {
-            gastosRow.style.display = 'none';
-        }
-    });
-});
+                const targetId = row.getAttribute('data-target');
+                const gastosRow = document.getElementById(targetId);
+
+                if (gastosRow.style.display === 'none' || gastosRow.style.display === '') {
+                    gastosRow.style.display = 'table-row';
+                } else {
+                    gastosRow.style.display = 'none';
+                }
+            });
+        });
+
 
     });
 </script>

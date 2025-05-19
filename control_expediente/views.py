@@ -162,6 +162,15 @@ def ver_seguimiento(request, caso_id):
     seguimientos = caso.seguimientos.all().prefetch_related('gastos')  # solo 'gastos' directos
     presentaciones = caso.presentaciones.prefetch_related(presentaciones_prefetch)
 
+
+    total_soles = 0
+    total_dolares = 0
+
+    for seguimiento in seguimientos:
+        for gasto in seguimiento.gastos.all():
+            total_soles += gasto.gastos_soles or 0
+            total_dolares += gasto.gastos_dolares or 0
+
     context = {
         'caso': caso,
         'seguimientos': seguimientos,
@@ -170,6 +179,8 @@ def ver_seguimiento(request, caso_id):
         'form2': gasto_form,
         'form3': presentacion_form,
         'form4': gasto_presentacion_form,
+        'total_soles': total_soles,
+        'total_dolares': total_dolares,
     }
 
     return render(request, 'control_expediente/seguimientos_y_gastos.html', context)
