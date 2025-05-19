@@ -88,7 +88,7 @@
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
                             <a href="{% url 'lista_partidas' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
-                                style="background-color: {% if request.user.role == 3 %}#9a1413{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar
+                                style="background-color: {% if request.user.role == 3 %}#9a1413{% elif request.user.role == 2 %}#0995AD{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar
                                 Filtros</a>
                         </div>
 
@@ -182,7 +182,7 @@
                     <!-- Tabla -->
                     <div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
                         <table class="table table-hover" id="documentsTable">
-                            <thead class="table" style="position: sticky; top: 0; z-index: 1;">
+                            <thead class="" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
                                     <th></th>
                                     <th>Item</th>
@@ -216,14 +216,24 @@
                                     <td class="text-nowrap">{{ cj.expediente }}</td>
                                     <td>{{ cj.materia }}</td>
                                     <td>{{ cj.juzgado }}</td>
-                                    <!-- Demandante resaltado si representante es 'demandante' -->
+                                    <!-- Demandante resaltado según representante y rol -->
                                     <td
-                                        style="{% if cj.representante == 'demandante' %}background-color: #C8C8C8;{% endif %}">
+                                        {% if cj.representante == 'demandante' and request.user.role == 2 %}
+                                            style="background-color: #E2FBFF;"
+                                        {% elif cj.representante == 'demandante' and request.user.role == 3 %}
+                                            style="background-color: #FCEEEE;"
+                                        {% endif %}
+                                    >
                                         {{ cj.demandante }}
                                     </td>
-                                    <!-- Demandado resaltado si representante es 'demandado' -->
+                                    <!-- Demandado resaltado según representante y rol -->
                                     <td
-                                        style="{% if cj.representante == 'demandado' %}background-color: #C8C8C8;{% endif %}">
+                                        {% if cj.representante == 'demandado' and request.user.role == 2 %}
+                                            style="background-color: #E2FBFF;"
+                                        {% elif cj.representante == 'demandado' and request.user.role == 3 %}
+                                            style="background-color: #FCEEEE;"
+                                        {% endif %}
+                                    >
                                         {{ cj.demandado }}
                                     </td>
                                     <td>{{ cj.sede }}</td>
@@ -364,23 +374,23 @@
                     <script>
 
                         // FILAS RESALTADAS
-                        document.addEventListener('DOMContentLoaded', function () {
-                            const filas = document.querySelectorAll('#documentsTable tbody tr');
+                        // document.addEventListener('DOMContentLoaded', function () {
+                        //     const filas = document.querySelectorAll('#documentsTable tbody tr');
 
-                            filas.forEach(fila => {
-                                fila.addEventListener('click', function () {
-                                    // Si ya está seleccionada, la quitamos
-                                    if (this.classList.contains('fila-seleccionada')) {
-                                        this.classList.remove('fila-seleccionada');
-                                    } else {
-                                        // Primero quitamos la clase de todas las filas
-                                        filas.forEach(f => f.classList.remove('fila-seleccionada'));
-                                        // Luego la agregamos a la que se hizo click
-                                        this.classList.add('fila-seleccionada');
-                                    }
-                                });
-                            });
-                        });
+                        //     filas.forEach(fila => {
+                        //         fila.addEventListener('click', function () {
+                        //             // Si ya está seleccionada, la quitamos
+                        //             if (this.classList.contains('fila-seleccionada')) {
+                        //                 this.classList.remove('fila-seleccionada');
+                        //             } else {
+                        //                 // Primero quitamos la clase de todas las filas
+                        //                 filas.forEach(f => f.classList.remove('fila-seleccionada'));
+                        //                 // Luego la agregamos a la que se hizo click
+                        //                 this.classList.add('fila-seleccionada');
+                        //             }
+                        //         });
+                        //     });
+                        // });
 
                         document.addEventListener("DOMContentLoaded", function () {
                             const table = document.getElementById("documentsTable");

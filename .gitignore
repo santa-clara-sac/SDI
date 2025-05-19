@@ -1,5 +1,6 @@
 # Entorno Virtual
 .venv
+venv
 .asd
 # Archivos compilados de Python
 __pycache__/

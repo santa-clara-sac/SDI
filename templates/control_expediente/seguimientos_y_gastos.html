@@ -99,8 +99,8 @@
                                     <td class="text-nowrap">{{ seguimiento.resolucion }}</td>
                                     <td>{{ seguimiento.fecha_seguimiento|date:"d-m-Y" }}</td>
                                     <td class="text-nowrap">{{ seguimiento.seguimiento }}</td>
-                                    <td>{{ seguimiento.pendiente }}</td>
-                                    <td>{{ seguimiento.responsable }}</td>
+                                    <td>{{ seguimiento.pendiente|default:"" }}</td>
+                                    <td>{{ seguimiento.responsable|default:"" }}</td>
                                     <td>{{ seguimiento.estado }}</td>
                                     <td class="pdf">
                                         {% if seguimiento.pdf %}
@@ -239,7 +239,7 @@
                                 {% endfor %}
                             </tbody>
                             <tfoot>
-                                <tr>
+                                <tr style="background-color: #FCEEEE;">
                                     <td colspan="6"><strong>Totales Generales:</strong></td>
                                     <td><strong>{{ total_soles }} (S)</strong></td>
                                     <td><strong>{{ total_dolares }} ($)</strong></td>
@@ -491,11 +491,11 @@
 <!-- Modal para ver PDF -->
 <div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content" style="background-color: #3b4252">
+        <div class="modal-content" style="background-color: #26292E">
             <div class="modal-header">
-                <h5 class="modal-title" style="color: #eceff4;">Visualizar documento PDF</h5>
+                <h5 class="modal-title" style="color: #fff;">Visualizar documento PDF</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
-                    style="background-color: #9a1413;"></button>
+                    style="background-color: #E46962;"></button>
             </div>
             <div class="modal-body" style="height: 80vh;">
                 <iframe id="pdfIframe" src="" width="100%" height="100%" style="border: none;"></iframe>
@@ -718,7 +718,7 @@
                                 {{ form.pdf }}
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label d-block">¿Inter?</label>
+                                <label class="form-label d-block">¿Es una Cédula?</label>
                                 <div class="form-check form-switch">
                                     {{ form.inter }}
                                     <label class="form-check-label" for="id_inter">Sí</label>
@@ -792,7 +792,7 @@
                                 <input type="file" class="form-control" id="edit_id_pdf" name="pdf">
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label d-block" for="edit_id_inter">¿Inter?</label>
+                                <label class="form-label d-block" for="edit_id_inter">¿ Es una Cédula?</label>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="edit_id_inter" name="inter">
                                     <label class="form-check-label" for="edit_id_inter">Sí</label>

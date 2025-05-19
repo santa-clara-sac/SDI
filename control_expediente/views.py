@@ -159,7 +159,8 @@ def ver_seguimiento(request, caso_id):
 
     # Consultas para mostrar los datos en la plantilla
     
-    seguimientos = caso.seguimientos.all().prefetch_related('gastos')  # solo 'gastos' directos
+    #seguimientos = caso.seguimientos.all().prefetch_related('gastos')  # solo 'gastos' directos
+    seguimientos = caso.seguimientos.all().prefetch_related('gastos').order_by('fecha_seguimiento')
     presentaciones = caso.presentaciones.prefetch_related(presentaciones_prefetch)
 
 

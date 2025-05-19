@@ -20,13 +20,13 @@
 
     <style>
         .navbar {  
-            box-shadow: {% if request.user.role == 3 %}0 1px 3px 1px #ffc2c2{% else %}0 1px 3px 1px #4c566a{% endif %};
+            box-shadow: {% if request.user.role == 3 %}0 1px 3px 1px #ffc2c2{% else %}0 1px 3px 1px #BEBFC0{% endif %};
         }
     
     </style>    
 
     <nav class="navbar navbar-expand-lg navbar-dark"
-        style="background-color: {% if request.user.role == 3 %}#9a1413{% else %}#3b4252{% endif %}; padding-top: 5px; padding-bottom: 5px;">
+        style="background-color: {% if request.user.role == 3 %}#9a1413{% else %}#0D1028{% endif %}; padding-top: 5px; padding-bottom: 5px;">
         <div class="container-fluid">
             <!-- Logo e identidad -->
             <div class="navbar-brand d-flex align-items-center me-4" style="cursor: default;">
