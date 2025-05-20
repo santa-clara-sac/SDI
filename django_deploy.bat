@@ -1,11 +1,8 @@
 @echo off
-cd /d C:\Users\Admin\Desktop\SDI
+cd /d C:\Users\User\Desktop\SDI
 call .venv\Scripts\activate
 
 :loop
-echo Aplicando migraciones...
-python manage.py migrate
-
 echo Iniciando el servidor Django...
 python manage.py runserver 0.0.0.0:9090
 

@@ -93,7 +93,7 @@
                             <label class="form-label" style="color: #ffffff;">Limpiar</label>
                             <a href="{% url 'lista_planos' %}" id="clearFilters"
                                 class="form-control btn btn-secondary text-center"
-                                style="background-color: {% if request.user.role == 3 %}#9a1413{% elif request.user.role == 2 %}#5e81ac{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar Filtros</a>
+                                style="background-color: {% if request.user.role == 3 %}#9a1413{% elif request.user.role == 2 %}#0995AD{% else %}#3b4252{% endif %}; border: none; line-height: 25px;">Limpiar Filtros</a>
                         </div>
 
                     </div>
@@ -205,7 +205,7 @@
                                     <td>
                                         {% if plano.pdf %}
                                         <button type="button"
-                                            style="background: none; border: none; color: #9c0101; text-decoration: none; cursor: pointer;"
+                                            style="background: none; border: none; color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %}; text-decoration: none; cursor: pointer;"
                                             data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
                                             data-pdf-url="{{ plano.pdf.url }}" class="ver-pdf-btn">
                                             Ver PDF
@@ -260,7 +260,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" style="color: #edeff4;">Visualizar documento PDF</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
-                    style="background-color: #ff3f3f;"></button>
+                    style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};"></button>
             </div>
             <div class="modal-body" style="height: 80vh;">
                 <iframe id="pdfIframe" src="" width="100%" height="100%" style="border: none;"></iframe>

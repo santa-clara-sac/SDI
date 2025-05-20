@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('partidas_planos.urls')),
     path('', include('centro_costos.urls')),
     path('', include('control_expediente.urls')),
+    path('', include('hoja_requerimiento.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

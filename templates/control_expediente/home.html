@@ -95,10 +95,10 @@
                     </div>
 
                     <!-- Botón para abrir el modal de agregar -->
-                    {% if request.user.role != 1 and request.user.role != 2 %}
+                    {% if request.user.role != 1 %}
                     <center>
                         <button type="button" class="btn text-white mt-4"
-                            style="background-color: #9a1413; border: none;" data-bs-toggle="modal"
+                            style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %}; border: none;" data-bs-toggle="modal"
                             data-bs-target="#documentModal">
                             <i class="bi bi-plus-lg"></i> Agregar Nuevo Expediente
                         </button>
@@ -111,7 +111,7 @@
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #9a1413;">
+                                <div class="modal-header text-white" style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                                     <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Expediente</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -195,7 +195,7 @@
                                     <th>Especialidad</th>
                                     <th class="text-nowrap">Año Inicio</th>
                                     <th class="d-none">Representa a</th>
-                                    {% if request.user.role != 1 and request.user.role != 2 %}
+                                    {% if request.user.role != 1 %}
                                     <th>Acciones</th>
                                     {% endif %}
                                 </tr>
@@ -249,7 +249,7 @@
                                         {% endif %}
                                     </td>
 
-                                    {% if request.user.role != 1 and request.user.role != 2 %}
+                                    {% if request.user.role != 1 %}
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm text-white me-2 btn-editar"
@@ -267,7 +267,7 @@
 
                                             <a href="{% url 'control_expediente:eliminar_expediente' cj.id %}"
                                                 class="btn btn-sm text-white btnEliminar"
-                                                style="background-color: #9a1413;" title="Eliminar">
+                                                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};" title="Eliminar">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
@@ -287,7 +287,7 @@
                         aria-labelledby="editCasoJudicialModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: #9a1413;">
+                                <div class="modal-header text-white" style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                                     <h5 class="modal-title" id="editCasoJudicialModalLabel">Editar Expediente</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>

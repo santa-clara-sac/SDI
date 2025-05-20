@@ -1,5 +1,5 @@
 body {
-    background-image: url("/static/images/bgg2.jpg");
+    background-image: url("/static/images/bgg3.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -15,7 +15,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(216, 222, 233, 0.495);
+    background-color: rgba(138, 148, 162, 0.4);
     z-index: 0;
 }
 

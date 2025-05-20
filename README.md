@@ -85,3 +85,21 @@ Demandado: Persona o entidad contra quienes se interpone la demanda.
 AñoInicio: Año en que se inició el proceso judicial.
 
 1ra hoja -> todos los movimientos
+
+```SQL
+SELECT TOP (1000) [id]
+      ,[anio]
+      ,[url]
+      ,[flag]
+  FROM [SDI_dev].[dbo].[hoja_requerimiento_anios];
+
+TRUNCATE TABLE [SDI_dev].[dbo].[hoja_requerimiento_anios];
+
+insert into dbo.hoja_requerimiento_anios VALUES ('2025', '/q1_t1', 1);
+insert into dbo.hoja_requerimiento_anios VALUES ('2025', '/q2_t1', 1);
+insert into dbo.hoja_requerimiento_anios VALUES ('2026', '/q1_t2', 1);
+insert into dbo.hoja_requerimiento_anios VALUES ('2026', '/q2_t2', 1);
+insert into dbo.hoja_requerimiento_anios VALUES ('2027', '/q1_t3', 1);
+insert into dbo.hoja_requerimiento_anios VALUES ('2027', '/q2_t3', 1);
+
+```
