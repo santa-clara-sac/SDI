@@ -98,8 +98,8 @@
                     {% if request.user.role != 1 %}
                     <center>
                         <button type="button" class="btn text-white mt-4"
-                            style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %}; border: none;" data-bs-toggle="modal"
-                            data-bs-target="#documentModal">
+                            style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %}; border: none;"
+                            data-bs-toggle="modal" data-bs-target="#documentModal">
                             <i class="bi bi-plus-lg"></i> Agregar Nuevo Expediente
                         </button>
                     </center>
@@ -111,7 +111,8 @@
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
+                                <div class="modal-header text-white"
+                                    style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                                     <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Expediente</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -184,11 +185,12 @@
                         <table class="table table-hover" id="documentsTable">
                             <thead class="" style="position: sticky; top: 0; z-index: 1;">
                                 <tr>
-                                    <th></th>
+                                    <th>Seg. y gts.</th>
                                     <th>Item</th>
                                     <th>Expediente</th>
                                     <th>Materia</th>
                                     <th>Juzgado</th>
+                                    <th>Tlf. Juzgado</th>
                                     <th>Demandante</th>
                                     <th>Demandado</th>
                                     <th>Sede</th>
@@ -216,26 +218,28 @@
                                     <td class="text-nowrap">{{ cj.expediente }}</td>
                                     <td>{{ cj.materia }}</td>
                                     <td>{{ cj.juzgado }}</td>
+                                    <td>{{ cj.tlf_juzgado }}</td>
                                     <!-- Demandante resaltado según representante y rol -->
-                                    <td
-                                        {% if cj.representante == 'demandante' and request.user.role == 2 %}
-                                            style="background-color: #E2FBFF;"
-                                        {% elif cj.representante == 'demandante' and request.user.role == 3 %}
-                                            style="background-color: #FCEEEE;"
-                                        {% endif %}
-                                    >
+                                    <td {% if cj.representante|default:'' == 'demandante' %}
+                                            {% if request.user.role == 2 %}
+                                                style="background-color: #E2FBFF; font-weight: bold;"
+                                            {% elif request.user.role == 3 %}
+                                                style="background-color: #FCEEEE; font-weight: bold;"
+                                            {% endif %}
+                                        {% endif %}>
                                         {{ cj.demandante }}
                                     </td>
-                                    <!-- Demandado resaltado según representante y rol -->
-                                    <td
-                                        {% if cj.representante == 'demandado' and request.user.role == 2 %}
-                                            style="background-color: #E2FBFF;"
-                                        {% elif cj.representante == 'demandado' and request.user.role == 3 %}
-                                            style="background-color: #FCEEEE;"
-                                        {% endif %}
-                                    >
+
+                                    <td {% if cj.representante|default:'' == 'demandado' %}
+                                            {% if request.user.role == 2 %}
+                                                style="background-color: #E2FBFF; font-weight: bold;"
+                                            {% elif request.user.role == 3 %}
+                                                style="background-color: #FCEEEE; font-weight: bold;"
+                                            {% endif %}
+                                        {% endif %}>
                                         {{ cj.demandado }}
                                     </td>
+
                                     <td>{{ cj.sede }}</td>
                                     <td>{{ cj.especialidad }}</td>
                                     <td>{{ cj.anio_inicio|default:"" }}</td>
@@ -267,7 +271,8 @@
 
                                             <a href="{% url 'control_expediente:eliminar_expediente' cj.id %}"
                                                 class="btn btn-sm text-white btnEliminar"
-                                                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};" title="Eliminar">
+                                                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};"
+                                                title="Eliminar">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
@@ -287,7 +292,8 @@
                         aria-labelledby="editCasoJudicialModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                             <div class="modal-content">
-                                <div class="modal-header text-white" style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
+                                <div class="modal-header text-white"
+                                    style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                                     <h5 class="modal-title" id="editCasoJudicialModalLabel">Editar Expediente</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                         aria-label="Close"></button>

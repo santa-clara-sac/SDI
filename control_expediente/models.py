@@ -27,6 +27,8 @@ class Seguimiento(models.Model):
     ESTADO_CHOICES = [
         ('En proceso', 'En Proceso'),
         ('Finalizado', 'Finalizado'),
+        ('Presentado', 'Presentado'),
+        ('Notificado', 'Notificado'),
     ]
 
     caso = models.ForeignKey(CasoJudicial, on_delete=models.CASCADE, related_name='seguimientos')
@@ -40,6 +42,8 @@ class Seguimiento(models.Model):
     pdf = models.FileField(upload_to='seguimiento/', blank=True, null=True)
     inter = models.BooleanField(default=False)
     fecha_registro = models.DateTimeField(auto_now_add=True)
+    tlf_juzgado = models.CharField(max_length=255, blank=True, null=True)
+    editor = models.CharField(max_length=255, blank=True, null=True)
     
 
     def __str__(self):
