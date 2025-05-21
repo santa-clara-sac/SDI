@@ -1,6 +1,6 @@
-# models.py
 from django.db import models
 from django.utils import timezone
+from partidas_planos.models import User
 
 class CasoJudicial(models.Model):
     REPRESENTANTE_CHOICES = [
@@ -17,6 +17,7 @@ class CasoJudicial(models.Model):
     demandado = models.CharField(max_length=255)
     anio_inicio = models.CharField(max_length=4, blank=True, null=True)
     representante = models.CharField(max_length=20, choices=REPRESENTANTE_CHOICES)
+    tlf_juzgado = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         # return f"{self.expediente} - {self.demandante} vs {self.demandado}"
@@ -32,19 +33,18 @@ class Seguimiento(models.Model):
     ]
 
     caso = models.ForeignKey(CasoJudicial, on_delete=models.CASCADE, related_name='seguimientos')
-    resolucion = models.TextField()
-    fecha_seguimiento = models.DateField()
+    resolucion = models.CharField(max_length=255, blank=True, null=True)
+    fecha_seguimiento = models.DateField(blank=True, null=True)
     seguimiento = models.TextField()
-    fecha_pendiente = models.DateField(blank=True, null=True)
+    fecha_pendiente = models.DateField(blank=True, null=True) # fecha notificacion
     pendiente = models.TextField(blank=True)
     responsable = models.CharField(max_length=255, blank=True, null=True)
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='en_proceso')
     pdf = models.FileField(upload_to='seguimiento/', blank=True, null=True)
     inter = models.BooleanField(default=False)
-    fecha_registro = models.DateTimeField(auto_now_add=True)
-    tlf_juzgado = models.CharField(max_length=255, blank=True, null=True)
+    fecha_registro = models.DateTimeField(auto_now=True) # (auto_now_add=True)
     editor = models.CharField(max_length=255, blank=True, null=True)
-    
+    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='seguimientos_creados')    
 
     def __str__(self):
         return f"Seguimiento - {self.caso.expediente} - {self.fecha_seguimiento}"

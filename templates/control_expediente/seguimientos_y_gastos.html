@@ -54,7 +54,8 @@
     }
 
     .compact-table {
-        font-size: 0.875rem; /* Opcional: texto más pequeño */
+        font-size: 0.875rem;
+        /* Opcional: texto más pequeño */
     }
 
     .btn-group .btn {
@@ -63,6 +64,35 @@
 
     .bi {
         font-size: 1rem !important;
+    }
+
+    /* Para evitar que el modal se encoja o deforme al moverlo */
+    .modal-dialog {
+        width: 60vw;
+        max-width: 60vw;
+        height: 80vh;
+        max-height: 80vh;
+    }
+
+    /* Cuando es movible (tiene la clase draggable) */
+    .modal.draggable .modal-dialog {
+        position: absolute;
+        top: 10px;
+        left: calc(50% - 40vw);
+        /* Centrado inicial basado en width: 80vw */
+        margin: 0;
+        transform: none !important;
+    }
+
+    /* Opcional: Cursor en el encabezado para indicar que se puede mover */
+    #pdfModalHeader {
+        cursor: move;
+    }
+
+    #pdfIframe {
+        width: 100%;
+        height: 100%;
+        border: none;
     }
 </style>
 
@@ -82,8 +112,8 @@
                     {% if request.user.role != 1 %}
                     <center>
                         <button type="button" class="btn text-white mt-4"
-                            style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %}; border: none;" data-bs-toggle="modal"
-                            data-bs-target="#documentModal">
+                            style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %}; border: none;"
+                            data-bs-toggle="modal" data-bs-target="#documentModal">
                             <i class="bi bi-plus-lg"></i>Nuevo Seguimiento
                         </button>
 
@@ -109,7 +139,9 @@
                                     <th>Responsable</th>
                                     <th>Estado</th>
                                     <th>PDF</th>
-                                    <th class="d-none">Fecha Registro</th>
+                                    <th class="">Fecha Notificación</th>
+                                    <th class="">Última edición</th>
+                                    <th class="">Editor</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -136,7 +168,9 @@
                                         No disponible
                                         {% endif %}
                                     </td>
-                                    <td class="d-none">{{ seguimiento.fecha_registro|date:"d/m/Y H:i" }}</td>
+                                    <td class="">{{ seguimiento.fecha_pendiente|date:"d-m-Y" }}</td>
+                                    <td class="">{{ seguimiento.fecha_registro|date:"d-m-Y H:i" }}</td>
+                                    <td class="">{{ seguimiento.editor|default:"" }}</td>
 
                                     {% if request.user.role != 1 %}
                                     <td class="acciones">
@@ -147,16 +181,18 @@
                                                 data-resolucion="{{ seguimiento.resolucion }}"
                                                 data-seguimiento="{{ seguimiento.seguimiento }}"
                                                 data-pendiente="{{ seguimiento.pendiente }}"
-                                                data-responsable="{{ seguimiento.responsable }}"
+                                                data-responsable="{{ seguimiento.responsable|default_if_none:'' }}"
                                                 data-estado="{{ seguimiento.estado }}"
                                                 data-fecha_seguimiento="{{ seguimiento.fecha_seguimiento|date:'Y-m-d' }}"
+                                                data-fecha_pendiente="{{ seguimiento.fecha_pendiente|date:'Y-m-d' }}"
                                                 data-inter="{{ seguimiento.inter|yesno:'true,false' }}">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
 
                                             <a href="{% url 'control_expediente:eliminar_seguimiento' seguimiento.id %}"
                                                 class="btn btn-sm text-white btnEliminar"
-                                                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};" title="Eliminar">
+                                                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};"
+                                                title="Eliminar">
                                                 <i class="bi bi-trash"></i>
                                             </a>
 
@@ -190,7 +226,7 @@
                                                         <th>Gasto Soles</th>
                                                         <th>Gasto Dólares</th>
                                                         <th>Pdf</th>
-                                                        <th>Fecha modificado</th>
+                                                        <th class="d-none">Fecha modificado</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
@@ -205,9 +241,9 @@
                                                         <td>
                                                             {% if gasto.pdf %}
                                                             <button type="button"
-                                                                    style="background: none; border: none; color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %}; text-decoration: none; cursor: pointer;"
-                                                                    data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
-                                                                    data-pdf-url="{{ gasto.pdf.url }}" class="ver-pdf-btn">
+                                                                style="background: none; border: none; color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %}; text-decoration: none; cursor: pointer;"
+                                                                data-bs-toggle="modal" data-bs-target="#pdfViewerModal"
+                                                                data-pdf-url="{{ gasto.pdf.url }}" class="ver-pdf-btn">
                                                                 Ver PDF
                                                             </button>
                                                             {% else %}
@@ -218,16 +254,16 @@
                                                         <td>
                                                             <div class="btn-group" role="group">
                                                                 <button type="button"
-                                                                        class="btn btn-sm me-1 btn-editar-gasto"
-                                                                        style="color: #434c5e;" data-bs-toggle="modal"
-                                                                        data-bs-target="#editGastoModal"
-                                                                        data-id_gasto="{{ gasto.id }}"
-                                                                        data-codigo_pago="{{ gasto.codigo_pago }}"
-                                                                        data-detalle="{{ gasto.detalle }}"
-                                                                        data-gastos_soles="{{ gasto.gastos_soles }}"
-                                                                        data-gastos_dolares="{{ gasto.gastos_dolares }}"
-                                                                        data-pdf="{{ gasto.pdf }}"
-                                                                        data-fecha="{{ gasto.fecha|date:'Y-m-d' }}">
+                                                                    class="btn btn-sm me-1 btn-editar-gasto"
+                                                                    style="color: #434c5e;" data-bs-toggle="modal"
+                                                                    data-bs-target="#editGastoModal"
+                                                                    data-id_gasto="{{ gasto.id }}"
+                                                                    data-codigo_pago="{{ gasto.codigo_pago }}"
+                                                                    data-detalle="{{ gasto.detalle }}"
+                                                                    data-gastos_soles="{{ gasto.gastos_soles }}"
+                                                                    data-gastos_dolares="{{ gasto.gastos_dolares }}"
+                                                                    data-pdf="{{ gasto.pdf }}"
+                                                                    data-fecha="{{ gasto.fecha|date:'Y-m-d' }}">
                                                                     <i class="bi bi-pencil-square"></i>
                                                                 </button>
 
@@ -236,11 +272,14 @@
                                                                     class="form-eliminar-gasto"
                                                                     style="display: inline;">
                                                                     {% csrf_token %}
-                                                                    <input type="hidden" name="gasto_id" value="{{ gasto.id }}">
-                                                                    <button type="submit" class="btn btn-sm btnEliminarg"
+                                                                    <input type="hidden" name="gasto_id"
+                                                                        value="{{ gasto.id }}">
+                                                                    <button type="submit"
+                                                                        class="btn btn-sm btnEliminarg"
                                                                         style="color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};"
                                                                         title="Eliminar">
-                                                                        <i class="bi bi-trash" style="font-size: 1.25rem;"></i>
+                                                                        <i class="bi bi-trash"
+                                                                            style="font-size: 1.25rem;"></i>
                                                                     </button>
                                                                 </form>
                                                             </div>
@@ -260,8 +299,9 @@
                                 {% endfor %}
                             </tbody>
                             <tfoot>
-                                <tr style="background-color: {% if request.user.role == 2 %}#F2FDFF;{% else %}#FFF3F7{% endif %};">
-                                    <td colspan="6"><strong>Totales Generales:</strong></td>
+                                <tr
+                                    style="background-color: {% if request.user.role == 2 %}#F2FDFF;{% else %}#FFF3F7{% endif %};">
+                                    <td colspan="8"><strong>Gasto General:</strong></td>
                                     <td><strong>{{ total_soles }} (S)</strong></td>
                                     <td><strong>{{ total_dolares }} ($)</strong></td>
                                     <td colspan="4"></td>
@@ -369,8 +409,8 @@
                                                                     {% csrf_token %}
                                                                     <input type="hidden" name="gasto_id"
                                                                         value="{{ gastop.id }}">
-                                                                    <button class="btn btn-sm text-danger btnEliminar" type="submit"
-                                                                        title="Eliminar">
+                                                                    <button class="btn btn-sm text-danger btnEliminar"
+                                                                        type="submit" title="Eliminar">
                                                                         <i class="bi bi-trash"></i>
                                                                     </button>
                                                                 </form>
@@ -402,9 +442,10 @@
 
 <!-- Modal para editar gasto -->
 <div class="modal fade" id="editGastoModal" tabindex="-1" aria-labelledby="editGastoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog modal-xl" id="pdfModalDialog">
         <div class="modal-content">
-            <div class="modal-header text-white" style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
+            <div class="modal-header text-white"
+                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                 <h5 class="modal-title" id="editGastoModalLabel">Editar Gasto</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -511,9 +552,9 @@
 
 <!-- Modal para ver PDF -->
 <div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content" style="background-color: #0D1028">
-            <div class="modal-header">
+            <div class="modal-header" id="pdfModalHeader">
                 <h5 class="modal-title" style="color: #fff;">Visualizar documento PDF</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
                     style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};"></button>
@@ -575,7 +616,8 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header text-white" style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
+            <div class="modal-header text-white"
+                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                 <h5 class="modal-title" id="documentModalGastoLabel">Agregar Nuevo Gasto</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -699,7 +741,8 @@
 <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header text-white" style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
+            <div class="modal-header text-white"
+                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                 <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Seguimiento</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -711,8 +754,16 @@
                     <div class="container">
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <label for="id_codigo" class="form-label">Descripción</label>
-                                {{ form.resolucion }}
+                                <label class="form-label">Fecha Seguimiento</label>
+                                {{ form.fecha_seguimiento }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Descripción (Escrito o Resolución)</label>
+                                <div class="input-group">
+                                    {{ form.resolucion_tipo }}
+                                    {{ form.resolucion_texto }}
+                                </div>
+                                {{ form.resolucion }} <!-- campo oculto que se llena con los dos anteriores -->
                             </div>
                             <div class="col-md-4">
                                 <label for="id_partida" class="form-label">Seguimiento</label>
@@ -727,19 +778,19 @@
                                 {{ form.responsable }}
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Fecha</label>
-                                {{ form.fecha_seguimiento }}
-                            </div>
-                            <div class="col-md-4">
                                 <label for="id_pg" class="form-label">Estado</label>
                                 {{ form.estado }}
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-4">
+                                <label for="id_pg" class="form-label">Fecha Notificación</label>
+                                {{ form.fecha_pendiente }}
+                            </div>
+                            <div class="col-md-8">
                                 <label for="id_pdf" class="form-label">PDF</label>
                                 {{ form.pdf }}
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label d-block">¿Es una Cédula?</label>
+                            <div class="col-md-4 d-none">
+                                <label class="form-label d-block">¿Es una Resolución?</label>
                                 <div class="form-check form-switch">
                                     {{ form.inter }}
                                     <label class="form-check-label" for="id_inter">Sí</label>
@@ -768,7 +819,8 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <div class="modal-header text-white" style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
+            <div class="modal-header text-white"
+                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                 <h5 class="modal-title" id="editSeguimientoModalLabel">Editar Seguimiento</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -781,17 +833,18 @@
                     <div class="container">
                         <div class="row g-3">
                             <div class="col-md-4">
-                                <label for="edit_id_codigo" class="form-label">Descripción</label>
+                                <label class="form-label">Fecha del Seguimiento</label>
+                                <input type="date" class="form-control" id="edit_id_fecha_seguimiento"
+                                    name="fecha_seguimiento">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="edit_id_codigo" class="form-label">Descripción (Escrito o
+                                    Resolución)</label>
                                 <input type="text" class="form-control" id="edit_id_resolucion" name="resolucion">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Seguimiento</label>
                                 <input type="text" class="form-control" id="edit_id_seguimiento" name="seguimiento">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Fecha</label>
-                                <input type="date" class="form-control" id="edit_id_fecha_seguimiento"
-                                    name="fecha_seguimiento">
                             </div>
                             <div class="col-md-4">
                                 <label for="edit_id_pendiente" class="form-label">Pendiente</label>
@@ -806,14 +859,21 @@
                                 <select class="form-control" id="edit_id_estado" name="estado">
                                     <option value="En proceso">En Proceso</option>
                                     <option value="Finalizado">Finalizado</option>
+                                    <option value="Presentado">Presentado</option>
+                                    <option value="Notificado">Notificado</option>
                                 </select>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-4">
+                                <label class="form-label">Fecha Notificación</label>
+                                <input type="date" class="form-control" id="edit_id_fecha_pendiente"
+                                    name="fecha_pendiente">
+                            </div>
+                            <div class="col-md-8">
                                 <label for="edit_id_pdf" class="form-label">Archivo PDF</label>
                                 <input type="file" class="form-control" id="edit_id_pdf" name="pdf">
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label d-block" for="edit_id_inter">¿ Es una Cédula?</label>
+                            <div class="col-md-4 d-none">
+                                <label class="form-label d-block" for="edit_id_inter">¿Es una Resolución?</label>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="edit_id_inter" name="inter">
                                     <label class="form-check-label" for="edit_id_inter">Sí</label>
@@ -878,58 +938,58 @@
 <script>
 
     //ALERT ELIMINAR
-                        (function () {
-                            const botonesEliminar = document.querySelectorAll('.btnEliminar');
+    (function () {
+        const botonesEliminar = document.querySelectorAll('.btnEliminar');
 
-                            botonesEliminar.forEach(boton => {
-                                boton.addEventListener('click', function (e) {
-                                    e.preventDefault(); // Evita que el enlace se siga inmediatamente
+        botonesEliminar.forEach(boton => {
+            boton.addEventListener('click', function (e) {
+                e.preventDefault(); // Evita que el enlace se siga inmediatamente
 
-                                    Swal.fire({
-                                        title: '¿Estás seguro de eliminar?',
-                                        text: "Esta acción no se puede deshacer.",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#9a1413',
-                                        cancelButtonColor: '#6F6F6F',
-                                        confirmButtonText: 'Sí, eliminar',
-                                        cancelButtonText: 'Cancelar'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            // Redirige al href del botón
-                                            window.location.href = this.href;
-                                        }
-                                    });
-                                });
-                            });
-                        })();
+                Swal.fire({
+                    title: '¿Estás seguro de eliminar?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#9a1413',
+                    cancelButtonColor: '#6F6F6F',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirige al href del botón
+                        window.location.href = this.href;
+                    }
+                });
+            });
+        });
+    })();
 
-                       (function () {
-                            const botonesEliminar = document.querySelectorAll('.btnEliminarg');
+    (function () {
+        const botonesEliminar = document.querySelectorAll('.btnEliminarg');
 
-                            botonesEliminar.forEach(boton => {
-                                boton.addEventListener('click', function (e) {
-                                    e.preventDefault();
+        botonesEliminar.forEach(boton => {
+            boton.addEventListener('click', function (e) {
+                e.preventDefault();
 
-                                    const form = this.closest('form');
+                const form = this.closest('form');
 
-                                    Swal.fire({
-                                        title: '¿Estás seguro de eliminar?',
-                                        text: "Esta acción no se puede deshacer.",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#9a1413',
-                                        cancelButtonColor: '#6F6F6F',
-                                        confirmButtonText: 'Sí, eliminar',
-                                        cancelButtonText: 'Cancelar'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            form.submit();
-                                        }
-                                    });
-                                });
-                            });
-                        })();
+                Swal.fire({
+                    title: '¿Estás seguro de eliminar?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#9a1413',
+                    cancelButtonColor: '#6F6F6F',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    })();
 
 
     // BTN GUARDAR
@@ -964,6 +1024,61 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
+
+
+        const modale = document.getElementById('pdfViewerModal');
+        const header = document.getElementById('pdfModalHeader');
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        header.style.cursor = 'move';
+
+        header.addEventListener('mousedown', function (e) {
+            const dialog = modale.querySelector('.modal-dialog');
+            isDragging = true;
+
+            // Hacerlo posicionable
+            dialog.style.position = 'absolute';
+            dialog.style.margin = '0';  // quitar el centrado vertical
+
+            const rect = dialog.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+        });
+
+        document.addEventListener('mousemove', function (e) {
+            if (isDragging) {
+                const dialog = modale.querySelector('.modal-dialog');
+                dialog.style.left = (e.clientX - offsetX) + 'px';
+                dialog.style.top = (e.clientY - offsetY) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', function () {
+            isDragging = false;
+        });
+
+        // Al cerrar el modal, restaurar todo al estado original
+        modale.addEventListener('hidden.bs.modal', function () {
+            const dialog = modale.querySelector('.modal-dialog');
+            dialog.style.position = '';
+            dialog.style.left = '';
+            dialog.style.top = '';
+            dialog.style.margin = '';
+        });
+
+        // Este bloque es lo que soluciona el “doble clic en cerrar”
+        const closeBtn = modale.querySelector('.btn-close');
+        closeBtn.addEventListener('click', function () {
+            // Asegúrate de cerrar el modal con Bootstrap y no solo visualmente
+            const bsModal = bootstrap.Modal.getInstance(modale);
+            if (bsModal) {
+                bsModal.hide();
+            }
+        });
+
+
 
         //Agrega JavaScript para pasar el ID dinámicamente
         const modal = document.getElementById('documentModalGastoPresentacion');
@@ -1014,6 +1129,7 @@
                 document.getElementById('edit_id_responsable').value = button.getAttribute('data-responsable');
                 document.getElementById('edit_id_estado').value = button.getAttribute('data-estado');
                 document.getElementById('edit_id_fecha_seguimiento').value = button.getAttribute('data-fecha_seguimiento');
+                document.getElementById('edit_id_fecha_pendiente').value = button.getAttribute('data-fecha_pendiente');
 
                 // Gasto
                 document.getElementById('edit_id_codigo_pago').value = button.getAttribute('data-codigo_pago');

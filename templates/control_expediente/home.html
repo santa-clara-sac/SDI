@@ -144,6 +144,10 @@
                                                     {{ form.materia }}
                                                 </div>
                                                 <div class="col-md-4">
+                                                    <label for="id_tlf_juzgado" class="form-label">Tlf. Juzgado</label>
+                                                    {{ form.tlf_juzgado }}
+                                                </div>
+                                                <div class="col-md-4">
                                                     <label for="id_juzgado" class="form-label">Juzgado</label>
                                                     {{ form.juzgado }}
                                                 </div>
@@ -189,8 +193,8 @@
                                     <th>Item</th>
                                     <th>Expediente</th>
                                     <th>Materia</th>
-                                    <th>Juzgado</th>
                                     <th>Tlf. Juzgado</th>
+                                    <th>Juzgado</th>
                                     <th>Demandante</th>
                                     <th>Demandado</th>
                                     <th>Sede</th>
@@ -217,8 +221,8 @@
                                     <td>{{ cj.codigo }}</td>
                                     <td class="text-nowrap">{{ cj.expediente }}</td>
                                     <td>{{ cj.materia }}</td>
+                                    <td class="text-nowrap">{{ cj.tlf_juzgado }}</td>
                                     <td>{{ cj.juzgado }}</td>
-                                    <td>{{ cj.tlf_juzgado }}</td>
                                     <!-- Demandante resaltado según representante y rol -->
                                     <td {% if cj.representante|default:'' == 'demandante' %}
                                             {% if request.user.role == 2 %}
@@ -265,7 +269,8 @@
                                                 data-demandante="{{ cj.demandante }}"
                                                 data-demandado="{{ cj.demandado }}"
                                                 data-anioinicio="{{ cj.anio_inicio|default_if_none:'' }}"
-                                                data-representante="{{ cj.representante }}">
+                                                data-representante="{{ cj.representante }}"
+                                                data-tlfjuzgado="{{ cj.tlf_juzgado }}">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
 
@@ -331,6 +336,13 @@
                                                     <input type="text" class="form-control" id="edit_id_materia"
                                                         name="materia">
                                                 </div>
+
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_tlf_juzgado" class="form-label">Tlf. Juzgado</label>
+                                                    <input type="text" class="form-control" id="edit_id_tlf_juzgado"
+                                                        name="tlf_juzgado">
+                                                </div>
+                                                
                                                 <div class="col-md-4">
                                                     <label for="edit_id_juzgado" class="form-label">Juzgado</label>
                                                     <input type="text" class="form-control" id="edit_id_juzgado"
@@ -433,95 +445,74 @@
 
                         document.addEventListener('DOMContentLoaded', function () {
 
+    // FILTRO EN TIEMPO REAL
+    document.querySelectorAll('.filter-input').forEach(input => {
+        input.addEventListener('input', filtrarTabla);
+    });
 
-                            // FILTRO EN TIEMPO REAL
-                            document.querySelectorAll('.filter-input').forEach(input => {
-                                input.addEventListener('input', filtrarTabla); // Detecta tanto texto como selects
-                            });
+    function filtrarTabla() {
+        const filtros = {};
 
-                            function filtrarTabla() {
-                                const filtros = {};
+        document.querySelectorAll('.filter-input').forEach(input => {
+            const columna = input.dataset.column;
+            const valor = input.value.trim().toLowerCase();
+            if (valor) {
+                filtros[columna] = valor;
+            }
+        });
 
-                                document.querySelectorAll('.filter-input').forEach(input => {
-                                    const columna = input.dataset.column;
-                                    const valor = input.value.trim().toLowerCase();
-                                    if (valor) {
-                                        filtros[columna] = valor;
-                                    }
-                                });
+        document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
+            let mostrar = true;
 
-                                document.querySelectorAll('#documentsTable tbody tr').forEach(fila => {
-                                    let mostrar = true;
+            for (const columna in filtros) {
+                const celda = fila.cells[parseInt(columna)];
+                if (celda) {
+                    const textoCelda = celda.textContent.toLowerCase();
+                    if (!textoCelda.includes(filtros[columna])) {
+                        mostrar = false;
+                        break;
+                    }
+                }
+            }
 
-                                    for (const columna in filtros) {
-                                        const celda = fila.cells[parseInt(columna)];
-                                        if (celda) {
-                                            const textoCelda = celda.textContent.toLowerCase();
-                                            if (!textoCelda.includes(filtros[columna])) {
-                                                mostrar = false;
-                                                break;
-                                            }
-                                        }
-                                    }
+            fila.style.display = mostrar ? '' : 'none';
+        });
+    }
 
-                                    fila.style.display = mostrar ? '' : 'none';
-                                });
-                            }
+    // EDITAR REGISTRO
+    const editButtons = document.querySelectorAll('.btn-editar');
+    editButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault(); // Si el botón es un enlace, previene la redirección automática
 
+            const codigo = button.getAttribute('data-codigo');
+            const partida = button.getAttribute('data-partida');
+            const id = button.getAttribute('data-id');
 
+            console.log("Código:", codigo);
+            console.log("Partida:", partida);
+            console.log("Id:", id);
 
-                            // EDITAR REGISTRO
-                            const editButtons = document.querySelectorAll('.btn-editar');
-                            editButtons.forEach(button => {
-                                button.addEventListener('click', function () {
-                                    const codigo = button.getAttribute('data-codigo');
-                                    const partida = button.getAttribute('data-partida');
-                                    const id = button.getAttribute('data-id');
-                                    console.log("Código:", codigo);
-                                    console.log("Partida:", partida);
-                                    console.log("Id:", id);
-                                    document.getElementById('edit_id').value = button.getAttribute('data-id');
-                                    document.getElementById('edit_id_codigo').value = button.getAttribute('data-codigo');
-                                    document.getElementById('edit_id_expediente').value = button.getAttribute('data-expediente');
-                                    document.getElementById('edit_id_sede').value = button.getAttribute('data-sede');
-                                    document.getElementById('edit_id_especialidad').value = button.getAttribute('data-especialidad');
-                                    document.getElementById('edit_id_materia').value = button.getAttribute('data-materia');
-                                    document.getElementById('edit_id_juzgado').value = button.getAttribute('data-juzgado');
-                                    document.getElementById('edit_id_demandante').value = button.getAttribute('data-demandante');
-                                    document.getElementById('edit_id_demandado').value = button.getAttribute('data-demandado');
-                                    document.getElementById('edit_id_anio_inicio').value = button.getAttribute('data-anioinicio');
-                                    document.getElementById('edit_id_representante').value = button.getAttribute('data-representante');
-                                });
-                            });
-                        });
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_id_codigo').value = codigo;
+            document.getElementById('edit_id_expediente').value = button.getAttribute('data-expediente');
+            document.getElementById('edit_id_sede').value = button.getAttribute('data-sede');
+            document.getElementById('edit_id_especialidad').value = button.getAttribute('data-especialidad');
+            document.getElementById('edit_id_materia').value = button.getAttribute('data-materia');
+            document.getElementById('edit_id_juzgado').value = button.getAttribute('data-juzgado');
+            document.getElementById('edit_id_demandante').value = button.getAttribute('data-demandante');
+            document.getElementById('edit_id_demandado').value = button.getAttribute('data-demandado');
+            document.getElementById('edit_id_anio_inicio').value = button.getAttribute('data-anioinicio');
+            document.getElementById('edit_id_representante').value = button.getAttribute('data-representante');
+            document.getElementById('edit_id_tlf_juzgado').value = button.getAttribute('data-tlfjuzgado');
 
+            // Redirigir (opcional, solo si se requiere navegación)
+            // window.location.href = button.getAttribute('href');
+        });
+    });
 
-                        //ALERT ELIMINAR
-                        (function () {
-                            const botonesEliminar = document.querySelectorAll('.btnEliminar');
+});
 
-                            botonesEliminar.forEach(boton => {
-                                boton.addEventListener('click', function (e) {
-                                    e.preventDefault(); // Evita que el enlace se siga inmediatamente
-
-                                    Swal.fire({
-                                        title: '¿Estás seguro de eliminar?',
-                                        text: "Esta acción no se puede deshacer.",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#9a1413',
-                                        cancelButtonColor: '#6F6F6F',
-                                        confirmButtonText: 'Sí, eliminar',
-                                        cancelButtonText: 'Cancelar'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            // Redirige al href del botón
-                                            window.location.href = this.href;
-                                        }
-                                    });
-                                });
-                            });
-                        })();
 
                         // BTN GUARDAR
                         (function () {
