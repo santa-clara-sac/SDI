@@ -410,7 +410,60 @@
                         //     });
                         // });
 
+
+                        function makeModalDraggable(modalId, dialogId, headerId) {
+    const modal = document.getElementById(modalId);
+    const modalDialog = document.getElementById(dialogId);
+    const modalHeader = document.getElementById(headerId);
+
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    modal.addEventListener('shown.bs.modal', function () {
+        const rect = modalDialog.getBoundingClientRect();
+        modalDialog.style.position = 'fixed';
+        modalDialog.style.top = rect.top + 'px';
+        modalDialog.style.left = rect.left + 'px';
+        modalDialog.style.margin = '0';
+        modalDialog.style.transform = 'none';
+        modalDialog.style.width = rect.width + 'px';
+    });
+
+    modalHeader.addEventListener('mousedown', function (e) {
+        if (e.target.closest('button')) return;
+        isDragging = true;
+        const rect = modalDialog.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+    });
+
+    document.addEventListener('mousemove', function (e) {
+        if (isDragging) {
+            modalDialog.style.top = `${e.clientY - offsetY}px`;
+            modalDialog.style.left = `${e.clientX - offsetX}px`;
+        }
+    });
+
+    document.addEventListener('mouseup', function () {
+        isDragging = false;
+    });
+
+    modal.addEventListener('hidden.bs.modal', function () {
+        modalDialog.removeAttribute('style');
+    });
+}
+
+
+
                         document.addEventListener("DOMContentLoaded", function () {
+
+
+                            // MODALES MOVIBLES
+                            makeModalDraggable('pdfViewerModal', 'draggableModal', 'pdfModalHeader');
+                        makeModalDraggable('editSeguimientoModal', 'editDraggableModal', 'editModalHeader');
+
+
                             const table = document.getElementById("documentsTable");
                             const tbody = table.querySelector("tbody");
                             const rows = Array.from(tbody.querySelectorAll("tr"));
