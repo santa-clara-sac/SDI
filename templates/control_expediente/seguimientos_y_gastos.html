@@ -66,34 +66,7 @@
         font-size: 1rem !important;
     }
 
-    /* Para evitar que el modal se encoja o deforme al moverlo */
-    .modal-dialog {
-        width: 60vw;
-        max-width: 60vw;
-        height: 80vh;
-        max-height: 80vh;
-    }
-
-    /* Cuando es movible (tiene la clase draggable) */
-    .modal.draggable .modal-dialog {
-        position: absolute;
-        top: 10px;
-        left: calc(50% - 40vw);
-        /* Centrado inicial basado en width: 80vw */
-        margin: 0;
-        transform: none !important;
-    }
-
-    /* Opcional: Cursor en el encabezado para indicar que se puede mover */
-    #pdfModalHeader {
-        cursor: move;
-    }
-
-    #pdfIframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-    }
+    
 </style>
 
 <center>
@@ -552,9 +525,9 @@
 
 <!-- Modal para ver PDF -->
 <div class="modal fade" id="pdfViewerModal" tabindex="-1" aria-labelledby="pdfViewerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl" id="draggableModal">
         <div class="modal-content" style="background-color: #0D1028">
-            <div class="modal-header" id="pdfModalHeader">
+            <div class="modal-header" id="pdfModalHeader" style="cursor: move;">
                 <h5 class="modal-title" style="color: #fff;">Visualizar documento PDF</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"
                     style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};"></button>
@@ -565,6 +538,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 <!-- Modal para agregar nueva  Presentacion -->
@@ -937,6 +912,54 @@
 
 <script>
 
+    document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('pdfViewerModal');
+    const modalDialog = document.getElementById('draggableModal');
+    const modalHeader = document.getElementById('pdfModalHeader');
+
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // Solo cuando el modal ya está completamente visible
+    modal.addEventListener('shown.bs.modal', function () {
+        const rect = modalDialog.getBoundingClientRect();
+        modalDialog.style.position = 'fixed';
+        modalDialog.style.top = rect.top + 'px';
+        modalDialog.style.left = rect.left + 'px';
+        modalDialog.style.margin = '0';
+        modalDialog.style.transform = 'none';
+        modalDialog.style.width = rect.width + 'px';
+    });
+
+    modalHeader.addEventListener('mousedown', function (e) {
+        // Evitar que el clic en el botón de cerrar dispare arrastre
+        if (e.target.closest('button')) return;
+
+        isDragging = true;
+        const rect = modalDialog.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+    });
+
+    document.addEventListener('mousemove', function (e) {
+        if (isDragging) {
+            modalDialog.style.top = `${e.clientY - offsetY}px`;
+            modalDialog.style.left = `${e.clientX - offsetX}px`;
+        }
+    });
+
+    document.addEventListener('mouseup', function () {
+        isDragging = false;
+    });
+
+    // Restaurar estilo al cerrar el modal
+    modal.addEventListener('hidden.bs.modal', function () {
+        modalDialog.removeAttribute('style');
+    });
+});
+
+
     //ALERT ELIMINAR
     (function () {
         const botonesEliminar = document.querySelectorAll('.btnEliminar');
@@ -1026,32 +1049,27 @@
     document.addEventListener('DOMContentLoaded', function () {
 
 
-        const modale = document.getElementById('pdfViewerModal');
+        document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.querySelector('#pdfViewerModal .modal-dialog');
         const header = document.getElementById('pdfModalHeader');
-        let isDragging = false;
-        let offsetX = 0;
-        let offsetY = 0;
 
-        header.style.cursor = 'move';
+        let isDragging = false;
+        let offsetX, offsetY;
 
         header.addEventListener('mousedown', function (e) {
-            const dialog = modale.querySelector('.modal-dialog');
             isDragging = true;
-
-            // Hacerlo posicionable
-            dialog.style.position = 'absolute';
-            dialog.style.margin = '0';  // quitar el centrado vertical
-
-            const rect = dialog.getBoundingClientRect();
+            const rect = modal.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
             offsetY = e.clientY - rect.top;
+            modal.style.position = 'fixed';
+            modal.style.margin = '0';  // Elimina márgenes para que no interfiera
+            modal.style.zIndex = '1055'; // Encima de todo (por si acaso)
         });
 
         document.addEventListener('mousemove', function (e) {
             if (isDragging) {
-                const dialog = modale.querySelector('.modal-dialog');
-                dialog.style.left = (e.clientX - offsetX) + 'px';
-                dialog.style.top = (e.clientY - offsetY) + 'px';
+                modal.style.top = `${e.clientY - offsetY}px`;
+                modal.style.left = `${e.clientX - offsetX}px`;
             }
         });
 
@@ -1059,24 +1077,12 @@
             isDragging = false;
         });
 
-        // Al cerrar el modal, restaurar todo al estado original
-        modale.addEventListener('hidden.bs.modal', function () {
-            const dialog = modale.querySelector('.modal-dialog');
-            dialog.style.position = '';
-            dialog.style.left = '';
-            dialog.style.top = '';
-            dialog.style.margin = '';
+        // Resetear posición al cerrar
+        const modalEl = document.getElementById('pdfViewerModal');
+        modalEl.addEventListener('hidden.bs.modal', function () {
+            modal.removeAttribute('style');
         });
-
-        // Este bloque es lo que soluciona el “doble clic en cerrar”
-        const closeBtn = modale.querySelector('.btn-close');
-        closeBtn.addEventListener('click', function () {
-            // Asegúrate de cerrar el modal con Bootstrap y no solo visualmente
-            const bsModal = bootstrap.Modal.getInstance(modale);
-            if (bsModal) {
-                bsModal.hide();
-            }
-        });
+    });
 
 
 
