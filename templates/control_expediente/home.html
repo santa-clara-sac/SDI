@@ -52,26 +52,18 @@
                         <!-- Partida -->
                         <div class="col">
                             <label class="form-label">Expediente</label>
-                            <input type="text" class="form-control filter-input" data-column="2">
-                        </div>
-
-                        <div class="col d-none">
-                            <label class="form-label">Sede</label>
-                            <input type="text" class="form-control filter-input" data-column="7">
-                        </div>
-
-                        <!-- Descripción -->
-                        <div class="col">
-                            <label class="form-label">Especialidad</label>
-                            <input type="text" class="form-control filter-input" data-column="8">
+                            <input type="text" class="form-control filter-input" data-column="1">
                         </div>
 
                         <!-- Ubicación -->
                         <div class="col">
                             <label class="form-label">Materia</label>
-                            <input type="text" class="form-control filter-input" data-column="3">
+                            <input type="text" class="form-control filter-input" data-column="2">
                         </div>
-
+                        <div class="col ">
+                            <label class="form-label">Juzgado</label>
+                            <input type="text" class="form-control filter-input" data-column="4">
+                        </div>
                         <!--Centro de Costo -->
                         <div class="col">
                             <label class="form-label">Demandante</label>
@@ -81,6 +73,14 @@
                         <div class="col">
                             <label class="form-label">Demandado</label>
                             <input type="text" class="form-control filter-input" data-column="6">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Sede</label>
+                            <input type="text" class="form-control filter-input" data-column="7">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Especialidad</label>
+                            <input type="text" class="form-control filter-input" data-column="8">
                         </div>
 
                         <!-- Botón Limpiar Filtros -->
@@ -106,12 +106,12 @@
                     {% endif %}
 
 
-                    <!-- Modal para agregar nueva partida -->
-                    <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <!-- Modal para agregar nueva expediente -->
+                    <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl" id="draggableDocumentModal">
                             <div class="modal-content">
                                 <div class="modal-header text-white"
+                                    id="documentModalHeader"
                                     style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                                     <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Expediente</h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -188,104 +188,96 @@
                     <div class="table-container" style="max-height: 55vh; overflow-y: auto; overflow-x: auto;">
                         <table class="table table-hover" id="documentsTable">
                             <thead class="" style="position: sticky; top: 0; z-index: 1;">
-                                <tr>
-                                    <th>Seg. y gts.</th>
-                                    <th>Item</th>
-                                    <th>Expediente</th>
-                                    <th>Materia</th>
-                                    <th>Tlf. Juzgado</th>
-                                    <th>Juzgado</th>
-                                    <th>Demandante</th>
-                                    <th>Demandado</th>
-                                    <th>Sede</th>
-                                    <th>Especialidad</th>
-                                    <th class="text-nowrap">Año Inicio</th>
-                                    <th class="d-none">Representa a</th>
+                                <tr style="background-color: #26292E;">
+                                    <th style="color: white;">Item</th>
+                                    <th style="color: white;">Expediente</th>
+                                    <th style="color: white;">Materia</th>
+                                    <th style="color: white;">Tlf. Juzgado</th>
+                                    <th style="color: white;">Juzgado</th>
+                                    <th style="color: white;">Demandante</th>
+                                    <th style="color: white;">Demandado</th>
+                                    <th style="color: white;">Sede</th>
+                                    <th style="color: white;">Especialidad</th>
+                                    <th style="color: white;" class="text-nowrap">Año Inicio</th>
+                                    <th style="color: white;" class="d-none">Representa a</th>
                                     {% if request.user.role != 1 %}
-                                    <th>Acciones</th>
+                                    <th style="color: white;">Acciones</th>
                                     {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for cj in caso_judiciales %}
-                                <tr>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a href="{% url 'control_expediente:ver_seguimiento' cj.id %}"
-                                                class="btn btn-sm text-white" style="background-color: #3b4252;"
-                                                title="Ver Seguimiento y Gastos">
-                                                <i class="bi bi-file-earmark-text" style="font-size: 1.0rem;"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td>{{ cj.codigo }}</td>
-                                    <td class="text-nowrap">{{ cj.expediente }}</td>
-                                    <td>{{ cj.materia }}</td>
-                                    <td class="text-nowrap">{{ cj.tlf_juzgado }}</td>
-                                    <td>{{ cj.juzgado }}</td>
-                                    <!-- Demandante resaltado según representante y rol -->
-                                    <td {% if cj.representante|default:'' == 'demandante' %}
-                                            {% if request.user.role == 2 %}
-                                                style="background-color: #E2FBFF; font-weight: bold;"
-                                            {% elif request.user.role == 3 %}
-                                                style="background-color: #FCEEEE; font-weight: bold;"
-                                            {% endif %}
-                                        {% endif %}>
-                                        {{ cj.demandante }}
-                                    </td>
+    {% for cj in caso_judiciales %}
+    <tr class="clickable-row"
+        data-href="{% url 'control_expediente:ver_seguimiento' cj.id %}">
+        
+        <td>{{ cj.codigo }}</td>
+        <td class="text-nowrap">{{ cj.expediente }}</td>
+        <td>{{ cj.materia }}</td>
+        <td class="text-nowrap">{{ cj.tlf_juzgado }}</td>
+        <td>{{ cj.juzgado }}</td>
 
-                                    <td {% if cj.representante|default:'' == 'demandado' %}
-                                            {% if request.user.role == 2 %}
-                                                style="background-color: #E2FBFF; font-weight: bold;"
-                                            {% elif request.user.role == 3 %}
-                                                style="background-color: #FCEEEE; font-weight: bold;"
-                                            {% endif %}
-                                        {% endif %}>
-                                        {{ cj.demandado }}
-                                    </td>
+        <td {% if cj.representante|default:'' == 'demandante' %}
+                {% if request.user.role == 2 %}
+                    style="background-color: #E2FBFF; font-weight: bold;"
+                {% elif request.user.role == 3 %}
+                    style="background-color: #FCEEEE; font-weight: bold;"
+                {% endif %}
+            {% endif %}>
+            {{ cj.demandante }}
+        </td>
 
-                                    <td>{{ cj.sede }}</td>
-                                    <td>{{ cj.especialidad }}</td>
-                                    <td>{{ cj.anio_inicio|default:"" }}</td>
+        <td {% if cj.representante|default:'' == 'demandado' %}
+                {% if request.user.role == 2 %}
+                    style="background-color: #E2FBFF; font-weight: bold;"
+                {% elif request.user.role == 3 %}
+                    style="background-color: #FCEEEE; font-weight: bold;"
+                {% endif %}
+            {% endif %}>
+            {{ cj.demandado }}
+        </td>
 
-                                    <!-- Representante -->
-                                    <td class="d-none">
-                                        {% if cj.representante == 'demandante' %}
-                                        Demandante
-                                        {% elif cj.representante == 'demandado' %}
-                                        Demandado
-                                        {% endif %}
-                                    </td>
+        <td>{{ cj.sede|default:"" }}</td>
+        <td>{{ cj.especialidad }}</td>
+        <td>{{ cj.anio_inicio|default:"" }}</td>
 
-                                    {% if request.user.role != 1 %}
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-sm text-white me-2 btn-editar"
-                                                style="background-color: #434c5e;" data-bs-toggle="modal"
-                                                data-bs-target="#editCasoJudicialModal" data-id="{{ cj.id }}"
-                                                data-codigo="{{ cj.codigo }}" data-expediente="{{ cj.expediente }}"
-                                                data-sede="{{ cj.sede }}" data-especialidad="{{ cj.especialidad }}"
-                                                data-materia="{{ cj.materia }}" data-juzgado="{{ cj.juzgado }}"
-                                                data-demandante="{{ cj.demandante }}"
-                                                data-demandado="{{ cj.demandado }}"
-                                                data-anioinicio="{{ cj.anio_inicio|default_if_none:'' }}"
-                                                data-representante="{{ cj.representante }}"
-                                                data-tlfjuzgado="{{ cj.tlf_juzgado }}">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
+        <td class="d-none">
+            {% if cj.representante == 'demandante' %}
+            Demandante
+            {% elif cj.representante == 'demandado' %}
+            Demandado
+            {% endif %}
+        </td>
 
-                                            <a href="{% url 'control_expediente:eliminar_expediente' cj.id %}"
-                                                class="btn btn-sm text-white btnEliminar"
-                                                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};"
-                                                title="Eliminar">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
-                            </tbody>
+        {% if request.user.role != 1 %}
+        <td class="action-column">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-sm text-white me-2 btn-editar"
+                    style="background-color: #434c5e;" data-bs-toggle="modal"
+                    data-bs-target="#editCasoJudicialModal" data-id="{{ cj.id }}"
+                    data-codigo="{{ cj.codigo }}" data-expediente="{{ cj.expediente }}"
+                    data-sede="{{ cj.sede }}" data-especialidad="{{ cj.especialidad }}"
+                    data-materia="{{ cj.materia }}" data-juzgado="{{ cj.juzgado }}"
+                    data-demandante="{{ cj.demandante }}"
+                    data-demandado="{{ cj.demandado }}"
+                    data-anioinicio="{{ cj.anio_inicio|default_if_none:'' }}"
+                    data-representante="{{ cj.representante }}"
+                    data-tlfjuzgado="{{ cj.tlf_juzgado }}">
+                    <i class="bi bi-pencil-square"></i>
+                </button>
+
+                <a href="{% url 'control_expediente:eliminar_expediente' cj.id %}"
+                    class="btn btn-sm text-white btnEliminar"
+                    style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};"
+                    title="Eliminar">
+                    <i class="bi bi-trash"></i>
+                </a>
+            </div>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</tbody>
+
 
                         </table>
                     </div>
@@ -294,14 +286,14 @@
 
                     <!-- Modal para editar expediente -->
                     <div class="modal fade" id="editCasoJudicialModal" tabindex="-1"
-                        aria-labelledby="editCasoJudicialModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-xl">
-                            <div class="modal-content">
-                                <div class="modal-header text-white"
-                                    style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
-                                    <h5 class="modal-title" id="editCasoJudicialModalLabel">Editar Expediente</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+    aria-labelledby="editCasoJudicialModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" id="editCasoJudicialDialog">
+        <div class="modal-content">
+            <div class="modal-header text-white" id="editCasoJudicialHeader"
+                style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
+                <h5 class="modal-title" id="editCasoJudicialModalLabel">Editar Expediente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <form method="POST" action="{% url 'control_expediente:editar_expediente' %}">
@@ -454,14 +446,12 @@
     });
 }
 
-
-
                         document.addEventListener("DOMContentLoaded", function () {
-
-
                             // MODALES MOVIBLES
-                            makeModalDraggable('pdfViewerModal', 'draggableModal', 'pdfModalHeader');
-                        makeModalDraggable('editSeguimientoModal', 'editDraggableModal', 'editModalHeader');
+                            //makeModalDraggable('pdfViewerModal', 'draggableModal', 'pdfModalHeader');
+                            //makeModalDraggable('editSeguimientoModal', 'editDraggableModal', 'editModalHeader');
+                            makeModalDraggable('documentModal', 'draggableDocumentModal', 'documentModalHeader');
+                            makeModalDraggable('editCasoJudicialModal', 'editCasoJudicialDialog', 'editCasoJudicialHeader');
 
 
                             const table = document.getElementById("documentsTable");
@@ -497,6 +487,22 @@
                         });
 
                         document.addEventListener('DOMContentLoaded', function () {
+
+                            const rows = document.querySelectorAll(".clickable-row");
+
+        rows.forEach(row => {
+            row.addEventListener("click", function (e) {
+                // Evita que haga redirect si se hace clic en un botón o enlace dentro de la fila
+                if (e.target.closest(".action-column") || e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('.btn-group')) {
+                    return;
+                }
+                const url = this.dataset.href;
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+
 
     // FILTRO EN TIEMPO REAL
     document.querySelectorAll('.filter-input').forEach(input => {
@@ -630,6 +636,33 @@
                                 });
                             });
                         })();
+
+                        // BTN ELIMINAR
+                        (function () {
+        const botonesEliminar = document.querySelectorAll('.btnEliminar');
+
+        botonesEliminar.forEach(boton => {
+            boton.addEventListener('click', function (e) {
+                e.preventDefault(); // Evita que el enlace se siga inmediatamente
+
+                Swal.fire({
+                    title: '¿Estás seguro de eliminar?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#9a1413',
+                    cancelButtonColor: '#6F6F6F',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirige al href del botón
+                        window.location.href = this.href;
+                    }
+                });
+            });
+        });
+    })();
                     </script>
 
                     {% endblock %}

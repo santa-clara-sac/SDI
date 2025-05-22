@@ -65,10 +65,14 @@
     .bi {
         font-size: 1rem !important;
     }
+    .modal-backdrop.show {
+        background-color: rgba(240, 240, 240, 0.7); /* Gris muy claro con transparencia */
+    }
+
 </style>
 
 <center>
-    <h3 style="padding-top: 15px;">Seguimientos del caso: {{ caso }}</h3>
+    <h3 style="padding-top: 15px;">Seguimiento del caso: {{ caso }}</h3>
     <!-- <h5 style="padding-top: 15px;">gastos generales</h5> -->
 </center>
 
@@ -148,7 +152,7 @@
                                     <td class="acciones">
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm text-white me-2 btn-editar"
-                                                style="background-color: #434c5e;" data-bs-toggle="modal"
+                                                style="background-color: #26292E;" data-bs-toggle="modal"
                                                 data-bs-target="#editSeguimientoModal" data-id="{{ seguimiento.id }}"
                                                 data-resolucion="{{ seguimiento.resolucion }}"
                                                 data-seguimiento="{{ seguimiento.seguimiento }}"
@@ -713,9 +717,9 @@
 
 <!-- Modal para agregar nueva seguimiento -->
 <div class="modal fade" id="documentModal" tabindex="-1" aria-labelledby="documentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-xl" id="documentDraggableModal">
         <div class="modal-content">
-            <div class="modal-header text-white"
+            <div class="modal-header text-white" id="documentModalHeader"
                 style="background-color: {% if request.user.role == 2 %}#0995AD;{% else %}#9a1413{% endif %};">
                 <h5 class="modal-title" id="documentModalLabel">Agregar Nuevo Seguimiento</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -770,15 +774,10 @@
                                     <label class="form-check-label" for="id_inter">Sí</label>
                                 </div>
                             </div>
-
-
-
-
                         </div>
                         <div class="text-center mt-4">
                             <button type="submit" class="btn px-5 py-2 btnGuardar"
                                 style="background-color: #3b4252; color: #edeff4;">Guardar</button>
-
                         </div>
                     </div>
                 </form>
@@ -912,53 +911,55 @@
 <script>
 
     function makeModalDraggable(modalId, dialogId, headerId) {
-    const modal = document.getElementById(modalId);
-    const modalDialog = document.getElementById(dialogId);
-    const modalHeader = document.getElementById(headerId);
+        const modal = document.getElementById(modalId);
+        const modalDialog = document.getElementById(dialogId);
+        const modalHeader = document.getElementById(headerId);
 
-    let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
 
-    modal.addEventListener('shown.bs.modal', function () {
-        const rect = modalDialog.getBoundingClientRect();
-        modalDialog.style.position = 'fixed';
-        modalDialog.style.top = rect.top + 'px';
-        modalDialog.style.left = rect.left + 'px';
-        modalDialog.style.margin = '0';
-        modalDialog.style.transform = 'none';
-        modalDialog.style.width = rect.width + 'px';
-    });
+        modal.addEventListener('shown.bs.modal', function () {
+            const rect = modalDialog.getBoundingClientRect();
+            modalDialog.style.position = 'fixed';
+            modalDialog.style.top = rect.top + 'px';
+            modalDialog.style.left = rect.left + 'px';
+            modalDialog.style.margin = '0';
+            modalDialog.style.transform = 'none';
+            modalDialog.style.width = rect.width + 'px';
+        });
 
-    modalHeader.addEventListener('mousedown', function (e) {
-        if (e.target.closest('button')) return;
-        isDragging = true;
-        const rect = modalDialog.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
-    });
+        modalHeader.addEventListener('mousedown', function (e) {
+            if (e.target.closest('button')) return;
+            isDragging = true;
+            const rect = modalDialog.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+        });
 
-    document.addEventListener('mousemove', function (e) {
-        if (isDragging) {
-            modalDialog.style.top = `${e.clientY - offsetY}px`;
-            modalDialog.style.left = `${e.clientX - offsetX}px`;
-        }
-    });
+        document.addEventListener('mousemove', function (e) {
+            if (isDragging) {
+                modalDialog.style.top = `${e.clientY - offsetY}px`;
+                modalDialog.style.left = `${e.clientX - offsetX}px`;
+            }
+        });
 
-    document.addEventListener('mouseup', function () {
-        isDragging = false;
-    });
+        document.addEventListener('mouseup', function () {
+            isDragging = false;
+        });
 
-    modal.addEventListener('hidden.bs.modal', function () {
-        modalDialog.removeAttribute('style');
-    });
-}
+        modal.addEventListener('hidden.bs.modal', function () {
+            modalDialog.removeAttribute('style');
+        });
+    }
 
 
 
     document.addEventListener('DOMContentLoaded', function () {
 
-  makeModalDraggable('editGastoModal', 'editGastoDraggableModal', 'editGastoModalHeader');
+    makeModalDraggable('editGastoModal', 'editGastoDraggableModal', 'editGastoModalHeader');
+    makeModalDraggable('documentModal', 'documentDraggableModal', 'documentModalHeader');
+    
         
         // MODAL EDICION SEGUIMIENTO
         const editModal = document.getElementById('editSeguimientoModal');

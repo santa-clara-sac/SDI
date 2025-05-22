@@ -7,12 +7,12 @@ class CasoJudicial(models.Model):
         ('demandante', 'Demandante'),
         ('demandado', 'Demandado'),
     ]
-    codigo = models.PositiveIntegerField()
+    codigo = models.CharField(max_length=100, blank=True, null=True)
     expediente = models.CharField(max_length=100)
-    sede = models.CharField(max_length=100)
-    especialidad = models.CharField(max_length=100)
-    materia = models.CharField(max_length=100)
-    juzgado = models.CharField(max_length=100)
+    sede = models.CharField(max_length=100, blank=True, null=True)
+    especialidad = models.CharField(max_length=100, blank=True, null=True)
+    materia = models.CharField(max_length=100, blank=True, null=True)
+    juzgado = models.CharField(max_length=100, blank=True, null=True)
     demandante = models.CharField(max_length=255)
     demandado = models.CharField(max_length=255)
     anio_inicio = models.CharField(max_length=4, blank=True, null=True)
