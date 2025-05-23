@@ -32,7 +32,7 @@ def home(request):
 
 @login_required
 def lista_usuarios(request):
-    usuarios = User.objects.all()
+    usuarios = User.objects.all().order_by('username')
     ccs = NuevoGasto.objects.filter(flag=True)
 
     if request.method == 'POST':
@@ -60,10 +60,13 @@ def editar_usuario(request):
         form = UserEditForm(request.POST, instance=usuario)
 
         if form.is_valid():
+            print(form)
+            print(form.is_valid())
             user = form.save(commit=False)
             user.save()
             messages.success(request, "Usuario actualizado correctamente.")
         else:
+            print("Errores del formulario:", form.errors)  # Aquí se imprimen los errores
             messages.error(request, "Hubo un error al actualizar el usuario.")
 
     return redirect('lista_usuarios')

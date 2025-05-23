@@ -46,10 +46,13 @@
 
                     <!-- Sección de búsqueda -->
                     <h5 class="mb-2">Utiliza los filtros para localizar el documento</h5>
-
                     <div class="row mb-3">
-
-                        <!-- Partida -->
+                        <!-- Item -->
+                        <div class="col">
+                            <label class="form-label">Item</label>
+                            <input type="text" class="form-control filter-input" data-column="0">
+                        </div>
+                        <!-- Expediente -->
                         <div class="col">
                             <label class="form-label">Expediente</label>
                             <input type="text" class="form-control filter-input" data-column="1">
@@ -210,10 +213,10 @@
     <tr class="clickable-row"
         data-href="{% url 'control_expediente:ver_seguimiento' cj.id %}">
         
-        <td>{{ cj.codigo }}</td>
+        <td>{{ cj.codigo|default:'' }}</td>
         <td class="text-nowrap">{{ cj.expediente }}</td>
         <td>{{ cj.materia }}</td>
-        <td class="text-nowrap">{{ cj.tlf_juzgado }}</td>
+        <td class="text-nowrap">{{ cj.tlf_juzgado|default:'' }}</td>
         <td>{{ cj.juzgado }}</td>
 
         <td {% if cj.representante|default:'' == 'demandante' %}
@@ -254,14 +257,14 @@
                 <button type="button" class="btn btn-sm text-white me-2 btn-editar"
                     style="background-color: #434c5e;" data-bs-toggle="modal"
                     data-bs-target="#editCasoJudicialModal" data-id="{{ cj.id }}"
-                    data-codigo="{{ cj.codigo }}" data-expediente="{{ cj.expediente }}"
+                    data-codigo="{{ cj.codigo|default_if_none:'' }}" data-expediente="{{ cj.expediente }}"
                     data-sede="{{ cj.sede }}" data-especialidad="{{ cj.especialidad }}"
                     data-materia="{{ cj.materia }}" data-juzgado="{{ cj.juzgado }}"
                     data-demandante="{{ cj.demandante }}"
                     data-demandado="{{ cj.demandado }}"
                     data-anioinicio="{{ cj.anio_inicio|default_if_none:'' }}"
                     data-representante="{{ cj.representante }}"
-                    data-tlfjuzgado="{{ cj.tlf_juzgado }}">
+                    data-tlfjuzgado="{{ cj.tlf_juzgado|default_if_none:'' }}">
                     <i class="bi bi-pencil-square"></i>
                 </button>
 
@@ -313,15 +316,15 @@
                                                         name="expediente">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <label for="edit_id_sede" class="form-label">Sede</label>
-                                                    <input type="text" class="form-control" id="edit_id_sede"
-                                                        name="sede">
-                                                </div>
-                                                <div class="col-md-4">
                                                     <label for="edit_id_especialidad"
                                                         class="form-label">Especialidad</label>
                                                     <input type="text" class="form-control" id="edit_id_especialidad"
                                                         name="especialidad">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="edit_id_sede" class="form-label">Sede</label>
+                                                    <input type="text" class="form-control" id="edit_id_sede"
+                                                        name="sede">
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="edit_id_materia" class="form-label">Materia</label>

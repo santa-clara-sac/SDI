@@ -51,6 +51,7 @@ class SeguimientoForm(forms.ModelForm):
         self.fields['seguimiento'].required = False
         self.fields['fecha_seguimiento'].required = False
         self.fields['pdf'].required = False
+        self.fields['inter'].required = False
 
     def clean(self):
         cleaned_data = super().clean()

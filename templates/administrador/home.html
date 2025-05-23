@@ -139,8 +139,8 @@
                                     <td>{{ user.first_name }}</td>
                                     <td>{{ user.last_name }}</td>
                                     <td>{{ user.username }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.phone_number }}</td>
+                                    <td>{{ user.email|default:"" }}</td>
+                                    <td>{{ user.phone_number|default:"" }}</td>
                                     <td>
                                         {% if user.role == 1 %}Estandar
                                         {% elif user.role == 2 %}Legal
@@ -154,8 +154,8 @@
                                                 data-bs-target="#editUserModal" data-id="{{ user.id }}"
                                                 data-first_name="{{ user.first_name }}"
                                                 data-last_name="{{ user.last_name }}"
-                                                data-username="{{ user.username }}" data-email="{{ user.email }}"
-                                                data-phone_number="{{ user.phone_number }}" data-role="{{ user.role }}">
+                                                data-username="{{ user.username }}" data-email="{{ user.email|default_if_none:'' }}"
+                                                data-phone_number="{{ user.phone_number|default_if_none:'' }}" data-role="{{ user.role }}">
                                                 <i class="bi bi-pencil-square"></i>
                                             </button>
 
